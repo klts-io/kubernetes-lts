@@ -1,0 +1,50 @@
+name: Releases
+
+on:
+  push:
+    tags:
+      - v*
+
+  workflow_dispatch:
+
+jobs:
+  Images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build images
+        run: |
+          git config --global user.name "bot"
+          KUBE_DOCKER_REGISTRY=docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z") make dependent $(basename ${GITHUB_REF}) build-image
+      - name: Push images
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
+          docker images | grep docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z") | awk '{print $1":"$2}' | xargs -I {} docker push {}
+
+  Server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build server binaries
+        run: |
+          git config --global user.name "bot"
+          make dependent $(basename ${GITHUB_REF}) build-server
+      - name: Push server binaries
+        uses: wzshiming/action-upload-release-assets@v1
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE: release
+
+  Client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build client binaries
+        run: |
+          git config --global user.name "bot"
+          make dependent $(basename ${GITHUB_REF}) build-client
+      - name: Push client binaries
+        uses: wzshiming/action-upload-release-assets@v1
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE: release
