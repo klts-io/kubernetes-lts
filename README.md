@@ -2,26 +2,27 @@
 
 ## Checkout to the specified patch release
 
-Defined in the [./releases.yml](releases.yml)
+Defined in the [./releases.yml](https://github.com/DaoCloud-OpenSource/kubepatch/blob/master/releases.yml)
+
 ``` bash
 make v1.18.18.cve.0
 ```
 
-## Build image
+## Build
+
+### Build image
 
 ``` bash
 make build-image
 ```
 
-## Build client
+[Images artifacts](https://github.com/orgs/DaoCloud-OpenSource/packages?repo_name=kubepatch)
+
+### Build client and server
 
 ``` bash
 make build-client
-```
-
-## Build server
-
-``` bash
 make build-server
 ```
 
+[Binaries artifacts](https://github.com/DaoCloud-OpenSource/kubepatch/releases)
