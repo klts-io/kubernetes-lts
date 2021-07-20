@@ -1,0 +1,112 @@
+base: https://github.com/kubernetes/kubernetes
+
+releases:
+  - name: v1.18.20-cve.0
+    base_release: v1.18.20
+    patches: []
+  - name: v1.17.17-cve.0
+    base_release: v1.17.17
+    patches:
+      - CVE-2021-3121
+  - name: v1.16.15-cve.0
+    base_release: v1.16.15
+    patches:
+      - CVE-2021-3121
+  - name: v1.15.12-cve.0
+    base_release: v1.15.12
+    patches:
+      - CVE-2021-3121
+  - name: v1.14.10-cve.0
+    base_release: v1.14.10
+    patches:
+      - CVE-2020-8559
+      - CVE-2021-3121
+  - name: v1.13.12-cve.0
+    base_release: v1.13.12
+    patches:
+      - CVE-2020-8559.1.13
+      - CVE-2021-3121
+  - name: v1.12.10-cve.0
+    base_release: v1.12.10
+    patches:
+      - CVE-2020-8559.1.13
+      - CVE-2021-3121
+  - name: v1.11.10-cve.0
+    base_release: v1.11.10
+    patches:
+      # - CVE-2020-8559.1.13
+      - CVE-2021-3121
+  - name: v1.10.13-cve.0
+    base_release: v1.10.13
+    patches:
+      # - CVE-2020-8559.1.13
+      - CVE-2021-3121
+
+# https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html
+patches:
+  # CVSS Score >= 7.0
+  - name: CVE-2021-3121 # CVSS Score 7.5, < k8s1.18, https://www.cvedetails.com/cve/CVE-2021-3121/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/101327.patch
+
+  # CVSS Score >= 6.0
+  - name: CVE-2020-8559 # CVSS Score 6.0, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8559/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/92971.patch
+  - name: CVE-2020-8559.1.13
+    patch:
+      - patches/CVE-2020-8559.1.13.patch # Remove test from https://github.com/kubernetes/kubernetes/pull/92971.patch
+  - name: CVE-2019-11248 # CVSS Score 6.4, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11248/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/79184.patch
+  - name: CVE-2019-11247 # CVSS Score 6.5, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11247/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/80852.patch
+
+  # CVSS Score >= 5.0
+  - name: CVE-2020-8558 # CVSS Score 5.8, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8558/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/92040.patch
+  - name: CVE-2019-1002101 # CVSS Score 5.8, < k8s1.11, https://www.cvedetails.com/cve/CVE-2019-1002101/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/75043.patch
+  - name: CVE-2019-11253 # CVSS Score 5.0, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11253/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/83436.patch
+  - name: CVE-2019-11252 # CVSS Score 5.0, < k8s1.17, https://www.cvedetails.com/cve/CVE-2019-11252/
+    patch:
+      # Change is too large
+      # - https://github.com/kubernetes/kubernetes/pull/88684.patch
+  - name: CVE-2019-11249 # CVSS Score 5.8, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11249/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/80871.patch
+  - name: CVE-2019-9946 # CVSS Score 5.0, < k8s1.11, https://www.cvedetails.com/cve/CVE-2019-9946/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/75464.patch
+
+  # CVSS Score >= 4.0
+  - name: CVE-2020-8552 # CVSS Score 4.0, < k8s1.15, https://www.cvedetails.com/cve/CVE-2020-8552/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/87682.patch
+  - name: CVE-2019-1002100 # CVSS Score 4.0, < k8s1.11, https://www.cvedetails.com/cve/CVE-2019-1002100/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/74106.patch
+  - name: CVE-2019-11254 # CVSS Score 4.0, < k8s1.15, https://www.cvedetails.com/cve/CVE-2019-11254/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/87640.patch
+  - name: CVE-2019-11251 # CVSS Score 4.3, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11251/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/82503.patch
+  - name: CVE-2019-11246 # CVSS Score 4.3, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11246/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/77262.patch
+  - name: CVE-2019-11245 # CVSS Score 4.6, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11245/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/78320.patch
+  - name: CVE-2019-11243 # CVSS Score 4.3, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11243/
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/71937.patch
+
+  # CVSS Score >= 3.0
+  - name: TODO
+    patch: []
