@@ -6,6 +6,7 @@ set -o pipefail
 
 ROOT="$(dirname "${BASH_SOURCE}")/.."
 WORKDIR="${ROOT}/workdir"
+KUBE_DOCKER_REGISTRY=${KUBE_DOCKER_REGISTRY:-}
 cd "${WORKDIR}"
 
 KUBE_BUILD_PLATFORMS=(
