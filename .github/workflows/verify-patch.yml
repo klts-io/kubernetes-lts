@@ -1,19 +1,19 @@
-name: Verify
+name: "Verify Patch"
 
 on:
   push:
-    branches: [ master ]
+    branches: [master]
   pull_request:
-    branches: [ master ]
+    branches: [master]
 
   workflow_dispatch:
 
 jobs:
-  Verify:
+  Patch:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Run verify
         run: |
           git config --global user.name "bot"
-          make dependent verify
+          make dependent verify-patch
