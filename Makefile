@@ -5,6 +5,7 @@ v%:
 
 dependent:
 	pip3 install yq
+	./hack/git_init_workdir.sh
 
 .PHONY: build-client
 build-client:
