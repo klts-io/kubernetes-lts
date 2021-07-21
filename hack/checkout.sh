@@ -57,7 +57,6 @@ for patch in ${PATCHES}; do
     done
 done
 
-mkdir -p "${WORKDIR}"
 WORKDIR="${WORKDIR}" REPO="${BASE}" ./hack/git_fetch_tag.sh ${BASE_RELEASE}
 if [[ "${PATCH_LIST}" != "" ]]; then
     WORKDIR="${WORKDIR}" ./hack/git_patch.sh ${PATCH_LIST}

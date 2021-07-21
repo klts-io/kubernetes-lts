@@ -34,11 +34,13 @@ releases:
   - name: v1.11.10-cve.0
     base_release: v1.11.10
     patches:
-      # - CVE-2020-8559.1.12
+      - release-images-script
+      #  - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.10.13-cve.0
     base_release: v1.10.13
     patches:
+      - release-images-script
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
 
@@ -113,3 +115,8 @@ patches:
   # CVSS Score >= 3.0
   - name: TODO
     patch: []
+
+  # Other
+  - name: release-images-script
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/68096.patch

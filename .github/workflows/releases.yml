@@ -15,11 +15,11 @@ jobs:
       - name: Build images
         run: |
           git config --global user.name "bot"
-          KUBE_DOCKER_REGISTRY=docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z") make dependent $(basename ${GITHUB_REF}) build-image
+          make dependent $(basename ${GITHUB_REF}) build-image
       - name: Push images
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          docker images | grep docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z") | awk '{print $1":"$2}' | xargs -I {} docker push {}
+          docker images | grep k8s.gcr.io | sed "s#k8s.gcr.io#docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z")#g" | awk '{print $1":"$2}' | xargs -I {} docker push {}
 
   Server:
     runs-on: ubuntu-latest

@@ -19,3 +19,8 @@ KUBE_BUILD_PLATFORMS=(
 for platform in ${KUBE_BUILD_PLATFORMS[*]} ; do
     make KUBE_BUILD_HYPERKUBE=n KUBE_BUILD_CONFORMANCE=n KUBE_BUILD_PULL_LATEST_IMAGES=n KUBE_RELEASE_RUN_TESTS=n KUBE_BUILD_PLATFORMS="${platform}" KUBE_DOCKER_REGISTRY="${KUBE_DOCKER_REGISTRY}" release-images || echo "fail ${platform}"
 done
+
+targets=$(ls _output/release-images/*/*.tar)
+for target in $targets ; do
+    docker load -i "${target}"
+done
