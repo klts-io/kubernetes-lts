@@ -29,17 +29,17 @@ releases:
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
-      - CVE-2020-8559.1.13
+      - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.11.10-cve.0
     base_release: v1.11.10
     patches:
-      # - CVE-2020-8559.1.13
+      # - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.10.13-cve.0
     base_release: v1.10.13
     patches:
-      # - CVE-2020-8559.1.13
+      # - CVE-2020-8559.1.12
       - CVE-2021-3121
 
 # https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html
@@ -56,6 +56,9 @@ patches:
   - name: CVE-2020-8559.1.13
     patch:
       - patches/CVE-2020-8559.1.13.patch # Remove test from https://github.com/kubernetes/kubernetes/pull/92971.patch
+  - name: CVE-2020-8559.1.12
+    patch:
+      - patches/CVE-2020-8559.1.12.patch # Remove test from https://github.com/kubernetes/kubernetes/pull/92971.patch
   - name: CVE-2019-11248 # CVSS Score 6.4, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11248/
     patch:
       - https://github.com/kubernetes/kubernetes/pull/79184.patch
