@@ -27,3 +27,23 @@ verify: verify-patch
 .PHONY: verify-patch
 verify-patch: 
 	./hack/verify_patch.sh
+
+.PHONY: verify-build
+verify-build: 
+	./hack/verify_build.sh
+
+.PHONY: verify-build-client
+verify-build-client: 
+	./hack/verify_build_client.sh
+
+.PHONY: verify-build-server
+verify-build-server: 
+	./hack/verify_build_server.sh
+
+.PHONY: verify-build-image
+verify-build-image: 
+	./hack/verify_build_image.sh
+
+.PHONY: gen-verify-build-workflows
+gen-verify-build-workflows:
+	./hack/gen_verify_build.sh > .github/workflows/verify-build.yml
