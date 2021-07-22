@@ -51,4 +51,4 @@ gen-verify-build-workflows:
 
 .PHONY: push-image
 push-image:
-	./hack/image_tag.sh && ./hack/push_image.sh
+	./hack/image_tag.sh && ./hack/image_push.sh

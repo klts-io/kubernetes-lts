@@ -17,7 +17,7 @@ KUBE_BUILD_PLATFORMS=(
     linux/ppc64le
 )
 for platform in ${KUBE_BUILD_PLATFORMS[*]} ; do
-    ./build/run.sh make KUBE_BUILD_PLATFORMS="${platform}" kubelet kubeadm | grep -v -E '^I\w+ ' || echo "fail ${platform}"
+    ./build/run.sh make KUBE_BUILD_PLATFORMS="${platform}" kubelet kubeadm 2>&1 | grep -v -E '^I\w+ ' || echo "fail ${platform}"
 done
 targets=$(ls _output/dockerized/bin/*/*/{kubelet,kubeadm})
 echo cp "${targets}" "${OUTPUT}"
