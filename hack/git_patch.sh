@@ -7,7 +7,7 @@ set -o pipefail
 WORKDIR="${WORKDIR:-.}"
 cd "${WORKDIR}"
 PATCH_DIR="${PATCH_DIR:-}"
-QUIET="${QUIET:-n}"
+QUIET="${QUIET:-y}"
 STARTING_BRANCH="$(git symbolic-ref --short HEAD)"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
 REBASE_APPLY="${REPO_ROOT}/.git/rebase-apply"
