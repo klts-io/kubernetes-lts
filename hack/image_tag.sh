@@ -7,7 +7,7 @@ set -o pipefail
 
 OLD_REGISTRY=${OLD_REGISTRY:-}
 REGISTRY=${REGISTRY:-}
-OLD_IMAGES=$(docker images | grep ${OLD_REGISTRY} | awk '{print $1":"$2}')
+OLD_IMAGES=$(docker images | grep ${OLD_REGISTRY} | grep kube- | awk '{print $1":"$2}')
 for old_image in ${OLD_IMAGES} ;  do
     new_image=$(echo ${old_image} | sed "s#${OLD_REGISTRY}#${REGISTRY}#g")
     docker tag "${old_image}" "${new_image}"
