@@ -35,12 +35,14 @@ releases:
     base_release: v1.11.10
     patches:
       - release-images-script
+      - CVE-2019-11248
       #  - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.10.13-cve.0
     base_release: v1.10.13
     patches:
       - release-images-script
+      - CVE-2019-11248
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
 
