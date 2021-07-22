@@ -1,0 +1,28 @@
+From eb1dce93beb8cf1d6750b8aab44f60857c16294b Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Thu, 22 Jul 2021 18:41:45 +0800
+Subject: [PATCH] No delete images
+
+---
+
+diff --git a/build/lib/release.sh b/build/lib/release.sh
+index 1275e6e1d96..26fcaf03a4e 100644
+--- a/build/lib/release.sh
++++ b/build/lib/release.sh
+@@ -376,9 +376,9 @@ function kube::release::create_docker_images_for_server() {
+           fi
+-        else
++        # else
+           # not a release
+-          kube::log::status "Deleting docker image ${docker_image_tag}"
+-          "${DOCKER[@]}" rmi "${docker_image_tag}" &>/dev/null || true
+-          "${DOCKER[@]}" rmi "${deprecated_image_tag}" &>/dev/null || true
++          # kube::log::status "Deleting docker image ${docker_image_tag}"
++          # "${DOCKER[@]}" rmi "${docker_image_tag}" &>/dev/null || true
++          # "${DOCKER[@]}" rmi "${deprecated_image_tag}" &>/dev/null || true
+         fi
+       ) &
+     done
+-- 
+2.32.0
+

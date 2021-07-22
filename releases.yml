@@ -3,32 +3,39 @@ base: https://github.com/kubernetes/kubernetes
 releases:
   - name: v1.18.20-cve.0
     base_release: v1.18.20
-    patches: []
+    patches:
+      - no-delete-images.1.18
   - name: v1.17.17-cve.0
     base_release: v1.17.17
     patches:
+      - no-delete-images.1.18
       - CVE-2021-3121
   - name: v1.16.15-cve.0
     base_release: v1.16.15
     patches:
+      - no-delete-images.1.18
       - CVE-2021-3121
   - name: v1.15.12-cve.0
     base_release: v1.15.12
     patches:
+      - no-delete-images.1.15
       - CVE-2021-3121
   - name: v1.14.10-cve.0
     base_release: v1.14.10
     patches:
+      - no-delete-images.1.15
       - CVE-2020-8559
       - CVE-2021-3121
   - name: v1.13.12-cve.0
     base_release: v1.13.12
     patches:
+      - no-delete-images.1.15
       - CVE-2020-8559.1.13
       - CVE-2021-3121
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
+      - no-delete-images.1.12
       - CVE-2019-11247
       - CVE-2020-8559.1.12
       - CVE-2021-3121
@@ -36,6 +43,7 @@ releases:
     base_release: v1.11.10
     patches:
       - release-images-script
+      - no-delete-images.1.12
       - CVE-2019-11247.1.11
       - CVE-2019-11248.1.12
       #  - CVE-2020-8559.1.12
@@ -44,6 +52,7 @@ releases:
     base_release: v1.10.13
     patches:
       - release-images-script
+      - no-delete-images.1.10
       # - CVE-2019-11247.1.11
       - CVE-2019-11248.1.12
       # - CVE-2020-8559.1.12
@@ -128,3 +137,15 @@ patches:
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch
+  - name: no-delete-images.1.18
+    patch:
+      - patches/no-delete-images.1.18.patch
+  - name: no-delete-images.1.15
+    patch:
+      - patches/no-delete-images.1.15.patch
+  - name: no-delete-images.1.12
+    patch:
+      - patches/no-delete-images.1.12.patch
+  - name: no-delete-images.1.10
+    patch:
+      - patches/no-delete-images.1.10.patch
