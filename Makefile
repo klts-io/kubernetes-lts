@@ -45,9 +45,9 @@ verify-build-server:
 verify-build-image: 
 	./hack/verify_build_image.sh
 
-.PHONY: gen-verify-build-workflows
-gen-verify-build-workflows:
-	./hack/gen_verify_build.sh > .github/workflows/verify-build.yml
+.PHONY: gen-verify-workflows
+gen-verify-workflows:
+	./hack/gen_verify_build.sh > .github/workflows/verify.yml
 
 .PHONY: push-image
 push-image:
