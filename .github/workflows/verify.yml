@@ -1,0 +1,290 @@
+name: Verify
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+  workflow_dispatch:
+
+jobs:
+  Patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify patch
+        run: |
+          git config --global user.name "bot"
+          make dependent verify-patch
+
+  Build-Client-v1-18-20-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.18.20-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.18.20-cve.0 verify-build-client
+
+  Build-Server-v1-18-20-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.18.20-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.18.20-cve.0 verify-build-server
+
+  Build-Image-v1-18-20-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.18.20-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.18.20-cve.0 verify-build-image
+
+  Build-Client-v1-17-17-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.17.17-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.17.17-cve.0 verify-build-client
+
+  Build-Server-v1-17-17-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.17.17-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.17.17-cve.0 verify-build-server
+
+  Build-Image-v1-17-17-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.17.17-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.17.17-cve.0 verify-build-image
+
+  Build-Client-v1-16-15-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.16.15-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.16.15-cve.0 verify-build-client
+
+  Build-Server-v1-16-15-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.16.15-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.16.15-cve.0 verify-build-server
+
+  Build-Image-v1-16-15-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.16.15-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.16.15-cve.0 verify-build-image
+
+  Build-Client-v1-15-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.15.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.15.12-cve.0 verify-build-client
+
+  Build-Server-v1-15-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.15.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.15.12-cve.0 verify-build-server
+
+  Build-Image-v1-15-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.15.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.15.12-cve.0 verify-build-image
+
+  Build-Client-v1-14-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.14.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.14.10-cve.0 verify-build-client
+
+  Build-Server-v1-14-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.14.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.14.10-cve.0 verify-build-server
+
+  Build-Image-v1-14-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.14.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.14.10-cve.0 verify-build-image
+
+  Build-Client-v1-13-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.13.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.13.12-cve.0 verify-build-client
+
+  Build-Server-v1-13-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.13.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.13.12-cve.0 verify-build-server
+
+  Build-Image-v1-13-12-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.13.12-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.13.12-cve.0 verify-build-image
+
+  Build-Client-v1-12-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.12.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.12.10-cve.0 verify-build-client
+
+  Build-Server-v1-12-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.12.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.12.10-cve.0 verify-build-server
+
+  Build-Image-v1-12-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.12.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.12.10-cve.0 verify-build-image
+
+  Build-Client-v1-11-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.11.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.11.10-cve.0 verify-build-client
+
+  Build-Server-v1-11-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.11.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.11.10-cve.0 verify-build-server
+
+  Build-Image-v1-11-10-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.11.10-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.11.10-cve.0 verify-build-image
+
+  Build-Client-v1-10-13-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build client v1.10.13-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.10.13-cve.0 verify-build-client
+
+  Build-Server-v1-10-13-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build server v1.10.13-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.10.13-cve.0 verify-build-server
+
+  Build-Image-v1-10-13-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify build image v1.10.13-cve.0
+        run: |
+          git config --global user.name "bot"
+          make dependent v1.10.13-cve.0 verify-build-image
+
