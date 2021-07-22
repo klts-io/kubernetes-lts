@@ -19,7 +19,7 @@ jobs:
       - name: Push images
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          docker images | grep k8s.gcr.io | sed "s#k8s.gcr.io#docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z")#g" | awk '{print $1":"$2}' | xargs -I {} docker push {}
+          OLD_REGISTRY=k8s.gcr.io REGISTRY="docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
 
   Server:
     runs-on: ubuntu-latest
