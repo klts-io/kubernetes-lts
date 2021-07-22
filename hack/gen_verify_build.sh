@@ -10,7 +10,7 @@ RELEASES=$(cat "${CONFIG}" | yq ".releases | .[] | .name" | tr -d '"' | tr '\n' 
 
 
 cat << EOF
-name: "Verify Build"
+name: Verify
 
 on:
   push:
@@ -21,34 +21,46 @@ on:
   workflow_dispatch:
 
 jobs:
+  Patch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Verify patch
+        run: |
+          git config --global user.name "bot"
+          make dependent verify-patch
+
 EOF
 
 for release in ${RELEASES}; do
   name=${release//\./\-}
   cat << EOF
   Build-Client-${name}:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run verify
+      - name: Verify build client ${release}
         run: |
           git config --global user.name "bot"
           make dependent ${release} verify-build-client
 
   Build-Server-${name}:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run verify
+      - name: Verify build server ${release}
         run: |
           git config --global user.name "bot"
           make dependent ${release} verify-build-server
 
   Build-Image-${name}:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Run verify
+      - name: Verify build image ${release}
         run: |
           git config --global user.name "bot"
           make dependent ${release} verify-build-image
