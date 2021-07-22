@@ -22,7 +22,7 @@ KUBE_BUILD_PLATFORMS=(
     windows/386
 )
 for platform in ${KUBE_BUILD_PLATFORMS[*]} ; do
-    ./build/run.sh make KUBE_BUILD_PLATFORMS="${platform}" kubectl | grep -v -E '^I\w+ ' || echo "fail ${platform}"
+    ./build/run.sh make KUBE_BUILD_PLATFORMS="${platform}" kubectl 2>&1 | grep -v -E '^I\w+ ' || echo "fail ${platform}"
 done
 targets=$(ls _output/dockerized/bin/*/*/kubectl*)
 echo cp "${targets}" "${OUTPUT}"
