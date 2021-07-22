@@ -29,12 +29,14 @@ releases:
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
+      - CVE-2019-11247
       - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.11.10-cve.0
     base_release: v1.11.10
     patches:
       - release-images-script
+      - CVE-2019-11247.1.11
       - CVE-2019-11248
       #  - CVE-2020-8559.1.12
       - CVE-2021-3121
@@ -42,6 +44,7 @@ releases:
     base_release: v1.10.13
     patches:
       - release-images-script
+      - CVE-2019-11247.1.10
       - CVE-2019-11248
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
@@ -69,6 +72,12 @@ patches:
   - name: CVE-2019-11247 # CVSS Score 6.5, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11247/
     patch:
       - https://github.com/kubernetes/kubernetes/pull/80852.patch
+  - name: CVE-2019-11247.1.11
+    patch:
+      - patches/CVE-2019-11247.1.11.patch # Remove BUILD file from https://github.com/kubernetes/kubernetes/pull/80852.patch
+  - name: CVE-2019-11247.1.10
+    patch:
+      - patches/CVE-2019-11247.1.10.patch # Conflict resolution from patches/CVE-2019-11247.1.11.patch
 
   # CVSS Score >= 5.0
   - name: CVE-2020-8558 # CVSS Score 5.8, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8558/
