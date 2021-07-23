@@ -4,9 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-OUTPUT="../release"
-WORKDIR="${ROOT}/workdir"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
 KUBE_BUILD_PLATFORMS=(
@@ -20,13 +18,13 @@ WANTS=(
 )
 TARGETS=$(ls _output/dockerized/bin/*/*/*)
 FAILD=false
-for want in ${WANTS} ; do
-    if ! [[ "${TARGETS}" =~ "${want}" ]] ; then
+for want in ${WANTS}; do
+    if ! [[ "${TARGETS}" =~ "${want}" ]]; then
         FAILD=true
         echo "Missing ${want}"
     fi
 done
 
-if [[ "${FAILD}" == true ]] ; then
+if [[ "${FAILD}" == true ]]; then
     exit 1
 fi

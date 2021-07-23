@@ -4,9 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-WORKDIR="${WORKDIR:-.}"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
-PATCH_DIR="${PATCH_DIR:-}"
+
 QUIET="${QUIET:-y}"
 STARTING_BRANCH="$(git symbolic-ref --short HEAD)"
 REPO_ROOT="$(git rev-parse --show-toplevel)"
@@ -37,13 +37,11 @@ function cleanup() {
         git am --abort >/dev/null 2>&1 || true
     fi
 
-    # return to the starting branch and delete the PR text file
     echo
     echo "+++ Returning you to the ${STARTING_BRANCH} branch and cleaning up."
     git checkout -f "${STARTING_BRANCH}" >/dev/null 2>&1 || true
 }
 trap cleanup EXIT
-
 
 GIT_AM_CLEANUP=true
 
@@ -54,9 +52,9 @@ for PATCH in "${PATCHES[@]}"; do
     echo "  $ git am -3 ${PATCH}"
     echo
     git am -3 "${PATCH}" || {
-        CONFLICTS=false
-        while UNMERGED=$(git status --porcelain | grep ^U) && [[ -n ${UNMERGED} ]] || [[ -e "${REBASE_APPLY}" ]]; do
-            CONFLICTS=true
+        local conflicts=false
+        while unmerged=$(git status --porcelain | grep ^U) && [[ -n ${unmerged} ]] || [[ -e "${REBASE_APPLY}" ]]; do
+            conflicts=true
             echo
             echo "+++ Conflicts detected:"
             echo
@@ -75,7 +73,7 @@ for PATCH in "${PATCHES[@]}"; do
             fi
         done
 
-        if [[ "${CONFLICTS}" != "true" ]]; then
+        if [[ "${conflicts}" != "true" ]]; then
             echo "!!! git am failed, likely because of an in-progress 'git am' or 'git rebase'"
             exit 1
         fi

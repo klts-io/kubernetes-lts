@@ -5,14 +5,13 @@ set -o nounset
 set -o pipefail
 
 if [[ "$#" -lt 1 ]]; then
-    echo "${0} branch: branch name"
+    echo "${0} branch: fetch and checkout to the branch"
     exit 2
 fi
 
-WORKDIR="${WORKDIR:-.}"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
-REPO="${REPO:-https://github.com/kubernetes/kubernetes}"
 BRANCH="$1"
 ORIGIN="origin-pull-branch-${BRANCH}"
 

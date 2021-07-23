@@ -4,8 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-
-ROOT="$(dirname "${BASH_SOURCE}")/.."
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
 
 cp -r patches patches.bak

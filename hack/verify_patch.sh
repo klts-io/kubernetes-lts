@@ -4,10 +4,9 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-CONFIG="${FILE:-${ROOT}/releases.yml}"
-
-
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
-make $(cat "${CONFIG}" | yq '.releases | .[] | .name' | tr -d '"' | tr '\n' ' ')
+
+RELEASES=$(helper::config::list_releases)
+
+make ${RELEASES}

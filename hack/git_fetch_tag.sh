@@ -5,14 +5,13 @@ set -o nounset
 set -o pipefail
 
 if [[ "$#" -lt 1 ]]; then
-    echo "${0} tag: tag name"
+    echo "${0} tag: fetch and checkout to the tag"
     exit 2
 fi
 
-WORKDIR="${WORKDIR:-.}"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
-REPO="${REPO:-https://github.com/kubernetes/kubernetes}"
 TAG="$1"
 BRANCH="tag-${TAG}"
 ORIGIN="origin-pull-${BRANCH}"

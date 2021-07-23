@@ -4,12 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-CONFIG="${FILE:-${ROOT}/releases.yml}"
-
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
-RELEASES=$(cat "${CONFIG}" | yq '.releases | .[] | .name' | tr -d '"' | tr '\n' ' ')
+
+RELEASES=$(helper::config::list_releases)
 
 for release in ${RELEASES}; do
   echo "Verifying build release: ${release}"

@@ -4,14 +4,12 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
+cd "${ROOT}"
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-CONFIG="${FILE:-${ROOT}/releases.yml}"
+RELEASES=$(helper::config::list_releases)
 
-
-RELEASES=$(cat "${CONFIG}" | yq '.releases | .[] | .name' | tr -d '"' | tr '\n' ' ')
-
-for release in ${RELEASES} ; do
+for release in ${RELEASES}; do
     echo "Tagging and push release ${release}"
     git tag "${release}" && git push origin "${release}"
 done

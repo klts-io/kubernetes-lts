@@ -4,12 +4,11 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-CONFIG="${FILE:-${ROOT}/releases.yml}"
-RELEASES=$(cat "${CONFIG}" | yq ".releases | .[] | .name" | tr -d '"' | tr '\n' ' ')
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 
+RELEASES=$(helper::config::list_releases)
 
-cat << EOF
+cat <<EOF
 name: Verify
 
 on:
@@ -34,7 +33,7 @@ EOF
 
 for release in ${RELEASES}; do
   name=${release//\./\-}
-  cat << EOF
+  cat <<EOF
   Build-Client-${name}:
     needs: Patch
     runs-on: ubuntu-latest
@@ -68,5 +67,3 @@ for release in ${RELEASES}; do
 EOF
 
 done
-
- 

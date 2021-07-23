@@ -4,9 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-OUTPUT="../release"
-WORKDIR="${ROOT}/workdir"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
 KUBE_BUILD_PLATFORMS=(
@@ -23,13 +21,13 @@ WANTS=(
 )
 TARGETS=$(ls _output/release-images/*/*.tar)
 FAILD=false
-for want in ${WANTS} ; do
-    if ! [[ "${TARGETS}" =~ "${want}.tar" ]] ; then
+for want in ${WANTS}; do
+    if ! [[ "${TARGETS}" =~ "${want}.tar" ]]; then
         FAILD=true
         echo "Missing ${want}.tar"
     fi
 done
 
-if [[ "${FAILD}" == true ]] ; then
+if [[ "${FAILD}" == true ]]; then
     exit 1
 fi
