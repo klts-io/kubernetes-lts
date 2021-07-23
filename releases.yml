@@ -19,23 +19,27 @@ releases:
     base_release: v1.15.12
     patches:
       - no-delete-images.1.15
+      - fix-image-name
       - CVE-2021-3121
   - name: v1.14.10-cve.0
     base_release: v1.14.10
     patches:
       - no-delete-images.1.15
+      - fix-image-name
       - CVE-2020-8559
       - CVE-2021-3121
   - name: v1.13.12-cve.0
     base_release: v1.13.12
     patches:
       - no-delete-images.1.15
+      - fix-image-name
       - CVE-2020-8559.1.13
       - CVE-2021-3121
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
       - no-delete-images.1.12
+      - fix-image-name.1.12
       - CVE-2019-11247
       - CVE-2020-8559.1.12
       - CVE-2021-3121
@@ -44,6 +48,7 @@ releases:
     patches:
       - release-images-script
       - no-delete-images.1.12
+      - fix-image-name.1.12
       - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       #  - CVE-2020-8559.1.12
@@ -53,6 +58,7 @@ releases:
     patches:
       - release-images-script
       - no-delete-images.1.10
+      - fix-image-name.1.12
       # - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       # - CVE-2020-8559.1.12
@@ -149,3 +155,9 @@ patches:
   - name: no-delete-images.1.10
     patch:
       - patches/no-delete-images.1.10.patch
+  - name: fix-image-name
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/80047.patch
+  - name: fix-image-name.1.12
+    patch:
+      - patches/fix-image-name.1.12.patch

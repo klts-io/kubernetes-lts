@@ -1,0 +1,36 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Javier=20P=C3=A9rez=20Hern=C3=A1ndez?= <jbperez@google.com>
+Date: Thu, 11 Jul 2019 10:58:32 -0700
+Subject: [PATCH] release lib: docker save remove special name for amd64
+
+---
+ build/lib/release.sh | 16 ++--------------
+ 1 file changed, 2 insertions(+), 14 deletions(-)
+
+diff --git a/build/lib/release.sh b/build/lib/release.sh
+index ef7a5838e73..5f1ea62fd94 100644
+--- a/build/lib/release.sh
++++ b/build/lib/release.sh
+@@ -335,20 +335,8 @@ function kube::release::create_docker_images_for_server() {
+       local docker_build_path="${binary_dir}/${binary_name}.dockerbuild"
+       local docker_file_path="${docker_build_path}/Dockerfile"
+       local binary_file_path="${binary_dir}/${binary_name}"
+-      local docker_image_tag="${docker_registry}"
+-      local deprecated_image_tag="${deprecated_registry}"
+-      if [[ ${arch} == "amd64" ]]; then
+-        # If we are building a amd64 docker image, preserve the original
+-        # image name
+-        docker_image_tag+="/${binary_name}:${docker_tag}"
+-        deprecated_image_tag+="/${binary_name}:${docker_tag}"
+-      else
+-        # If we are building a docker image for another architecture,
+-        # append the arch in the image tag
+-        docker_image_tag+="/${binary_name}-${arch}:${docker_tag}"
+-        deprecated_image_tag+="/${binary_name}-${arch}:${docker_tag}"
+-      fi
+-
++      local docker_image_tag="${docker_registry}/${binary_name}-${arch}:${docker_tag}"
++      local deprecated_image_tag="${deprecated_registry}/${binary_name}-${arch}:${docker_tag}"
+ 
+       kube::log::status "Starting docker build for image: ${binary_name}-${arch}"
+       (
