@@ -4,9 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-OUTPUT="../release"
-WORKDIR="${ROOT}/workdir"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
 KUBE_BUILD_PLATFORMS=(
@@ -21,13 +19,13 @@ KUBE_BUILD_PLATFORMS=(
     windows/amd64
     windows/386
 )
-for platform in ${KUBE_BUILD_PLATFORMS[*]} ; do
+for platform in ${KUBE_BUILD_PLATFORMS[*]}; do
     ./build/run.sh make KUBE_BUILD_PLATFORMS="${platform}" kubectl 2>&1 | grep -v -E '^I\w+ ' || echo "fail ${platform}"
 done
-targets=$(ls _output/dockerized/bin/*/*/kubectl*)
-echo cp "${targets}" "${OUTPUT}"
+TARGETS=$(ls _output/dockerized/bin/*/*/kubectl*)
+
 mkdir -p "${OUTPUT}"
-for target in $targets; do
-    dist=$(echo ${target} | sed 's#_output/dockerized/bin/##' | tr '/' '-' )
+for target in $TARGETS; do
+    dist=$(echo ${target} | sed 's#_output/dockerized/bin/##' | tr '/' '-')
     cp "${target}" ""${OUTPUT}"/${dist}"
 done

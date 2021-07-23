@@ -4,12 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-ROOT="$(dirname "${BASH_SOURCE}")/.."
-WORKDIR="${ROOT}/workdir"
+source "$(dirname "${BASH_SOURCE}")/helper.sh"
 mkdir -p "${WORKDIR}"
 cd "${WORKDIR}"
 
-REPO="${REPO:-https://github.com/kubernetes/kubernetes}"
 BRANCH="master"
 ORIGIN="upstream"
 

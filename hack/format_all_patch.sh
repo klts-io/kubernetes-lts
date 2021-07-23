@@ -7,6 +7,8 @@ set -o pipefail
 source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
 
-RELEASES=$(helper::config::list_releases)
+PATCHES=$(ls ${PATCHESDIR}/*.patch)
 
-make ${RELEASES}
+for patch in ${PATCHES}; do
+    ./hack/format_patch.sh "$patch"
+done

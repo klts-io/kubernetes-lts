@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Thu, 22 Jul 2021 18:41:45 +0800
+Subject: [PATCH] No delete images
+
+---
+ build/lib/release.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/lib/release.sh b/build/lib/release.sh
+index 6d23dc20339..f5bf1dd0f57 100644
+--- a/build/lib/release.sh
++++ b/build/lib/release.sh
+@@ -411,8 +411,8 @@ EOF
+         rm -rf "${docker_build_path}"
+         ln "${binary_file_path}.tar" "${images_dir}/"
+ 
+-        kube::log::status "Deleting docker image ${docker_image_tag}"
+-        "${DOCKER[@]}" rmi "${docker_image_tag}" &>/dev/null || true
++        # kube::log::status "Deleting docker image ${docker_image_tag}"
++        # "${DOCKER[@]}" rmi "${docker_image_tag}" &>/dev/null || true
+       ) &
+     done
+ 
