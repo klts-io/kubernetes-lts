@@ -12,10 +12,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build images
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent $(basename ${GITHUB_REF}) build-image
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
+      - name: Build images
+        run: |
+          make build-image
       - name: Push images
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
@@ -25,10 +31,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build server binaries
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent $(basename ${GITHUB_REF}) build-server
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
+      - name: Build server binaries
+        run: |
+          make build-server
       - name: Push server binaries
         uses: wzshiming/action-upload-release-assets@v1
         env:
@@ -39,10 +51,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Install dependent
+        run: |
+          git config --global user.name "bot"
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
       - name: Build client binaries
         run: |
           git config --global user.name "bot"
-          make dependent $(basename ${GITHUB_REF}) build-client
+          make build-client
       - name: Push client binaries
         uses: wzshiming/action-upload-release-assets@v1
         env:

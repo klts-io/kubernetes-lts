@@ -24,10 +24,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Verify patch
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent verify-patch verify-patch-format
+          make dependent
+      - name: Verify patch
+        run: |
+          make verify-patch
+      - name: Verify patch format
+        run: |
+          make verify-patch-format
 
 EOF
 
@@ -39,31 +45,48 @@ for release in ${RELEASES}; do
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Verify build client ${release}
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent ${release} verify-build-client
+          make dependent
+      - name: Checkout to ${release}
+        run: |
+          make ${release}
+      - name: Verify build client
+        run: |
+          make verify-build-client
 
   Build-Server-${name}:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Verify build server ${release}
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent ${release} verify-build-server
+          make dependent
+      - name: Checkout to ${release}
+        run: |
+          make ${release}
+      - name: Verify build server
+        run: |
+          make verify-build-server
 
   Build-Image-${name}:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Verify build image ${release}
+      - name: Install dependent
         run: |
           git config --global user.name "bot"
-          make dependent ${release} verify-build-image
-
+          make dependent
+      - name: Checkout to ${release}
+        run: |
+          make ${release}
+      - name: Verify build image
+        run: |
+          make verify-build-image
 EOF
 
 done
