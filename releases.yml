@@ -45,7 +45,7 @@ releases:
       - release-images-script
       - no-delete-images.1.12
       - CVE-2019-11247.1.11
-      - CVE-2019-11248.1.12
+      - CVE-2019-11248.1.11
       #  - CVE-2020-8559.1.12
       - CVE-2021-3121
   - name: v1.10.13-cve.0
@@ -54,7 +54,7 @@ releases:
       - release-images-script
       - no-delete-images.1.10
       # - CVE-2019-11247.1.11
-      - CVE-2019-11248.1.12
+      - CVE-2019-11248.1.11
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
 
@@ -75,9 +75,9 @@ patches:
   - name: CVE-2020-8559.1.12
     patch:
       - patches/CVE-2020-8559.1.12.patch # Remove test from https://github.com/kubernetes/kubernetes/pull/92971.patch
-  - name: CVE-2019-11248.1.12 # CVSS Score 6.4, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11248/
+  - name: CVE-2019-11248.1.11 # CVSS Score 6.4, < k8s1.12, https://www.cvedetails.com/cve/CVE-2019-11248/
     patch:
-      - patches/CVE-2019-11248.1.12.patch # Conflict resolution from https://github.com/kubernetes/kubernetes/pull/79184.patch
+      - patches/CVE-2019-11248.1.11.patch # Conflict resolution from https://github.com/kubernetes/kubernetes/pull/79184.patch
   - name: CVE-2019-11247 # CVSS Score 6.5, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11247/
     patch:
       - https://github.com/kubernetes/kubernetes/pull/80852.patch

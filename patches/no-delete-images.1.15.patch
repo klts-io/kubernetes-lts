@@ -1,15 +1,19 @@
-From 83d5d0d6043ab25c7de8ab900b316b9e9cb984a9 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Shiming Zhang <wzshiming@foxmail.com>
 Date: Thu, 22 Jul 2021 18:41:45 +0800
 Subject: [PATCH] No delete images
 
 ---
+ build/lib/release.sh | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/build/lib/release.sh b/build/lib/release.sh
-index 9e0de70ffe5..ff3a575c073 100644
+index 9e0de70ffe5..b28c38fcb56 100644
 --- a/build/lib/release.sh
 +++ b/build/lib/release.sh
-@@ -410,8 +410,8 @@ EOF
+@@ -408,10 +408,10 @@ EOF
+             "${DOCKER[@]}" rmi "${release_docker_image_tag}" 2>/dev/null || true
+             "${DOCKER[@]}" tag "${docker_image_tag}" "${release_docker_image_tag}" 2>/dev/null
            fi
 -        else
 +        # else
@@ -21,6 +25,3 @@ index 9e0de70ffe5..ff3a575c073 100644
          fi
        ) &
      done
--- 
-2.32.0
-

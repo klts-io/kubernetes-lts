@@ -1,15 +1,19 @@
-From eb1dce93beb8cf1d6750b8aab44f60857c16294b Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Shiming Zhang <wzshiming@foxmail.com>
 Date: Thu, 22 Jul 2021 18:41:45 +0800
 Subject: [PATCH] No delete images
 
 ---
+ build/lib/release.sh | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/build/lib/release.sh b/build/lib/release.sh
-index 1275e6e1d96..26fcaf03a4e 100644
+index 1275e6e1d96..ef7a5838e73 100644
 --- a/build/lib/release.sh
 +++ b/build/lib/release.sh
-@@ -376,9 +376,9 @@ function kube::release::create_docker_images_for_server() {
+@@ -374,11 +374,11 @@ function kube::release::create_docker_images_for_server() {
+             "${DOCKER[@]}" rmi "${release_docker_image_tag}" 2>/dev/null || true
+             "${DOCKER[@]}" tag "${docker_image_tag}" "${release_docker_image_tag}" 2>/dev/null
            fi
 -        else
 +        # else
@@ -23,6 +27,3 @@ index 1275e6e1d96..26fcaf03a4e 100644
          fi
        ) &
      done
--- 
-2.32.0
-
