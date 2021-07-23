@@ -52,7 +52,7 @@ for PATCH in "${PATCHES[@]}"; do
     echo "  $ git am -3 ${PATCH}"
     echo
     git am -3 "${PATCH}" || {
-        local conflicts=false
+        conflicts=false
         while unmerged=$(git status --porcelain | grep ^U) && [[ -n ${unmerged} ]] || [[ -e "${REBASE_APPLY}" ]]; do
             conflicts=true
             echo
