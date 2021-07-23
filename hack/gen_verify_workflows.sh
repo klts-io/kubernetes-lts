@@ -24,6 +24,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: workdir
+          key: \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
@@ -45,6 +52,15 @@ for release in ${RELEASES}; do
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: workdir
+          key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
+          restore-keys: |
+            \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
@@ -61,6 +77,15 @@ for release in ${RELEASES}; do
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: workdir
+          key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
+          restore-keys: |
+            \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
@@ -77,6 +102,15 @@ for release in ${RELEASES}; do
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: workdir
+          key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
+          restore-keys: |
+            \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
