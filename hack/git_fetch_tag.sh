@@ -15,7 +15,7 @@ cd "${WORKDIR}"
 REPO="${REPO:-https://github.com/kubernetes/kubernetes}"
 TAG="$1"
 BRANCH="tag-${TAG}"
-ORIGIN="origin-pull-tag-${BRANCH}"
+ORIGIN="origin-pull-${BRANCH}"
 
 if ! [[ -d .git ]]; then
     git init

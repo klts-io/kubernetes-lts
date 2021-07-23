@@ -29,6 +29,10 @@ verify: verify-patch
 verify-patch: 
 	./hack/verify_patch.sh
 
+.PHONY: verify-patch-format
+verify-patch-format: 
+	./hack/verify_patch_format.sh
+
 .PHONY: verify-build
 verify-build: 
 	./hack/verify_build.sh
@@ -52,3 +56,7 @@ gen-verify-workflows:
 .PHONY: push-image
 push-image:
 	./hack/image_tag.sh && ./hack/image_push.sh
+
+.PHONY: format-all-patch
+format-all-patch:
+	./hack/format_all_patch.sh

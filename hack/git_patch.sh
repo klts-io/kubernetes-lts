@@ -30,7 +30,7 @@ fi
 cd "${REPO_ROOT}"
 
 GIT_AM_CLEANUP=false
-function return_to_kansas() {
+function cleanup() {
     if [[ "${GIT_AM_CLEANUP}" == "true" ]]; then
         echo
         echo "+++ Aborting in-progress git am."
@@ -42,7 +42,7 @@ function return_to_kansas() {
     echo "+++ Returning you to the ${STARTING_BRANCH} branch and cleaning up."
     git checkout -f "${STARTING_BRANCH}" >/dev/null 2>&1 || true
 }
-trap return_to_kansas EXIT
+trap cleanup EXIT
 
 
 GIT_AM_CLEANUP=true

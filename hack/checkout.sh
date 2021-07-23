@@ -15,47 +15,13 @@ RELEASE="$1"
 CONFIG="${FILE:-${ROOT}/releases.yml}"
 CONFIG_DIR="$(dirname "${CONFIG}")"
 
-function query() {
-    cat "${CONFIG}" | yq "$1" | tr -d '"'
-}
-
-function query_field() {
-    query ".$1 | .[] | select( .name == \"$2\" ) | .$3"
-}
-
-function query_field_line() {
-    query_field "$1" "$2" "$3 | .[]"
-}
-
-function download() {
-    PATCH="$1"
-    if ! [[ "${PATCH}" =~ ^https?:// ]]; then
-        echo "../${PATCH}"
-        return
-    fi
-    TMP_PATCH="${TMPDIR:-/tmp/}/patches/$(basename ${PATCH})"
-    if ! [[ -f "${TMP_PATCH}" ]]; then
-        mkdir -p "$(dirname ${TMP_PATCH})"
-        echo "+++ Downloading patch to ${TMP_PATCH} from ${PATCH}" 1>&2
-        curl -o "${TMP_PATCH}" -sSL "${PATCH}"
-    fi
-    echo ${TMP_PATCH}
-}
-
-BASE=$(query ".base")
-BASE_RELEASE=$(query_field "releases" "${RELEASE}" "base_release")
-PATCHES=$(query_field_line "releases" "${RELEASE}" "patches")
+BASE=$(cat "${CONFIG}" | yq ".base" | tr -d '"')
+BASE_RELEASE=$(cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"${RELEASE}\" ) | .base_release" | tr -d '"')
+PATCHES=$(cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"${RELEASE}\" ) | .patches | .[]" | tr -d '"')
 
 echo "Release ${BASE_RELEASE} patches ($(echo ${PATCHES} | tr ' ' ',')) as release ${RELEASE}"
 
-PATCH_LIST=""
-for patch in ${PATCHES}; do
-    patches=$(query_field_line "patches" "${patch}" "patch" || echo "")
-    echo "Patch ($(echo ${patches} | tr ' ' ',')) to ${BASE_RELEASE} from ${patch}"
-    for item in ${patches}; do
-      PATCH_LIST+=" $(download ${item})"
-    done
-done
+PATCH_LIST=$(./hack/get_patches.sh ${PATCHES})
 
 WORKDIR="${WORKDIR}" REPO="${BASE}" ./hack/git_fetch_tag.sh ${BASE_RELEASE}
 if [[ "${PATCH_LIST}" != "" ]]; then
