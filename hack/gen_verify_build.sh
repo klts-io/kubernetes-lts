@@ -28,7 +28,7 @@ jobs:
       - name: Verify patch
         run: |
           git config --global user.name "bot"
-          make dependent verify-patch
+          make dependent verify-patch verify-patch-format
 
 EOF
 
