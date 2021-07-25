@@ -25,12 +25,10 @@ jobs:
           make dependent
       - name: Verify patch
         run: |
-          make verify-patch
-      - name: Verify patch format
-        run: |
-          make verify-patch-format
+          make $(basename ${GITHUB_REF})
 
   Images:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -59,6 +57,7 @@ jobs:
           OLD_REGISTRY=k8s.gcr.io REGISTRY="docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
 
   Server:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -88,6 +87,7 @@ jobs:
           RELEASE: release
 
   Client:
+    needs: Patch
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
