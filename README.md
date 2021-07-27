@@ -29,4 +29,4 @@ make build-server
 
 ### Official patch release
 
-[patch release]https://kubernetes.io/releases/patch-releases/
+[patch release](https://kubernetes.io/releases/patch-releases/)
