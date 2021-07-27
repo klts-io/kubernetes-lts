@@ -13,6 +13,7 @@ releases:
   - name: v1.16.15-cve.0
     base_release: v1.16.15
     patches:
+      - fix-test.1.16
       - no-delete-images.1.18
       - CVE-2021-3121
   - name: v1.15.12-cve.0
@@ -170,3 +171,6 @@ patches:
   - name: fix-image-name.1.12
     patch:
       - patches/fix-image-name.1.12.patch
+  - name: fix-test.1.16
+    patch:
+      - patches/fix-test.1.16.patch
