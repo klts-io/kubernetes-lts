@@ -1,0 +1,24 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Jingyi Hu <jingyih@google.com>
+Date: Tue, 29 Oct 2019 13:10:29 -0700
+Subject: [PATCH] Update etcd.sh to use v3 endpoint
+
+---
+ hack/lib/etcd.sh | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/hack/lib/etcd.sh b/hack/lib/etcd.sh
+index cbe1083daaa..ac098a279a2 100755
+--- a/hack/lib/etcd.sh
++++ b/hack/lib/etcd.sh
+@@ -78,8 +78,8 @@ kube::etcd::start() {
+   ETCD_PID=$!
+ 
+   echo "Waiting for etcd to come up."
+-  kube::util::wait_for_url "http://${ETCD_HOST}:${ETCD_PORT}/v2/machines" "etcd: " 0.25 80
+-  curl -fs -X PUT "http://${ETCD_HOST}:${ETCD_PORT}/v2/keys/_test"
++  kube::util::wait_for_url "http://${ETCD_HOST}:${ETCD_PORT}/health" "etcd: " 0.25 80
++  curl -fs -X POST "http://${ETCD_HOST}:${ETCD_PORT}/v3/kv/put" -d '{"key": "X3Rlc3Q=", "value": ""}'
+ }
+ 
+ kube::etcd::stop() {
