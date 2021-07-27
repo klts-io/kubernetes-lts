@@ -26,3 +26,7 @@ make build-server
 ```
 
 [Binaries artifacts](https://github.com/DaoCloud-OpenSource/kubepatch/releases)
+
+### Official patch release
+
+[patch release]https://kubernetes.io/releases/patch-releases/
