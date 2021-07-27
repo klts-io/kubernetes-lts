@@ -26,4 +26,4 @@ fi
 git remote add "${ORIGIN}" "${REPO}"
 
 git fetch "${ORIGIN}" tag "${TAG}" --depth=1
-git checkout -B "${BRANCH}" "${TAG}"
+git checkout -f -B "${BRANCH}" "${TAG}"

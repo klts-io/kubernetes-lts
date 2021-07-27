@@ -25,4 +25,4 @@ fi
 git remote add "${ORIGIN}" "${REPO}"
 
 git fetch "${ORIGIN}" "${BRANCH}" --depth=1
-git checkout -B "${BRANCH}" --track "${ORIGIN}/${BRANCH}"
+git checkout -f -B "${BRANCH}" --track "${ORIGIN}/${BRANCH}"
