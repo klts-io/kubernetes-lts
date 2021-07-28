@@ -5,10 +5,12 @@ releases:
     base_release: v1.18.20
     patches:
       - no-delete-images.1.18
+      - fix-etcd-put-key.1.18
   - name: v1.17.17-cve.0
     base_release: v1.17.17
     patches:
       - no-delete-images.1.18
+      - fix-etcd-put-key.1.18
       - CVE-2021-3121
   - name: v1.16.15-cve.0
     base_release: v1.16.15
@@ -16,6 +18,7 @@ releases:
       - fix-test.1.16
       - no-delete-images.1.18
       - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2021-3121
   - name: v1.15.12-cve.0
     base_release: v1.15.12
@@ -23,6 +26,7 @@ releases:
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
       - CVE-2021-3121
   - name: v1.14.10-cve.0
@@ -31,6 +35,7 @@ releases:
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
       - CVE-2020-8559
       - CVE-2021-3121
@@ -40,6 +45,7 @@ releases:
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
       - CVE-2020-8559.1.13
       - CVE-2021-3121
@@ -49,6 +55,7 @@ releases:
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2019-11247
       - CVE-2020-8558.1.12
       - CVE-2020-8559.1.12
@@ -60,6 +67,7 @@ releases:
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.11
+      - fix-etcd-put-key.1.11
       - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       - CVE-2020-8558.1.12
@@ -72,6 +80,7 @@ releases:
       - no-delete-images.1.10
       - fix-image-name.1.12
       - fix-etcd-health.1.11
+      - fix-etcd-put-key.1.11
       # - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       # - CVE-2020-8558.1.12
@@ -187,3 +196,9 @@ patches:
   - name: fix-etcd-health.1.11
     patch:
       - patches/fix-etcd-health.1.11.patch # Pick commit from https://github.com/kubernetes/kubernetes/pull/84329.patch
+  - name: fix-etcd-put-key.1.18
+    patch:
+      - patches/fix-etcd-put-key.1.18.patch
+  - name: fix-etcd-put-key.1.11
+    patch:
+      - patches/fix-etcd-put-key.1.11.patch

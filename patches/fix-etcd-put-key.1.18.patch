@@ -1,0 +1,21 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Wed, 28 Jul 2021 10:32:45 +0800
+Subject: [PATCH] Remove writable verification in etcd startup
+
+---
+ hack/lib/etcd.sh | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/hack/lib/etcd.sh b/hack/lib/etcd.sh
+index 88f64fb0a09..1a3a0b1eefb 100755
+--- a/hack/lib/etcd.sh
++++ b/hack/lib/etcd.sh
+@@ -88,7 +88,6 @@ kube::etcd::start() {
+ 
+   echo "Waiting for etcd to come up."
+   kube::util::wait_for_url "${KUBE_INTEGRATION_ETCD_URL}/health" "etcd: " 0.25 80
+-  curl -fs -X POST "${KUBE_INTEGRATION_ETCD_URL}/v3/kv/put" -d '{"key": "X3Rlc3Q=", "value": ""}'
+ }
+ 
+ kube::etcd::stop() {
