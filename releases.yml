@@ -4,17 +4,20 @@ releases:
   - name: v1.18.20-cve.0
     base_release: v1.18.20
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.18
       - fix-etcd-put-key.1.18
   - name: v1.17.17-cve.0
     base_release: v1.17.17
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.18
       - fix-etcd-put-key.1.18
       - CVE-2021-3121
   - name: v1.16.15-cve.0
     base_release: v1.16.15
     patches:
+      - fix-run-docker.1.18
       - fix-test.1.16
       - no-delete-images.1.18
       - fix-etcd-health.1.16
@@ -23,6 +26,7 @@ releases:
   - name: v1.15.12-cve.0
     base_release: v1.15.12
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -32,6 +36,7 @@ releases:
   - name: v1.14.10-cve.0
     base_release: v1.14.10
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -42,6 +47,7 @@ releases:
   - name: v1.13.12-cve.0
     base_release: v1.13.12
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -52,6 +58,7 @@ releases:
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.16
@@ -63,6 +70,7 @@ releases:
   - name: v1.11.10-cve.0
     base_release: v1.11.10
     patches:
+      - fix-run-docker.1.18
       - release-images-script
       - no-delete-images.1.12
       - fix-image-name.1.12
@@ -76,6 +84,7 @@ releases:
   - name: v1.10.13-cve.0
     base_release: v1.10.13
     patches:
+      - fix-run-docker.1.18
       - release-images-script
       - no-delete-images.1.10
       - fix-image-name.1.12
@@ -166,6 +175,9 @@ patches:
     patch: []
 
   # Other
+  - name: fix-run-docker.1.18
+    patch:
+      - patches/fix-run-docker.1.18.patch
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch

@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Tue, 27 Jul 2021 16:43:27 +0800
+Subject: [PATCH 1/2] Run docker as root in tests
+
+---
+ build/common.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/build/common.sh b/build/common.sh
+index 75dc82ed335..c54fe8269d1 100755
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -535,7 +535,7 @@ function kube::build::run_build_command_ex() {
+ 
+   local -a docker_run_opts=(
+     "--name=${container_name}"
+-    "--user=$(id -u):$(id -g)"
++    "--user=root"
+     "--hostname=${HOSTNAME}"
+     "${DOCKER_MOUNT_ARGS[@]}"
+   )
+
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Wed, 28 Jul 2021 17:37:59 +0800
+Subject: [PATCH 2/2] Run docker with device kmsg
+
+---
+ build/common.sh | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/build/common.sh b/build/common.sh
+index c54fe8269d1..9cd95b5af51 100755
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -537,6 +537,7 @@ function kube::build::run_build_command_ex() {
+     "--name=${container_name}"
+     "--user=root"
+     "--hostname=${HOSTNAME}"
++    "--device=/dev/kmsg"
+     "${DOCKER_MOUNT_ARGS[@]}"
+   )
+ 
