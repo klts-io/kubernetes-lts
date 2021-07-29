@@ -31,6 +31,7 @@ OUTPUT=$(helper::fullpath ${OUTPUT})
 WORKDIR=$(helper::fullpath ${WORKDIR})
 PATCHESDIR=$(helper::fullpath ${PATCHESDIR})
 TMPDIR=$(helper::fullpath ${TMPDIR})
+CONFIG=$(helper::fullpath ${CONFIG})
 
 mkdir -p "${TMPDIR}"
 
