@@ -18,7 +18,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
@@ -41,7 +43,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -66,7 +70,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -91,7 +97,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -116,7 +124,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -141,7 +151,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -166,7 +178,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -191,7 +205,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -216,7 +232,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -241,7 +259,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -266,7 +286,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -291,7 +313,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -316,7 +340,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -341,7 +367,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -366,7 +394,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -391,7 +421,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -416,7 +448,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -441,7 +475,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -466,7 +502,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -491,7 +529,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -516,7 +556,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -541,7 +583,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -566,7 +610,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -591,7 +637,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -616,7 +664,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -641,7 +691,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -666,7 +718,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -691,7 +745,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -705,4 +761,3 @@ jobs:
       - name: Test integration
         run: |
           make test-integration
-
