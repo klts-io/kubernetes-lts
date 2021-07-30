@@ -55,7 +55,7 @@ gen-verify-workflows:
 
 .PHONY: push-image
 push-image:
-	./hack/image_tag.sh && ./hack/image_push.sh
+	./hack/image_tag.sh && ./hack/image_push.sh && ./hack/image_manifest_push.sh
 
 .PHONY: format-all-patch
 format-all-patch:
