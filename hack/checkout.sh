@@ -12,7 +12,8 @@ fi
 source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
 
-RELEASE="$1"
+ORIGIN_RELEASE="$1"
+RELEASE="${ORIGIN_RELEASE%.*}.0"
 
 BASE_RELEASE=$(helper::config::get_base_release $RELEASE)
 PATCHES=$(helper::config::get_patches $RELEASE)
@@ -26,4 +27,4 @@ if [[ "${PATCH_LIST}" != "" ]]; then
     ./hack/git_patch.sh ${PATCH_LIST}
 fi
 
-cd "${WORKDIR}" && git tag -f "${RELEASE}"
+cd "${WORKDIR}" && git tag -f "${ORIGIN_RELEASE}"
