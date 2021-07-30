@@ -53,8 +53,8 @@ jobs:
           make build-image
       - name: Push images
         run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login docker.pkg.github.com -u ${{ github.actor }} --password-stdin
-          OLD_REGISTRY=k8s.gcr.io REGISTRY="docker.pkg.github.com/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          OLD_REGISTRY=k8s.gcr.io REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
 
   Server:
     needs: Patch
