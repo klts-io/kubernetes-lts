@@ -6,7 +6,6 @@ v%:
 dependent:
 	pip3 install yq
 	./hack/git_init_workdir.sh
-	./hack/install_etcd.sh
 
 .PHONY: build-client
 build-client:
@@ -68,10 +67,12 @@ test:
 
 .PHONY: test-cmd
 test-cmd:
+	./hack/install_etcd.sh
 	./hack/test_cmd.sh
 
 .PHONY: test-integration
 test-integration:
+	./hack/install_etcd.sh
 	./hack/test_integration.sh
 
 .PHONY: test-e2e
