@@ -31,7 +31,7 @@ jobs:
         run: |
           make verify-patch-format
 
-  Build-Client-v1-18-20-cve-0:
+  Test-v1-18-20-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -52,11 +52,11 @@ jobs:
       - name: Checkout to v1.18.20-cve.0
         run: |
           make v1.18.20-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-18-20-cve-0:
+  Test-Cmd-v1-18-20-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -77,11 +77,11 @@ jobs:
       - name: Checkout to v1.18.20-cve.0
         run: |
           make v1.18.20-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-18-20-cve-0:
+  Test-Integration-v1-18-20-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -102,10 +102,11 @@ jobs:
       - name: Checkout to v1.18.20-cve.0
         run: |
           make v1.18.20-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-17-17-cve-0:
+          make test-integration
+
+  Test-v1-17-17-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -126,11 +127,11 @@ jobs:
       - name: Checkout to v1.17.17-cve.0
         run: |
           make v1.17.17-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-17-17-cve-0:
+  Test-Cmd-v1-17-17-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -151,11 +152,11 @@ jobs:
       - name: Checkout to v1.17.17-cve.0
         run: |
           make v1.17.17-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-17-17-cve-0:
+  Test-Integration-v1-17-17-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -176,10 +177,11 @@ jobs:
       - name: Checkout to v1.17.17-cve.0
         run: |
           make v1.17.17-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-16-15-cve-0:
+          make test-integration
+
+  Test-v1-16-15-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -200,11 +202,11 @@ jobs:
       - name: Checkout to v1.16.15-cve.0
         run: |
           make v1.16.15-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-16-15-cve-0:
+  Test-Cmd-v1-16-15-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -225,11 +227,11 @@ jobs:
       - name: Checkout to v1.16.15-cve.0
         run: |
           make v1.16.15-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-16-15-cve-0:
+  Test-Integration-v1-16-15-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -250,10 +252,11 @@ jobs:
       - name: Checkout to v1.16.15-cve.0
         run: |
           make v1.16.15-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-15-12-cve-0:
+          make test-integration
+
+  Test-v1-15-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -274,11 +277,11 @@ jobs:
       - name: Checkout to v1.15.12-cve.0
         run: |
           make v1.15.12-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-15-12-cve-0:
+  Test-Cmd-v1-15-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -299,11 +302,11 @@ jobs:
       - name: Checkout to v1.15.12-cve.0
         run: |
           make v1.15.12-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-15-12-cve-0:
+  Test-Integration-v1-15-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -324,10 +327,11 @@ jobs:
       - name: Checkout to v1.15.12-cve.0
         run: |
           make v1.15.12-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-14-10-cve-0:
+          make test-integration
+
+  Test-v1-14-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -348,11 +352,11 @@ jobs:
       - name: Checkout to v1.14.10-cve.0
         run: |
           make v1.14.10-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-14-10-cve-0:
+  Test-Cmd-v1-14-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -373,11 +377,11 @@ jobs:
       - name: Checkout to v1.14.10-cve.0
         run: |
           make v1.14.10-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-14-10-cve-0:
+  Test-Integration-v1-14-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -398,10 +402,11 @@ jobs:
       - name: Checkout to v1.14.10-cve.0
         run: |
           make v1.14.10-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-13-12-cve-0:
+          make test-integration
+
+  Test-v1-13-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -422,11 +427,11 @@ jobs:
       - name: Checkout to v1.13.12-cve.0
         run: |
           make v1.13.12-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-13-12-cve-0:
+  Test-Cmd-v1-13-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -447,11 +452,11 @@ jobs:
       - name: Checkout to v1.13.12-cve.0
         run: |
           make v1.13.12-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-13-12-cve-0:
+  Test-Integration-v1-13-12-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -472,10 +477,11 @@ jobs:
       - name: Checkout to v1.13.12-cve.0
         run: |
           make v1.13.12-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-12-10-cve-0:
+          make test-integration
+
+  Test-v1-12-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -496,11 +502,11 @@ jobs:
       - name: Checkout to v1.12.10-cve.0
         run: |
           make v1.12.10-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-12-10-cve-0:
+  Test-Cmd-v1-12-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -521,11 +527,11 @@ jobs:
       - name: Checkout to v1.12.10-cve.0
         run: |
           make v1.12.10-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-12-10-cve-0:
+  Test-Integration-v1-12-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -546,10 +552,11 @@ jobs:
       - name: Checkout to v1.12.10-cve.0
         run: |
           make v1.12.10-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-11-10-cve-0:
+          make test-integration
+
+  Test-v1-11-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -570,11 +577,11 @@ jobs:
       - name: Checkout to v1.11.10-cve.0
         run: |
           make v1.11.10-cve.0
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-v1-11-10-cve-0:
+  Test-Cmd-v1-11-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -595,11 +602,11 @@ jobs:
       - name: Checkout to v1.11.10-cve.0
         run: |
           make v1.11.10-cve.0
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-v1-11-10-cve-0:
+  Test-Integration-v1-11-10-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -620,35 +627,11 @@ jobs:
       - name: Checkout to v1.11.10-cve.0
         run: |
           make v1.11.10-cve.0
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
-  Build-Client-v1-10-13-cve-0:
-    needs: Patch
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache workdir
-        uses: actions/cache@v2
-        env:
-          cache-name: workdir
-        with:
-          path: workdir
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}
-      - name: Install dependent
-        run: |
-          git config --global user.name "bot"
-          make dependent
-      - name: Checkout to v1.10.13-cve.0
-        run: |
-          make v1.10.13-cve.0
-      - name: Verify build client
-        run: |
-          make verify-build-client
+          make test-integration
 
-  Build-Server-v1-10-13-cve-0:
+  Test-v1-10-13-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -669,11 +652,11 @@ jobs:
       - name: Checkout to v1.10.13-cve.0
         run: |
           make v1.10.13-cve.0
-      - name: Verify build server
+      - name: Test
         run: |
-          make verify-build-server
+          make test
 
-  Build-Image-v1-10-13-cve-0:
+  Test-Cmd-v1-10-13-cve-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -694,6 +677,32 @@ jobs:
       - name: Checkout to v1.10.13-cve.0
         run: |
           make v1.10.13-cve.0
-      - name: Verify build image
+      - name: Test cmd
         run: |
-          make verify-build-image
+          make test-cmd
+
+  Test-Integration-v1-10-13-cve-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: workdir
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          git config --global user.name "bot"
+          make dependent
+      - name: Checkout to v1.10.13-cve.0
+        run: |
+          make v1.10.13-cve.0
+      - name: Test integration
+        run: |
+          make test-integration
+

@@ -47,7 +47,7 @@ EOF
 for release in ${RELEASES}; do
   name=${release//\./\-}
   cat <<EOF
-  Build-Client-${name}:
+  Test-${name}:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -68,11 +68,11 @@ for release in ${RELEASES}; do
       - name: Checkout to ${release}
         run: |
           make ${release}
-      - name: Verify build client
+      - name: Test
         run: |
-          make verify-build-client
+          make test
 
-  Build-Server-${name}:
+  Test-Cmd-${name}:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -93,11 +93,11 @@ for release in ${RELEASES}; do
       - name: Checkout to ${release}
         run: |
           make ${release}
-      - name: Verify build server
+      - name: Test cmd
         run: |
-          make verify-build-server
+          make test-cmd
 
-  Build-Image-${name}:
+  Test-Integration-${name}:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -118,9 +118,10 @@ for release in ${RELEASES}; do
       - name: Checkout to ${release}
         run: |
           make ${release}
-      - name: Verify build image
+      - name: Test integration
         run: |
-          make verify-build-image
+          make test-integration
+
 EOF
 
 done

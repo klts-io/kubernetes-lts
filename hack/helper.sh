@@ -63,6 +63,14 @@ function helper::config::get_patches() {
     cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .patches | .[]" | tr -d '"'
 }
 
+function helper::config::get_test_failures_tolerated() {
+    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .test_failures_tolerated | .[]" | tr -d '"'
+}
+
+function helper::config::get_test_integration_failures_tolerated() {
+    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .test_integration_failures_tolerated | .[]" | tr -d '"'
+}
+
 function helper::config::get_patch() {
     local list=""
     for patch in $@; do
@@ -77,3 +85,6 @@ function helper::config::get_patch() {
 function helper::config::list_releases() {
     cat "${CONFIG}" | yq ".releases | .[] | .name" | tr -d '"'
 }
+
+# etcd
+export PATH="${WORKDIR}/third_party/etcd:${PATH}"

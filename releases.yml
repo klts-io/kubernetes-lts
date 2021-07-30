@@ -4,72 +4,143 @@ releases:
   - name: v1.18.20-cve.0
     base_release: v1.18.20
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.18
+      - fix-etcd-put-key.1.18
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
+      - k8s.io/kubernetes/pkg/volume/csi
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+    test_integration_failures_tolerated: []
+
   - name: v1.17.17-cve.0
     base_release: v1.17.17
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.18
+      - fix-etcd-put-key.1.18
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/volume/csi
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+    test_integration_failures_tolerated: []
+
   - name: v1.16.15-cve.0
     base_release: v1.16.15
     patches:
-      - fix-test.1.16
+      - fix-run-docker.1.18
+      - fix-test.1.16 # Fix test k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
       - no-delete-images.1.18
+      - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2021-3121
+    test_failures_tolerated:
+      # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/gce
+    test_integration_failures_tolerated: []
+
   - name: v1.15.12-cve.0
     base_release: v1.15.12
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
+      - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/master
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+    test_integration_failures_tolerated: []
+
   - name: v1.14.10-cve.0
     base_release: v1.14.10
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
+      - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
       - CVE-2020-8559
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/controller/podautoscaler
+      - k8s.io/kubernetes/pkg/controller/volume/persistentvolume
+      - k8s.io/kubernetes/pkg/master
+      - k8s.io/kubernetes/pkg/registry/storage/csidriver/storage
+    test_integration_failures_tolerated: []
+
   - name: v1.13.12-cve.0
     base_release: v1.13.12
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.15
       - fix-image-name
+      - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2020-8558
-      - CVE-2020-8559.1.13
+      # - CVE-2020-8559.1.13
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/api/testing
+      - k8s.io/kubernetes/pkg/controller/podautoscaler
+      - k8s.io/kubernetes/pkg/master
+      - k8s.io/kubernetes/pkg/registry/apps/daemonset/storage
+    test_integration_failures_tolerated: []
+
   - name: v1.12.10-cve.0
     base_release: v1.12.10
     patches:
+      - fix-run-docker.1.18
       - no-delete-images.1.12
       - fix-image-name.1.12
+      - fix-etcd-health.1.16
+      - fix-etcd-put-key.1.18
       - CVE-2019-11247
       - CVE-2020-8558.1.12
-      - CVE-2020-8559.1.12
+      # - CVE-2020-8559.1.12
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+    test_integration_failures_tolerated: []
+
   - name: v1.11.10-cve.0
     base_release: v1.11.10
     patches:
+      - fix-run-docker.1.18
       - release-images-script
       - no-delete-images.1.12
       - fix-image-name.1.12
+      - fix-etcd-health.1.11
+      - fix-etcd-put-key.1.11
       - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       - CVE-2020-8558.1.12
-      #  - CVE-2020-8559.1.12
+      # - CVE-2020-8559.1.12
       - CVE-2021-3121
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/util/mount
+    test_integration_failures_tolerated: []
+
   - name: v1.10.13-cve.0
     base_release: v1.10.13
     patches:
+      - fix-run-docker.1.18
       - release-images-script
       - no-delete-images.1.10
       - fix-image-name.1.12
+      - fix-etcd-health.1.11
+      - fix-etcd-put-key.1.11
       # - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
       # - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
+    test_failures_tolerated: []
+    test_integration_failures_tolerated: []
 
 # https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html
 patches:
@@ -150,6 +221,9 @@ patches:
     patch: []
 
   # Other
+  - name: fix-run-docker.1.18
+    patch:
+      - patches/fix-run-docker.1.18.patch
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch
@@ -174,3 +248,15 @@ patches:
   - name: fix-test.1.16
     patch:
       - patches/fix-test.1.16.patch
+  - name: fix-etcd-health.1.16
+    patch:
+      - patches/fix-etcd-health.1.16.patch # Pick commit from https://github.com/kubernetes/kubernetes/pull/84329.patch
+  - name: fix-etcd-health.1.11
+    patch:
+      - patches/fix-etcd-health.1.11.patch # Pick commit from https://github.com/kubernetes/kubernetes/pull/84329.patch
+  - name: fix-etcd-put-key.1.18
+    patch:
+      - patches/fix-etcd-put-key.1.18.patch
+  - name: fix-etcd-put-key.1.11
+    patch:
+      - patches/fix-etcd-put-key.1.11.patch
