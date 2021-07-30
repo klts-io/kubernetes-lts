@@ -29,7 +29,9 @@ jobs:
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
@@ -57,7 +59,9 @@ for release in ${RELEASES}; do
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
@@ -82,7 +86,9 @@ for release in ${RELEASES}; do
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
@@ -107,7 +113,9 @@ for release in ${RELEASES}; do
         env:
           cache-name: workdir
         with:
-          path: workdir
+          path: |
+            workdir
+            /tmp/kubepatch/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
