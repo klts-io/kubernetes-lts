@@ -17,6 +17,14 @@ build-server:
 	@echo Build server
 	./hack/build_server.sh
 
+.PHONY: pkg-rpm-client
+pkg-rpm-client:
+	./hack/pkg_rpm_client.sh
+
+.PHONY: pkg-rpm-server
+pkg-rpm-server:
+	./hack/pkg_rpm_server.sh
+
 .PHONY: build-image
 build-image:
 	@echo Build image
@@ -44,6 +52,14 @@ verify-build-client:
 .PHONY: verify-build-server
 verify-build-server: 
 	./hack/verify_build_server.sh
+
+.PHONY: verify-pkg-rpm-client
+verify-pkg-rpm-client:
+	./hack/verify_pkg_rpm_client.sh
+
+.PHONY: verify-pkg-rpm-server
+verify-pkg-rpm-server:
+	./hack/verify_pkg_rpm_server.sh
 
 .PHONY: verify-build-image
 verify-build-image: 
