@@ -1,0 +1,3 @@
+kubeadm (%{version}) lts; urgency=medium
+
+  * https://git.k8s.io/kubernetes/CHANGELOG/README.md
