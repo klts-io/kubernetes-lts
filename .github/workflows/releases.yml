@@ -89,6 +89,9 @@ jobs:
       - name: Package server rpm
         run: |
           make pkg-rpm-server
+      - name: Package server deb
+        run: |
+          make pkg-deb-server
       - name: Push server binaries
         uses: wzshiming/action-upload-release-assets@v1
         env:
@@ -124,6 +127,9 @@ jobs:
       - name: Package client rpm
         run: |
           make pkg-rpm-client
+      - name: Package client deb
+        run: |
+          make pkg-deb-client
       - name: Push client binaries
         uses: wzshiming/action-upload-release-assets@v1
         env:

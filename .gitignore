@@ -1,4 +1,5 @@
 workdir/
 release/
 rpmbuild/
+debbuild/
 .*

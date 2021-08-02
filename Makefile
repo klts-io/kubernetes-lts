@@ -25,6 +25,14 @@ pkg-rpm-client:
 pkg-rpm-server:
 	./hack/pkg_rpm_server.sh
 
+.PHONY: pkg-deb-client
+pkg-deb-client:
+	./hack/pkg_deb_client.sh
+
+.PHONY: pkg-deb-server
+pkg-deb-server:
+	./hack/pkg_deb_server.sh
+
 .PHONY: build-image
 build-image:
 	@echo Build image
@@ -60,6 +68,14 @@ verify-pkg-rpm-client:
 .PHONY: verify-pkg-rpm-server
 verify-pkg-rpm-server:
 	./hack/verify_pkg_rpm_server.sh
+
+.PHONY: verify-pkg-deb-client
+verify-pkg-deb-client:
+	./hack/verify_pkg_deb_client.sh
+
+.PHONY: verify-pkg-deb-server
+verify-pkg-deb-server:
+	./hack/verify_pkg_deb_server.sh
 
 .PHONY: verify-build-image
 verify-build-image: 
