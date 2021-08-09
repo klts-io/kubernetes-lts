@@ -33,7 +33,7 @@ jobs:
         run: |
           make verify-patch-format
 
-  Test-v1-18-20-cve-0:
+  Test-v1-18-20-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -46,21 +46,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.18.20-cve.0
+      - name: Checkout to v1.18.20-lts.0
         run: |
-          make v1.18.20-cve.0
+          make v1.18.20-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-18-20-cve-0:
+  Test-Cmd-v1-18-20-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -73,21 +73,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.18.20-cve.0
+      - name: Checkout to v1.18.20-lts.0
         run: |
-          make v1.18.20-cve.0
+          make v1.18.20-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-18-20-cve-0:
+  Test-Integration-v1-18-20-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -100,21 +100,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.18.20-cve.0
+      - name: Checkout to v1.18.20-lts.0
         run: |
-          make v1.18.20-cve.0
+          make v1.18.20-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-17-17-cve-0:
+  Test-v1-17-17-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -127,21 +127,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.17.17-cve.0
+      - name: Checkout to v1.17.17-lts.0
         run: |
-          make v1.17.17-cve.0
+          make v1.17.17-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-17-17-cve-0:
+  Test-Cmd-v1-17-17-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -154,21 +154,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.17.17-cve.0
+      - name: Checkout to v1.17.17-lts.0
         run: |
-          make v1.17.17-cve.0
+          make v1.17.17-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-17-17-cve-0:
+  Test-Integration-v1-17-17-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -181,21 +181,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.17.17-cve.0
+      - name: Checkout to v1.17.17-lts.0
         run: |
-          make v1.17.17-cve.0
+          make v1.17.17-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-16-15-cve-0:
+  Test-v1-16-15-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -208,21 +208,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.16.15-cve.0
+      - name: Checkout to v1.16.15-lts.0
         run: |
-          make v1.16.15-cve.0
+          make v1.16.15-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-16-15-cve-0:
+  Test-Cmd-v1-16-15-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -235,21 +235,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.16.15-cve.0
+      - name: Checkout to v1.16.15-lts.0
         run: |
-          make v1.16.15-cve.0
+          make v1.16.15-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-16-15-cve-0:
+  Test-Integration-v1-16-15-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -262,21 +262,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.16.15-cve.0
+      - name: Checkout to v1.16.15-lts.0
         run: |
-          make v1.16.15-cve.0
+          make v1.16.15-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-15-12-cve-0:
+  Test-v1-15-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -289,21 +289,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.15.12-cve.0
+      - name: Checkout to v1.15.12-lts.0
         run: |
-          make v1.15.12-cve.0
+          make v1.15.12-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-15-12-cve-0:
+  Test-Cmd-v1-15-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -316,21 +316,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.15.12-cve.0
+      - name: Checkout to v1.15.12-lts.0
         run: |
-          make v1.15.12-cve.0
+          make v1.15.12-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-15-12-cve-0:
+  Test-Integration-v1-15-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -343,21 +343,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.15.12-cve.0
+      - name: Checkout to v1.15.12-lts.0
         run: |
-          make v1.15.12-cve.0
+          make v1.15.12-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-14-10-cve-0:
+  Test-v1-14-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -370,21 +370,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.14.10-cve.0
+      - name: Checkout to v1.14.10-lts.0
         run: |
-          make v1.14.10-cve.0
+          make v1.14.10-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-14-10-cve-0:
+  Test-Cmd-v1-14-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -397,21 +397,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.14.10-cve.0
+      - name: Checkout to v1.14.10-lts.0
         run: |
-          make v1.14.10-cve.0
+          make v1.14.10-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-14-10-cve-0:
+  Test-Integration-v1-14-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -424,21 +424,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.14.10-cve.0
+      - name: Checkout to v1.14.10-lts.0
         run: |
-          make v1.14.10-cve.0
+          make v1.14.10-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-13-12-cve-0:
+  Test-v1-13-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -451,21 +451,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.13.12-cve.0
+      - name: Checkout to v1.13.12-lts.0
         run: |
-          make v1.13.12-cve.0
+          make v1.13.12-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-13-12-cve-0:
+  Test-Cmd-v1-13-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -478,21 +478,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.13.12-cve.0
+      - name: Checkout to v1.13.12-lts.0
         run: |
-          make v1.13.12-cve.0
+          make v1.13.12-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-13-12-cve-0:
+  Test-Integration-v1-13-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -505,21 +505,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.13.12-cve.0
+      - name: Checkout to v1.13.12-lts.0
         run: |
-          make v1.13.12-cve.0
+          make v1.13.12-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-12-10-cve-0:
+  Test-v1-12-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -532,21 +532,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.12.10-cve.0
+      - name: Checkout to v1.12.10-lts.0
         run: |
-          make v1.12.10-cve.0
+          make v1.12.10-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-12-10-cve-0:
+  Test-Cmd-v1-12-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -559,21 +559,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.12.10-cve.0
+      - name: Checkout to v1.12.10-lts.0
         run: |
-          make v1.12.10-cve.0
+          make v1.12.10-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-12-10-cve-0:
+  Test-Integration-v1-12-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -586,21 +586,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.12.10-cve.0
+      - name: Checkout to v1.12.10-lts.0
         run: |
-          make v1.12.10-cve.0
+          make v1.12.10-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-11-10-cve-0:
+  Test-v1-11-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -613,21 +613,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.11.10-cve.0
+      - name: Checkout to v1.11.10-lts.0
         run: |
-          make v1.11.10-cve.0
+          make v1.11.10-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-11-10-cve-0:
+  Test-Cmd-v1-11-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -640,21 +640,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.11.10-cve.0
+      - name: Checkout to v1.11.10-lts.0
         run: |
-          make v1.11.10-cve.0
+          make v1.11.10-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-11-10-cve-0:
+  Test-Integration-v1-11-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -667,21 +667,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.11.10-cve.0
+      - name: Checkout to v1.11.10-lts.0
         run: |
-          make v1.11.10-cve.0
+          make v1.11.10-lts.0
       - name: Test integration
         run: |
           make test-integration
 
-  Test-v1-10-13-cve-0:
+  Test-v1-10-13-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -694,21 +694,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.10.13-cve.0
+      - name: Checkout to v1.10.13-lts.0
         run: |
-          make v1.10.13-cve.0
+          make v1.10.13-lts.0
       - name: Test
         run: |
           make test
 
-  Test-Cmd-v1-10-13-cve-0:
+  Test-Cmd-v1-10-13-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -721,21 +721,21 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.10.13-cve.0
+      - name: Checkout to v1.10.13-lts.0
         run: |
-          make v1.10.13-cve.0
+          make v1.10.13-lts.0
       - name: Test cmd
         run: |
           make test-cmd
 
-  Test-Integration-v1-10-13-cve-0:
+  Test-Integration-v1-10-13-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -748,16 +748,17 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-cve-0
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           git config --global user.name "bot"
           make dependent
-      - name: Checkout to v1.10.13-cve.0
+      - name: Checkout to v1.10.13-lts.0
         run: |
-          make v1.10.13-cve.0
+          make v1.10.13-lts.0
       - name: Test integration
         run: |
           make test-integration
+
