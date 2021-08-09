@@ -49,6 +49,10 @@ function helper::download() {
     echo ${tmp_patch}
 }
 
+function helper::workdir::version() {
+    cd "${WORKDIR}" && git describe --tags
+}
+
 function helper::config::get_base_repository() {
     cat "${CONFIG}" | yq ".base" | tr -d '"'
 }
