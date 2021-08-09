@@ -1,7 +1,7 @@
 base: https://github.com/kubernetes/kubernetes
 
 releases:
-  - name: v1.18.20-cve.0
+  - name: v1.18.20-lts.0
     base_release: v1.18.20
     patches:
       - fix-run-docker.1.18
@@ -13,7 +13,7 @@ releases:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
 
-  - name: v1.17.17-cve.0
+  - name: v1.17.17-lts.0
     base_release: v1.17.17
     patches:
       - fix-run-docker.1.18
@@ -25,7 +25,7 @@ releases:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
 
-  - name: v1.16.15-cve.0
+  - name: v1.16.15-lts.0
     base_release: v1.16.15
     patches:
       - fix-run-docker.1.18
@@ -40,7 +40,7 @@ releases:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/gce
     test_integration_failures_tolerated: []
 
-  - name: v1.15.12-cve.0
+  - name: v1.15.12-lts.0
     base_release: v1.15.12
     patches:
       - fix-run-docker.1.18
@@ -55,7 +55,7 @@ releases:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
 
-  - name: v1.14.10-cve.0
+  - name: v1.14.10-lts.0
     base_release: v1.14.10
     patches:
       - fix-run-docker.1.18
@@ -73,7 +73,7 @@ releases:
       - k8s.io/kubernetes/pkg/registry/storage/csidriver/storage
     test_integration_failures_tolerated: []
 
-  - name: v1.13.12-cve.0
+  - name: v1.13.12-lts.0
     base_release: v1.13.12
     patches:
       - fix-run-docker.1.18
@@ -91,7 +91,7 @@ releases:
       - k8s.io/kubernetes/pkg/registry/apps/daemonset/storage
     test_integration_failures_tolerated: []
 
-  - name: v1.12.10-cve.0
+  - name: v1.12.10-lts.0
     base_release: v1.12.10
     patches:
       - fix-run-docker.1.18
@@ -107,7 +107,7 @@ releases:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
 
-  - name: v1.11.10-cve.0
+  - name: v1.11.10-lts.0
     base_release: v1.11.10
     patches:
       - fix-run-docker.1.18
@@ -125,7 +125,7 @@ releases:
       - k8s.io/kubernetes/pkg/util/mount
     test_integration_failures_tolerated: []
 
-  - name: v1.10.13-cve.0
+  - name: v1.10.13-lts.0
     base_release: v1.10.13
     patches:
       - fix-run-docker.1.18
