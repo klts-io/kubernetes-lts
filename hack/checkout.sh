@@ -15,8 +15,14 @@ cd "${ROOT}"
 ORIGIN_RELEASE="$1"
 RELEASE="${ORIGIN_RELEASE%.*}.0"
 
-BASE_RELEASE=$(helper::config::get_base_release $RELEASE)
-PATCHES=$(helper::config::get_patches $RELEASE)
+BASE_RELEASE=$(helper::config::get_base_release ${ORIGIN_RELEASE})
+if [[ "${BASE_RELEASE}" != "" ]]; then
+    RELEASE="${ORIGIN_RELEASE}"
+else
+    BASE_RELEASE=$(helper::config::get_base_release ${RELEASE})
+fi
+
+PATCHES=$(helper::config::get_patches ${RELEASE})
 
 echo "Release ${BASE_RELEASE} patches ($(echo ${PATCHES} | tr ' ' ',')) as release ${RELEASE}"
 
