@@ -8,7 +8,7 @@ source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${WORKDIR}"
 
 REGISTRY=${REGISTRY:-}
-TAG=$(git describe --tags | head -n 1)
+TAG=$(helper::workdir::version)
 
 DOCKER_CLI_EXPERIMENTAL=enabled
 

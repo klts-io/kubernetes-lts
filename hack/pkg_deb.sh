@@ -7,8 +7,8 @@ set -o pipefail
 source "$(dirname "${BASH_SOURCE}")/helper.sh"
 
 NAMES="${1:-kubelet}"
-ARCHS=${2:-amd64}
-VERSION="$(cd ${WORKDIR} && git describe --tags | head -n 1)"
+ARCHS="${2:-amd64}"
+VERSION=$(helper::workdir::version)
 RELEASE="${VERSION##*-}"
 VERSION="${VERSION%-*}"
 

@@ -13,7 +13,7 @@ TMPFILE="${TMPDIR}/test.log"
 
 RETRY_CASES=$(cat "${TMPFILE}" | grep -E '^FAIL\s+k8s.io/kubernetes' | awk '{print $2}' || echo "")
 
-TAG=$(git describe --tags | head -n 1)
+TAG=$(helper::workdir::version)
 
 FAILURES_TOLERATED=$(helper::config::get_test_failures_tolerated ${TAG})
 if [[ "${FAILURES_TOLERATED}" != "" ]]; then
