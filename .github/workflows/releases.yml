@@ -23,7 +23,6 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Verify patch
         run: |
@@ -47,7 +46,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout
         run: |
@@ -78,7 +76,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout
         run: |
@@ -86,17 +83,25 @@ jobs:
       - name: Build server binaries
         run: |
           make build-server
+      - name: Push server binaries
+        uses: wzshiming/action-upload-release-assets@v1
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE: release
+      - name: Initialize repository
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          make repos-init
       - name: Package server rpm
         run: |
           make pkg-rpm-server
       - name: Package server deb
         run: |
           make pkg-deb-server
-      - name: Push server binaries
-        uses: wzshiming/action-upload-release-assets@v1
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE: release
+      - name: Sync repository
+        run: |
+          make repos-sync
 
   Client:
     needs: Patch
@@ -116,7 +121,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout
         run: |
@@ -124,14 +128,22 @@ jobs:
       - name: Build client binaries
         run: |
           make build-client
+      - name: Push client binaries
+        uses: wzshiming/action-upload-release-assets@v1
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+          RELEASE: release
+      - name: Initialize repository
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          make repos-init
       - name: Package client rpm
         run: |
           make pkg-rpm-client
       - name: Package client deb
         run: |
           make pkg-deb-client
-      - name: Push client binaries
-        uses: wzshiming/action-upload-release-assets@v1
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE: release
+      - name: Sync repository
+        run: |
+          make repos-sync

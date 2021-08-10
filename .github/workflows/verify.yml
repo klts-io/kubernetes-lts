@@ -24,7 +24,6 @@ jobs:
           key: ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Verify patch
         run: |
@@ -51,7 +50,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.18.20-lts.0
         run: |
@@ -78,7 +76,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.18.20-lts.0
         run: |
@@ -105,7 +102,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.18.20-lts.0
         run: |
@@ -132,7 +128,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.17.17-lts.0
         run: |
@@ -159,7 +154,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.17.17-lts.0
         run: |
@@ -186,7 +180,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.17.17-lts.0
         run: |
@@ -213,7 +206,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.16.15-lts.0
         run: |
@@ -240,7 +232,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.16.15-lts.0
         run: |
@@ -267,7 +258,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.16.15-lts.0
         run: |
@@ -294,7 +284,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.15.12-lts.0
         run: |
@@ -321,7 +310,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.15.12-lts.0
         run: |
@@ -348,7 +336,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.15.12-lts.0
         run: |
@@ -375,7 +362,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.14.10-lts.0
         run: |
@@ -402,7 +388,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.14.10-lts.0
         run: |
@@ -429,7 +414,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.14.10-lts.0
         run: |
@@ -456,7 +440,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.13.12-lts.0
         run: |
@@ -483,7 +466,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.13.12-lts.0
         run: |
@@ -510,7 +492,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.13.12-lts.0
         run: |
@@ -537,7 +518,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.12.10-lts.0
         run: |
@@ -564,7 +544,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.12.10-lts.0
         run: |
@@ -591,7 +570,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.12.10-lts.0
         run: |
@@ -618,7 +596,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.11.10-lts.0
         run: |
@@ -645,7 +622,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.11.10-lts.0
         run: |
@@ -672,7 +648,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.11.10-lts.0
         run: |
@@ -699,7 +674,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.10.13-lts.0
         run: |
@@ -726,7 +700,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.10.13-lts.0
         run: |
@@ -753,7 +726,6 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to v1.10.13-lts.0
         run: |

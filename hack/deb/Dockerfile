@@ -3,6 +3,7 @@ FROM debian:10
 RUN export DEBIAN_FRONTEND=noninteractive \
   && apt-get update -y \
   && apt-get -yy -q install --no-install-recommends --no-install-suggests --fix-missing \
+  aptly \
   dpkg-dev \
   build-essential \
   debhelper \

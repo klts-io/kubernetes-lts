@@ -4,10 +4,10 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-NAME="${1:-kubelet}"
-VERSION="${2:-v1.18.20}"
-RELEASE="${3:-00}"
-ARCH="${4:-amd64}"
+NAMES="${1:-kubelet}"
+ARCHS="${2:-amd64}"
+VERSION="${3:-v1.18.20}"
+RELEASE="${4:-00}"
 
 declare -A ARCH_MAP
 ARCH_MAP["amd64"]="x86_64"
@@ -16,15 +16,39 @@ ARCH_MAP["arm64"]="aarch64"
 ARCH_MAP["ppc64le"]="ppc64le"
 ARCH_MAP["s390x"]="s390x"
 
-RPMBUILD="/root/rpmbuild"
+ROOT="/root"
+SRC="${ROOT}/src"
+BIN_PATH="${ROOT}/output/bin"
+RPMBUILD="${ROOT}/rpmbuild"
+RPMREPO="${ROOT}/rpmrepo"
 SRC_PATH="${RPMBUILD}/SOURCES"
 SPEC_PATH="${RPMBUILD}/SPECS"
 RPM_PATH="${RPMBUILD}/RPMS"
 
-RPMARCH="${ARCH_MAP[$ARCH]}"
+IFS=, NAMES_SLICE=(${NAMES})
+IFS=, ARCHS_SLICE=(${ARCHS})
 
-# Download sources if not already available
-cd "${SPEC_PATH}" && spectool -gf "${NAME}.spec"
-rpmbuild --target "${RPMARCH}" --define "_sourcedir ${SRC_PATH}" --define "_version ${VERSION}" --define "_release ${RELEASE}" -bb "${SPEC_PATH}/${NAME}.spec"
-mkdir -p "${RPM_PATH}/${RPMARCH}"
-# createrepo -o "${RPM_PATH}/${RPMARCH}/" "/root/rpmbuild/RPMS/${RPMARCH}"
+for arch in ${ARCHS_SLICE[@]}; do
+    RPMARCH="${ARCH_MAP[$arch]}"
+    for name in ${NAMES_SLICE[@]}; do
+        echo "Building ${name} RPM's for ${arch}"
+
+        bin="${BIN_PATH}/linux/${arch}/${name}"
+        src="${SRC_PATH}/${name}-${VERSION}"
+        tar="${SRC_PATH}/${name}-${VERSION}.tar.gz"
+
+        mkdir -p "${src}" "${SPEC_PATH}"
+
+        cp -r "${SRC}/${name}"/* "${src}/"
+        mv "${src}/${name}.spec" "${SPEC_PATH}/${name}.spec"
+        cp "${bin}" "${src}/${name}"
+
+        tar -czvf "${tar}" -C "${SRC_PATH}" "${name}-${VERSION}"
+
+        cd "${SPEC_PATH}" && spectool -gf "${name}.spec"
+        rpmbuild --target "${RPMARCH}" --define "_sourcedir ${SRC_PATH}" --define "_version ${VERSION}" --define "_release ${RELEASE}" -bb "${SPEC_PATH}/${name}.spec"
+    done
+    mkdir -p "${RPMREPO}/${RPMARCH}"
+    mv "${RPM_PATH}/${RPMARCH}"/*.rpm "${RPMREPO}/${RPMARCH}"
+    createrepo --update "${RPMREPO}/${RPMARCH}"
+done

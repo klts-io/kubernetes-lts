@@ -35,7 +35,6 @@ jobs:
           key: \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Verify patch
         run: |
@@ -67,7 +66,6 @@ for release in ${RELEASES}; do
             \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to ${release}
         run: |
@@ -94,7 +92,6 @@ for release in ${RELEASES}; do
             \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to ${release}
         run: |
@@ -121,7 +118,6 @@ for release in ${RELEASES}; do
             \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
-          git config --global user.name "bot"
           make dependent
       - name: Checkout to ${release}
         run: |

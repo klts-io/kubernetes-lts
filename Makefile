@@ -17,6 +17,14 @@ build-server:
 	@echo Build server
 	./hack/build_server.sh
 
+.PHONY: repos-init
+repos-init:
+	./hack/git_init_repos.sh
+
+.PHONY: repos-sync
+repos-sync:
+	./hack/git_sync_repos.sh
+
 .PHONY: pkg-rpm-client
 pkg-rpm-client:
 	./hack/pkg_rpm_client.sh
