@@ -5,7 +5,7 @@
 Defined in the [./releases.yml](https://github.com/DaoCloud-OpenSource/kubepatch/blob/master/releases.yml)
 
 ``` bash
-make v1.18.18-cve.0
+make v1.18.18-lts.0
 ```
 
 ## Build
