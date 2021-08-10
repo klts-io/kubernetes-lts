@@ -8,6 +8,7 @@ ROOT="${ROOT:-$(dirname "${BASH_SOURCE}")/..}"
 OUTPUT="${OUTPUT:-${ROOT}/release}"
 WORKDIR="${WORKDIR:-${ROOT}/workdir}"
 PATCHESDIR="${PATCHESDIR:-${ROOT}/patches}"
+REPOSDIR="${REPOSDIR:-${ROOT}/repos}"
 TMPDIR="${TMPDIR:-/tmp}/kubepatch"
 CONFIG="${CONFIG:-${ROOT}/releases.yml}"
 
@@ -30,6 +31,7 @@ ROOT=$(helper::fullpath ${ROOT})
 OUTPUT=$(helper::fullpath ${OUTPUT})
 WORKDIR=$(helper::fullpath ${WORKDIR})
 PATCHESDIR=$(helper::fullpath ${PATCHESDIR})
+REPOSDIR=$(helper::fullpath ${REPOSDIR})
 TMPDIR=$(helper::fullpath ${TMPDIR})
 CONFIG=$(helper::fullpath ${CONFIG})
 
@@ -88,6 +90,14 @@ function helper::config::get_patch() {
 
 function helper::config::list_releases() {
     cat "${CONFIG}" | yq ".releases | .[] | .name" | tr -d '"'
+}
+
+function helper::repos::get_base_repository() {
+    cd "${ROOT}" && git remote get-url origin
+}
+
+function helper::repos::branch() {
+    echo repos
 }
 
 # etcd
