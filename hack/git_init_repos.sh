@@ -23,6 +23,11 @@ fi
 if [[ "$(git remote | grep ${ORIGIN})" == "${ORIGIN}" ]]; then
     git remote remove "${ORIGIN}"
 fi
+
+if [[ "${GH_TOKEN:-}" != "" ]]; then
+    SOURCE=$(echo ${SOURCE} | sed "s#https://github.com#https://bot:${GH_TOKEN}@github.com#g")
+fi
+
 git remote add "${ORIGIN}" "${SOURCE}"
 
 git fetch "${ORIGIN}" "${BRANCH}" --depth=1 || true

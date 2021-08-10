@@ -89,6 +89,8 @@ jobs:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           RELEASE: release
       - name: Initialize repository
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
           make repos-init
       - name: Package server rpm
@@ -132,6 +134,8 @@ jobs:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           RELEASE: release
       - name: Initialize repository
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
           make repos-init
       - name: Package client rpm

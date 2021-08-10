@@ -93,7 +93,7 @@ function helper::config::list_releases() {
 }
 
 function helper::repos::get_base_repository() {
-    cd "${ROOT}" && git remote get-url origin
+    cd "${ROOT}" && git remote get-url origin | sed -E 's#git@(.+):(.+)#https://\1/\2#g'
 }
 
 function helper::repos::branch() {
