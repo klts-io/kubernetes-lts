@@ -15,6 +15,10 @@ if ! [[ -d .git ]]; then
     git init
 fi
 
+if [[ "$(git config user.name)" == "" ]]; then
+    git config --global user.name "bot"
+fi
+
 if [[ "$(git remote | grep ${ORIGIN})" == "${ORIGIN}" ]]; then
     git remote remove "${ORIGIN}"
 fi
