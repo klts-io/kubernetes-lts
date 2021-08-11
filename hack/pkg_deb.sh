@@ -6,11 +6,10 @@ set -o pipefail
 
 source "$(dirname "${BASH_SOURCE}")/helper.sh"
 
-NAMES="${1:-kubelet}"
-ARCHS="${2:-amd64}"
-VERSION=$(helper::workdir::version)
-RELEASE="${VERSION##*-}"
-VERSION="${VERSION%-*}"
+NAMES="${1:-}"
+ARCHS="${2:-}"
+VERSION="${3:-}"
+RELEASE="${4:-}"
 
 SRC="${ROOT}/hack/deb"
 DEBBUILD="${ROOT}/debbuild"

@@ -35,12 +35,26 @@ for arch in ${ARCHS_SLICE[@]}; do
 
         mkdir -p "${src}"
         cp -r "${SRC}/${name}"/* "${src}/"
-        cp "${bin}" "${src}/${name}"
+
+        if [[ "${name}" != "kubernetes-cni" ]] && [[ "${name}" != "cri-tools" ]]; then
+            cp "${bin}" "${src}/${name}"
+        fi
 
         debarch="${ARCH_MAP[$arch]}"
         cd "${SRC_PATH}/${name}-${VERSION}"
-        sed -i "s/%{version}/${VERSION#v}-${RELEASE}/g" ./debian/changelog
-        sed -i "s/%{arch}/${debarch}/g" ./debian/control
+
+        declare -A define
+        define["_version"]="${VERSION#v}"
+        define["_release"]="${RELEASE}"
+        define["_arch"]="${debarch}"
+        define["_goarch"]="${arch}"
+
+        for key in ${!define[@]}; do
+            sed -i "s#%{${key}}#${define[${key}]}#g" ./debian/changelog
+            sed -i "s#%{${key}}#${define[${key}]}#g" ./debian/control
+            sed -i "s#%{${key}}#${define[${key}]}#g" ./debian/rules
+        done
+
         dpkg-buildpackage --unsigned-source --unsigned-changes --build=binary --host-arch "${debarch}"
     done
 done

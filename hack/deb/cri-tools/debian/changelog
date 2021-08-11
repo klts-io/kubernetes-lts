@@ -1,0 +1,3 @@
+cri-tools (%{_version}-%{_release}) lts; urgency=medium
+
+  * https://github.com/kubernetes-sigs/cri-tools/blob/master/CHANGELOG.md
