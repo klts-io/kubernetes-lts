@@ -41,12 +41,25 @@ for arch in ${ARCHS_SLICE[@]}; do
 
         cp -r "${SRC}/${name}"/* "${src}/"
         mv "${src}/${name}.spec" "${SPEC_PATH}/${name}.spec"
-        cp "${bin}" "${src}/${name}"
 
-        tar -czvf "${tar}" -C "${SRC_PATH}" "${name}-${VERSION}"
+        if [[ "${name}" != "kubernetes-cni" ]] && [[ "${name}" != "cri-tools" ]]; then
+            cp "${bin}" "${src}/${name}"
 
-        cd "${SPEC_PATH}" && spectool -gf "${name}.spec"
-        rpmbuild --target "${RPMARCH}" --define "_sourcedir ${SRC_PATH}" --define "_version ${VERSION}" --define "_release ${RELEASE}" -bb "${SPEC_PATH}/${name}.spec"
+            tar -czvf "${tar}" -C "${SRC_PATH}" "${name}-${VERSION}"
+        fi
+
+        declare -A define
+        define["_sourcedir"]="${SRC_PATH}"
+        define["_version"]="${VERSION}"
+        define["_release"]="${RELEASE}"
+        define["_goarch"]="${arch}"
+
+        for key in ${!define[@]}; do
+            sed -i "s#%{${key}}#${define[${key}]}#g" "${SPEC_PATH}/${name}.spec"
+        done
+
+        cd "${SPEC_PATH}" && spectool -gf -C "${SRC_PATH}" "${name}.spec"
+        rpmbuild --target "${RPMARCH}" -bb "${SPEC_PATH}/${name}.spec"
     done
     mkdir -p "${RPMREPO}/${RPMARCH}"
     mv "${RPM_PATH}/${RPMARCH}"/*.rpm "${RPMREPO}/${RPMARCH}"

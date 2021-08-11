@@ -7,10 +7,8 @@ License: ASL 2.0
 URL: https://kubernetes.io
 Source0: %{name}-%{version}.tar.gz
 
-
-# TODO: Need to templatize dependencies
 BuildRequires: systemd
-BuildRequires: curl
+
 Requires: kubelet >= %{_version}
 Requires: kubectl >= %{_version}
 Requires: kubernetes-cni >= 0.8.6
@@ -20,7 +18,7 @@ Requires: cri-tools >= 1.13.0
 Command-line utility for administering a Kubernetes cluster.
 
 %prep
-%setup -n %{name}-%{version}
+%setup
 
 install -m 755 -d %{buildroot}%{_sysconfdir}/kubernetes/manifests/
 install -m 755 -d %{buildroot}%{_unitdir}/kubelet.service.d/

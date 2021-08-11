@@ -8,13 +8,12 @@ URL: https://kubernetes.io
 Source0: %{name}-%{version}.tar.gz
 
 BuildRequires: systemd
-# BuildRequires: curl
 
 %description
 Command-line utility for interacting with a Kubernetes cluster.
 
 %prep
-%setup -n %{name}-%{version}
+%setup
 
 install -m 755 -d %{buildroot}%{_bindir}
 install -p -m 755 -t %{buildroot}%{_bindir}/ kubectl

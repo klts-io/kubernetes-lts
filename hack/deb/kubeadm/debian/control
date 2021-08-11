@@ -2,14 +2,14 @@ Source: kubeadm
 Section: misc
 Priority: optional
 Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
-Build-Depends: curl, ca-certificates, debhelper (>= 8.0.0)
+Build-Depends: ca-certificates, debhelper (>= 8.0.0)
 Standards-Version: 3.9.4
 Homepage: https://kubernetes.io
 Vcs-Git: https://github.com/kubernetes/kubernetes.git
 Vcs-Browser: https://github.com/kubernetes/kubernetes
 
 Package: kubeadm
-Architecture: %{arch}
+Architecture: %{_arch}
 Depends: kubelet (>= 1.10.0), kubectl (>= 1.10.0), kubernetes-cni (>= 0.8.6), cri-tools (>= 1.13.0), ${misc:Depends}
 Description: Kubernetes Cluster Bootstrapping Tool
  The Kubernetes command line tool for bootstrapping a Kubernetes cluster.
