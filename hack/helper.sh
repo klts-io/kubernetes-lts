@@ -66,21 +66,42 @@ function helper::config::get_base_release() {
 }
 
 function helper::config::get_patches() {
-    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .patches | .[]" | tr -d '"'
+    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .patches | .[]?" | tr -d '"'
+}
+
+function helper::config::get_patches_all() {
+    base_chain=$(helper::config::base_chain $1)
+    for base in ${base_chain}; do
+        cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"${base}\" ) | .patches | .[]?" | tr -d '"'
+    done
 }
 
 function helper::config::get_test_failures_tolerated() {
-    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .test_failures_tolerated | .[]" | tr -d '"'
+    base_chain=$(helper::config::base_chain $1)
+    for base in ${base_chain}; do
+        cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"${base}\" ) | .test_failures_tolerated | .[]?" | tr -d '"'
+    done
 }
 
 function helper::config::get_test_integration_failures_tolerated() {
-    cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"$1\" ) | .test_integration_failures_tolerated | .[]" | tr -d '"'
+    base_chain=$(helper::config::base_chain $1)
+    for base in ${base_chain}; do
+        cat "${CONFIG}" | yq ".releases | .[] | select( .name == \"${base}\" ) | .test_integration_failures_tolerated | .[]?" | tr -d '"'
+    done
+}
+
+function helper::config::base_chain() {
+    base="$1"
+    while [[ "${base}" != "" ]]; do
+        echo "${base}"
+        base=$(helper::config::get_base_release "${base}")
+    done
 }
 
 function helper::config::get_patch() {
     local list=""
     for patch in $@; do
-        patches=$(cat "${CONFIG}" | yq ".patches | .[] | select( .name == \"${patch}\" ) | .patch | .[]" | tr -d '"' || "")
+        patches=$(cat "${CONFIG}" | yq ".patches | .[] | select( .name == \"${patch}\" ) | .patch | .[]?" | tr -d '"')
         for item in ${patches}; do
             list+=" $(helper::download ${item})"
         done
@@ -89,7 +110,7 @@ function helper::config::get_patch() {
 }
 
 function helper::config::list_releases() {
-    cat "${CONFIG}" | yq ".releases | .[] | .name" | tr -d '"'
+    cat "${CONFIG}" | yq ".releases | .[] | select( .must == true ) | .name" | tr -d '"'
 }
 
 function helper::repos::get_base_repository() {

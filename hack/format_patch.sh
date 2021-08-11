@@ -20,8 +20,8 @@ RELEASE=${NAME#*.}
 RELEASE=${RELEASE%.*}
 
 PATCH_RELEASE=$(helper::config::list_releases | grep v${RELEASE} | head -1)
-PATCH_LIST=$(helper::config::get_patches ${PATCH_RELEASE})
-BASE_RELEASE=$(helper::config::get_base_release ${PATCH_RELEASE})
+PATCH_LIST=$(helper::config::get_patches_all ${PATCH_RELEASE})
+BASE_RELEASE=$(helper::config::base_chain ${PATCH_RELEASE} | tail -1)
 COMMIT_COUNT=$(cat ${PATCH_PATH} | grep 'Subject: \[PATCH' | wc -l | tr -d ' ')
 
 ./hack/git_fetch_tag.sh ${BASE_RELEASE}
