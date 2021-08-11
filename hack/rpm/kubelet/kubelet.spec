@@ -8,7 +8,7 @@ URL: https://kubernetes.io
 Source0: %{name}-%{version}.tar.gz
 
 BuildRequires: systemd
-# BuildRequires: curl
+
 Requires: iptables >= 1.4.21
 Requires: kubernetes-cni >= 0.8.6
 Requires: socat
@@ -22,7 +22,7 @@ Requires: conntrack
 The node agent of Kubernetes, the container cluster manager.
 
 %prep
-%setup -n %{name}-%{version}
+%setup
  
 install -m 755 -d %{buildroot}%{_unitdir}
 install -m 755 -d %{buildroot}%{_unitdir}/kubelet.service.d/
