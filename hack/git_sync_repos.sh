@@ -8,7 +8,7 @@ source "$(dirname "${BASH_SOURCE}")/helper.sh"
 
 cd "${REPOSDIR}"
 
-BRANCH="${BRANCH:-$(helper::repos::branch)}"
+BRANCH="${BRANCH:-repos}"
 
 git add *
 git commit -m "Automatic Sync"

@@ -92,7 +92,7 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          make repos-init
+          BRANCH=repos SOURCE="https://github.com/${{ github.repository }}" make repos-init
       - name: Package server rpm
         run: |
           make pkg-rpm-server
@@ -101,7 +101,7 @@ jobs:
           make pkg-deb-server
       - name: Sync repository
         run: |
-          make repos-sync
+          BRANCH=repos make repos-sync
 
   Client:
     needs: Patch
@@ -137,7 +137,7 @@ jobs:
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         run: |
-          make repos-init
+          BRANCH=repos SOURCE="https://github.com/${{ github.repository }}" make repos-init
       - name: Package client rpm
         run: |
           make pkg-rpm-client
@@ -146,4 +146,4 @@ jobs:
           make pkg-deb-client
       - name: Sync repository
         run: |
-          make repos-sync
+          BRANCH=repos make repos-sync
