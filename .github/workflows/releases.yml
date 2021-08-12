@@ -58,7 +58,7 @@ jobs:
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
           OLD_REGISTRY=k8s.gcr.io REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
 
-  Server:
+  Binaries:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -71,52 +71,7 @@ jobs:
           path: |
             workdir
             /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-server
-          restore-keys: |
-            ${{ runner.os }}-build-${{ env.cache-name }}
-      - name: Install dependent
-        run: |
-          make dependent
-      - name: Checkout
-        run: |
-          make $(basename ${GITHUB_REF})
-      - name: Build server binaries
-        run: |
-          make build-server
-      - name: Push server binaries
-        uses: wzshiming/action-upload-release-assets@v1
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-          RELEASE: release
-      - name: Initialize repository
-        env:
-          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
-        run: |
-          BRANCH=repos SOURCE="https://github.com/${{ github.repository }}" make repos-init
-      - name: Package server rpm
-        run: |
-          make pkg-rpm-server
-      - name: Package server deb
-        run: |
-          make pkg-deb-server
-      - name: Sync repository
-        run: |
-          BRANCH=repos make repos-sync
-
-  Client:
-    needs: Patch
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Cache workdir
-        uses: actions/cache@v2
-        env:
-          cache-name: workdir
-        with:
-          path: |
-            workdir
-            /tmp/kubepatch/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-server
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-binaries
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
@@ -128,7 +83,10 @@ jobs:
       - name: Build client binaries
         run: |
           make build-client
-      - name: Push client binaries
+      - name: Build server binaries
+        run: |
+          make build-server
+      - name: Push binaries
         uses: wzshiming/action-upload-release-assets@v1
         env:
           GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
@@ -141,9 +99,15 @@ jobs:
       - name: Package client rpm
         run: |
           make pkg-rpm-client
+      - name: Package server rpm
+        run: |
+          make pkg-rpm-server
       - name: Package client deb
         run: |
           make pkg-deb-client
+      - name: Package server deb
+        run: |
+          make pkg-deb-server
       - name: Sync repository
         run: |
           BRANCH=repos make repos-sync
