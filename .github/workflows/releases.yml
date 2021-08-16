@@ -53,10 +53,15 @@ jobs:
       - name: Build images
         run: |
           make build-image
-      - name: Push images
+      - name: Login registry
         run: |
           echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push images
+        run: |
           OLD_REGISTRY=k8s.gcr.io REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
+      - name: Sync others image
+        run: |
+          REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make image-other
 
   Binaries:
     needs: Patch
