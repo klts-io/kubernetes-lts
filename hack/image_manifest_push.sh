@@ -30,19 +30,27 @@ for image in ${IMAGES}; do
     fi
 done
 
+OS="linux"
+
 for name in ${!IMAGE_ARCH[@]}; do
-    echo "+++ Creating manifest image ${REGISTRY}/${name}:${TAG}"
+    echo "+++ Creating manifest image ${REGISTRY}/${name}:${tag}"
+
+    echo "+++ Pushing images"
     manifests=""
     for arch in ${IMAGE_ARCH[${name}]}; do
-        manifests+=" ${REGISTRY}/${name}-${arch}:${TAG}"
+        docker tag "${REGISTRY}/${name}-${arch}:${TAG}" "${REGISTRY}/${name}:${TAG}__${arch}_${OS}"
+        docker push "${REGISTRY}/${name}:${TAG}__${arch}_${OS}"
+        manifests+=" ${REGISTRY}/${name}:${TAG}__${arch}_${OS}"
     done
+
+    echo "+++ Creating manifest"
     docker manifest create --amend "${REGISTRY}/${name}:${TAG}" ${manifests}
 
+    echo "+++ Annotating manifest with ARCH and OS"
     for arch in ${IMAGE_ARCH[${name}]}; do
-        echo "+++ Annotating ${REGISTRY}/${name}-${arch}:${TAG} with --arch ${arch}"
-        docker manifest annotate "${REGISTRY}/${name}:${TAG}" "${REGISTRY}/${name}-${arch}:${TAG}" --arch "${arch}"
+        docker manifest annotate "${REGISTRY}/${name}:${TAG}" "${REGISTRY}/${name}:${TAG}__${arch}_${OS}" --arch "${arch}" --os "${OS}"
     done
 
-    echo "+++ Pushing manifest image ${REGISTRY}/${name}:${TAG}"
+    echo "+++ Pushing manifest ${REGISTRY}/${name}:${TAG}"
     docker manifest push "${REGISTRY}/${name}:${TAG}" --purge
 done
