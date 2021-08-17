@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Shiming Zhang <wzshiming@foxmail.com>
+Date: Mon, 16 Aug 2021 19:14:44 +0800
+Subject: [PATCH] Disabled kmem
+
+---
+ .../opencontainers/runc/libcontainer/cgroups/fs/kmem.go         | 2 +-
+ .../runc/libcontainer/cgroups/fs/kmem_disabled.go               | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
+index 69b5a1946c7..678faccd370 100644
+--- a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
++++ b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
+@@ -1,4 +1,4 @@
+-// +build linux,!nokmem
++// +build linux,ignore
+ 
+ package fs
+ 
+diff --git a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem_disabled.go b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem_disabled.go
+index ac290fd7a02..c8fbdaa3128 100644
+--- a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem_disabled.go
++++ b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem_disabled.go
+@@ -1,4 +1,4 @@
+-// +build linux,nokmem
++// +build linux
+ 
+ package fs
+ 
