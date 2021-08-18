@@ -1,3 +1,20 @@
+Package: cri-tools
+Priority: optional
+Section: misc
+Installed-Size: 25807
+Maintainer: Kubernetes Authors <kubernetes-dev@googlegroups.com>
+Architecture: s390x
+Version: 1.13.0-00
+Filename: pool/main/c/cri-tools/cri-tools_1.13.0-00_s390x.deb
+Size: 8543420
+MD5sum: c3778a37a274246e17c7ca0d50523bbb
+SHA1: cd9b9c0c4d3474fc26d2d614bb0786172c1b870c
+SHA256: 07d4846aeb0f71a5cd36c557d2cf9d3e7af008695c1a85a19fc7651547ffe114
+SHA512: 47b14a170079ce9512214feaa8ff7f143b2528adb1c8a4c86101e872fd0a045151cb29e81d9520f1dc6af0dc08f6ec56a0e05ccc87fdda3b52119c0dfb624024
+Description: Container Runtime Interface Tools
+ Binaries that interact with the container runtime through the container runtime interface
+Homepage: https://kubernetes.io
+
 Package: kubeadm
 Priority: optional
 Section: misc
@@ -208,5 +225,22 @@ SHA256: 3ebb35708a63855981c368df96954cf698ac9d2bed5d87fcc04da31ea7b66283
 SHA512: 89faa132e077f1cf89743cfb54da4f5634699cb9f028e0454df87e969d6d653a983c33bdd77f3bedc2ff39352520326425fc4c3603c095655a3e34dd9cb15dad
 Description: Kubernetes Node Agent
  The node agent of Kubernetes, the container cluster manager
+Homepage: https://kubernetes.io
+
+Package: kubernetes-cni
+Priority: optional
+Section: misc
+Installed-Size: 75751
+Maintainer: Kubernetes Authors <kubernetes-dev@googlegroups.com>
+Architecture: s390x
+Version: 0.8.7-00
+Filename: pool/main/k/kubernetes-cni/kubernetes-cni_0.8.7-00_s390x.deb
+Size: 26680400
+MD5sum: 83c85f84e74cae2bfbbe23d3da4d6df6
+SHA1: 1a1f771cd248d9d26699676301579531db8207a8
+SHA256: fb089980dd15a2f8585d14ffd7adaef25a7f773620171a14209860e2df31ee01
+SHA512: 3c1c8891dd397475a060335f113216b2f26c16e2d2b667b54d088ec2462f564996515597b8df84dcfcac1fbebf638d343fffaf6c28909bdb8ac2b5b539ef38f5
+Description: Kubernetes CNI
+ The binaries required to provision container networking
 Homepage: https://kubernetes.io
 

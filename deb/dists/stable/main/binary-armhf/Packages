@@ -1,3 +1,20 @@
+Package: cri-tools
+Priority: optional
+Section: misc
+Installed-Size: 22358
+Maintainer: Kubernetes Authors <kubernetes-dev@googlegroups.com>
+Architecture: armhf
+Version: 1.13.0-00
+Filename: pool/main/c/cri-tools/cri-tools_1.13.0-00_armhf.deb
+Size: 7905252
+MD5sum: 329f81d2c3b7edf23065ed763161391f
+SHA1: 187df556bbf314ef38db5a6440f7f8d9001c265e
+SHA256: f30366eac3739578b366664df241b59b4ac22f0276f143211c34e10849d65df8
+SHA512: 4ff293cdde6540363e71f45c29e4412587545713c8303f9b522adb36b400233b3c4bdb40c9b4a10843ac2e565643a1c4c77da7048ed0bec97addb30352899d51
+Description: Container Runtime Interface Tools
+ Binaries that interact with the container runtime through the container runtime interface
+Homepage: https://kubernetes.io
+
 Package: kubeadm
 Priority: optional
 Section: misc
@@ -208,5 +225,22 @@ SHA256: 05e7a262c68e026f6da8ecd91954d3af931ebb8d2595662df5e77a4b46003dbe
 SHA512: 8829322ca0f83d32f91a63122f959eb74334fb26f1df00f44dcefa89521e1bbea6b8489827329b9af224b3a95a4511df859ca16447768229e7a76d931e985494
 Description: Kubernetes Node Agent
  The node agent of Kubernetes, the container cluster manager
+Homepage: https://kubernetes.io
+
+Package: kubernetes-cni
+Priority: optional
+Section: misc
+Installed-Size: 67276
+Maintainer: Kubernetes Authors <kubernetes-dev@googlegroups.com>
+Architecture: armhf
+Version: 0.8.7-00
+Filename: pool/main/k/kubernetes-cni/kubernetes-cni_0.8.7-00_armhf.deb
+Size: 24096100
+MD5sum: c3de8f0d3bcd03bd4573cb986e6decc7
+SHA1: 49a2d39106c85fa754119b50823df23a086b9a36
+SHA256: 03bd290ba8a8b78daddbd7ccedfd50e65d6395681623f327b6cc48c72d6dd316
+SHA512: 9ee91a77e07a36c5394c98392cac50ece04c3407b578b986614371928f28a1e3e1cd506e957acc427f2ca57d4b3b97cb6ff9a4e1f07a48e5f6bd8078b43fcd0d
+Description: Kubernetes CNI
+ The binaries required to provision container networking
 Homepage: https://kubernetes.io
 
