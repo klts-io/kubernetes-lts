@@ -1,0 +1,43 @@
+name: Releases Images
+
+on:
+  push:
+    tags:
+      - v*
+
+  workflow_dispatch:
+
+jobs:
+  Images:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubepatch/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-image
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
+      - name: Build images
+        run: |
+          make build-image
+      - name: Login registry
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Push images
+        run: |
+          OLD_REGISTRY=k8s.gcr.io REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
+      - name: Sync others image
+        run: |
+          REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make image-other
