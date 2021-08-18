@@ -141,6 +141,24 @@ Description: Kubernetes Cluster Bootstrapping Tool
  The Kubernetes command line tool for bootstrapping a Kubernetes cluster.
 Homepage: https://kubernetes.io
 
+Package: kubeadm
+Priority: optional
+Section: misc
+Installed-Size: 56084
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: ppc64el
+Version: 1.11.10-lts.0
+Depends: kubelet (>= 1.10.0), kubectl (>= 1.10.0), kubernetes-cni (>= 0.8.6), cri-tools (>= 1.13.0)
+Filename: pool/main/k/kubeadm/kubeadm_1.11.10-lts.0_ppc64el.deb
+Size: 8408312
+MD5sum: 32e4ab77e8f835326fc3ae3c0c6aeac4
+SHA1: 0472bd9d36182303612c36fe91d8a02bb4413bc3
+SHA256: 4916b1fd71fa5f51738854248b755fcf7bdd8a6a8007d4f2758c8ecb9cefedd0
+SHA512: db1ea94e371fd7da45dea4de7dd18437c2203e9ed43e4f478cabfbefb77bf7b67d49eb5ea19da5cbb63815b89086bb6e12650b92101499a828751a6260a6e0c6
+Description: Kubernetes Cluster Bootstrapping Tool
+ The Kubernetes command line tool for bootstrapping a Kubernetes cluster.
+Homepage: https://kubernetes.io
+
 Package: kubectl
 Priority: optional
 Section: misc
@@ -256,6 +274,23 @@ MD5sum: 613aa759843be843fabf8a4828d48ffb
 SHA1: 7c343b84dc86f3e7349d044ee8faf70465ad22c3
 SHA256: 87dab1662d251e96b5a71e5879aeb5a4da6007122ccd82735b33c54acf2fb5f4
 SHA512: acc8a2ea7cccd775cca0172844b829252c9934a1e8f15027f4c205202cb0c25cc99f4385ed0d93d7bf283cc55f011aa56fa2232e0c22fe577191046599fb75a1
+Description: Kubernetes Command Line Tool
+ The Kubernetes command line tool for interacting with the Kubernetes API.
+Homepage: https://kubernetes.io
+
+Package: kubectl
+Priority: optional
+Section: misc
+Installed-Size: 54247
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: ppc64el
+Version: 1.11.10-lts.0
+Filename: pool/main/k/kubectl/kubectl_1.11.10-lts.0_ppc64el.deb
+Size: 8366132
+MD5sum: 5896cf4a5b951aaa51560c82794e09b5
+SHA1: 99a82455a7c3994c693b092b1c558ca5217c09c1
+SHA256: af1bec564d0d4b691f2ad7241237819e04a77924d0fc1d81c664994aa360e722
+SHA512: 85478fcbcf8ffa4d211cf5ec40e33c51ff8ad49b0c356488560162bf7ab69a74447aea15e3164a30a67b315f39ea98d2a34e5f3e68a08ecb6322cd87275db6c2
 Description: Kubernetes Command Line Tool
  The Kubernetes command line tool for interacting with the Kubernetes API.
 Homepage: https://kubernetes.io
@@ -382,6 +417,24 @@ MD5sum: ac7b97de133716256c562abe67fb6721
 SHA1: b4e0d59f8cd87287295c38e2b49811bd814c0f2f
 SHA256: e318e0f365454d42de809e86fa32d9988cc33dab6afc247a8712506f31918851
 SHA512: 3e0616cb6b9d464e75bc31eac8cb9c25d0354743f8d9817d9b632b46182ceb2f5067d2b0f52bb42fccbe354e8b01113e30a0956d0f188484de3097f9396426d4
+Description: Kubernetes Node Agent
+ The node agent of Kubernetes, the container cluster manager
+Homepage: https://kubernetes.io
+
+Package: kubelet
+Priority: optional
+Section: misc
+Installed-Size: 159519
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: ppc64el
+Version: 1.11.10-lts.0
+Depends: iptables (>= 1.4.21), kubernetes-cni (>= 0.8.6), iproute2, socat, util-linux, mount, ebtables, ethtool, conntrack
+Filename: pool/main/k/kubelet/kubelet_1.11.10-lts.0_ppc64el.deb
+Size: 20983140
+MD5sum: 8f87dd36d50941342f0f5133fd90909d
+SHA1: a28bcd292d2d9002de12370795bdf624f308fa16
+SHA256: d9e261a4fa45e7440485d7fd52b429089dfe7fd7b27639d51192a1367d458768
+SHA512: f479dfa404db20d373c0da3d3bfeaa582d7f8d9ad55d88bcbab2c138b015f2141bc0d592811e4bed7b95d4c31d5e957c26e91763afa2c062f62893337ceb3158
 Description: Kubernetes Node Agent
  The node agent of Kubernetes, the container cluster manager
 Homepage: https://kubernetes.io
