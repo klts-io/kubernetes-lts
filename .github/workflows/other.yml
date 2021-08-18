@@ -1,0 +1,42 @@
+name: Releases other
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ dev ]
+  pull_request:
+    branches: [ dev ]
+
+jobs:
+  Binaries:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubepatch/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-binaries
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Initialize repository
+        env:
+          GH_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+        run: |
+          BRANCH=repos SOURCE="https://github.com/${{ github.repository }}" make repos-init
+      - name: Package other rpm
+        run: |
+          ./hack/pkg_rpm_other.sh
+      - name: Package other deb
+        run: |
+          ./hack/pkg_deb_other.sh
+      - name: Sync repository
+        run: |
+          BRANCH=repos make repos-sync
