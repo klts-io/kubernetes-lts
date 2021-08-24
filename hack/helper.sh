@@ -9,7 +9,7 @@ OUTPUT="${OUTPUT:-${ROOT}/release}"
 WORKDIR="${WORKDIR:-${ROOT}/workdir}"
 PATCHESDIR="${PATCHESDIR:-${ROOT}/patches}"
 REPOSDIR="${REPOSDIR:-${ROOT}/repos}"
-TMPDIR="${TMPDIR:-/tmp}/kubepatch"
+TMPDIR="${TMP_DIR:-./tmp}"
 CONFIG="${CONFIG:-${ROOT}/releases.yml}"
 
 function helper::fullpath() {

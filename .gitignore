@@ -3,4 +3,5 @@ release/
 rpmbuild/
 debbuild/
 repos/
+tmp/
 .*
