@@ -53,6 +53,7 @@ releases:
     base_release: v1.12.10-ci
     must: true
     patches:
+      - CVE-2019-11245
       - CVE-2019-11247
       - CVE-2019-11249.1.12
       - CVE-2019-11251
@@ -66,6 +67,7 @@ releases:
     base_release: v1.11.10-ci
     must: true
     patches:
+      - CVE-2019-11245
       - CVE-2019-11246.1.11
       - CVE-2019-11247.1.11
       - CVE-2019-11248.1.11
@@ -81,6 +83,7 @@ releases:
     base_release: v1.10.13-ci
     must: true
     patches:
+      - CVE-2019-11245
       - CVE-2019-1002101.1.10
       - CVE-2019-11246.1.10
       # - CVE-2019-11247.1.11
