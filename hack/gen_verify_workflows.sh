@@ -31,7 +31,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}
       - name: Install dependent
         run: |
@@ -60,7 +60,7 @@ for release in ${RELEASES}; do
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
@@ -86,7 +86,7 @@ for release in ${RELEASES}; do
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
@@ -112,7 +112,7 @@ for release in ${RELEASES}; do
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}

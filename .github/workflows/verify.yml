@@ -20,7 +20,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
@@ -44,7 +44,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -70,7 +70,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -96,7 +96,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -122,7 +122,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -148,7 +148,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -174,7 +174,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -200,7 +200,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -226,7 +226,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -252,7 +252,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -278,7 +278,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -304,7 +304,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -330,7 +330,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -356,7 +356,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -382,7 +382,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -408,7 +408,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -434,7 +434,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -460,7 +460,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -486,7 +486,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -512,7 +512,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -538,7 +538,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -564,7 +564,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -590,7 +590,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -616,7 +616,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -642,7 +642,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -668,7 +668,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -694,7 +694,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -720,7 +720,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
