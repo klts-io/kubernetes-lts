@@ -19,7 +19,7 @@ jobs:
         with:
           path: |
             workdir
-            /tmp/kubepatch/
+            /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-binaries
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}

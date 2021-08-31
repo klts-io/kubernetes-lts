@@ -62,9 +62,9 @@ done
 COMPONENT=main
 
 mv "${DEBREPO}/pool/${COMPONENT}"/*/*/*.deb "${SRC_PATH}/" || true
-aptly repo create -comment="KubePatch" -component="${COMPONENT}" -distribution="stable" kubepatch
-aptly repo add kubepatch "${SRC_PATH}"/*.deb
+aptly repo create -comment="kubernetes-lts" -component="${COMPONENT}" -distribution="stable" kubernetes-lts
+aptly repo add kubernetes-lts "${SRC_PATH}"/*.deb
 
-aptly publish repo -distribution="stable" -skip-signing kubepatch
+aptly publish repo -distribution="stable" -skip-signing kubernetes-lts
 rm -rf "${DEBREPO}"/*
 mv "${PUBLIC}"/* "${DEBREPO}"
