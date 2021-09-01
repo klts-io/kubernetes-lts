@@ -1,0 +1,8 @@
+rpm/*/*.rpm binary
+rpm/*/repodata/*.bz2 binary
+rpm/*/repodata/*.gz binary
+deb/pool/*/*/*/*.deb binary
+deb/dists/*/*.gz binary
+deb/dists/*/*/*.gz binary
+deb/dists/*/*/*/*.gz binary
+deb/dists/*/*/*/*.bz2 binary
