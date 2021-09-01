@@ -26,6 +26,7 @@ releases:
     must: true
     patches:
       - CVE-2020-8558
+      - CVE-2020-8559
       - CVE-2021-3121
       - nokmem.1.18
 
