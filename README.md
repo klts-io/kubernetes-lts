@@ -1,5 +1,8 @@
 # kubernetes-lts
 
+[![Releases Binaries](https://github.com/klts-io/kubernetes-lts/actions/workflows/releases-binaries.yml/badge.svg)](https://github.com/klts-io/kubernetes-lts/actions/workflows/releases-binaries.yml)
+[![Releases Images](https://github.com/klts-io/kubernetes-lts/actions/workflows/releases-images.yml/badge.svg)](https://github.com/klts-io/kubernetes-lts/actions/workflows/releases-images.yml)
+
 ## CVE Source
 
 https://github.com/kubernetes/kubernetes/pulls?q=is%3Apr+is%3Amerged+label%3Acherry-pick-approved+CVE
