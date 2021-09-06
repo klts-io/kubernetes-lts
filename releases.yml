@@ -352,7 +352,6 @@ patches:
       - patches/CVE-2019-11246.1.10.patch # Conflict resolution
 
   # CVSS Score 4.6, < k8s1.13, https://www.cvedetails.com/cve/CVE-2019-11245/
-  # TODO
   - name: CVE-2019-11245
     patch:
       - https://github.com/kubernetes/kubernetes/pull/78320.patch
