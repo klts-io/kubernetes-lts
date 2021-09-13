@@ -21,6 +21,10 @@ make v1.18.18-lts.0
 
 ## Build
 
+Since the repos branch is used as a software source for RPM and DEB, direct cloning is very large So try cloning only the single branch
+
+git clone --single-branch -b master https://github.com/klts-io/kubernetes-lts
+
 ### Build image
 
 ``` bash
