@@ -5,6 +5,7 @@ releases:
     base_release: v1.18.20-ci
     must: true
     patches:
+      - CVE-2021-25741.1.18
       - nokmem.1.18
 
   - name: v1.17.17-lts.0
@@ -12,6 +13,7 @@ releases:
     must: true
     patches:
       - CVE-2021-3121
+      # - CVE-2021-25741.1.18
       - nokmem.1.18
 
   - name: v1.16.15-lts.0
@@ -19,6 +21,7 @@ releases:
     must: true
     patches:
       - CVE-2021-3121
+      # - CVE-2021-25741.1.18
       - nokmem.1.18
 
   - name: v1.15.12-lts.0
@@ -28,6 +31,7 @@ releases:
       - CVE-2020-8558
       - CVE-2020-8559
       - CVE-2021-3121
+      # - CVE-2021-25741.1.18
       - nokmem.1.18
 
   - name: v1.14.10-lts.0
@@ -38,6 +42,7 @@ releases:
       - CVE-2020-8558
       - CVE-2020-8559
       - CVE-2021-3121
+      # - CVE-2021-25741.1.18
       - nokmem.1.18
 
   - name: v1.13.12-lts.0
@@ -48,6 +53,7 @@ releases:
       - CVE-2020-8558
       # - CVE-2020-8559.1.13
       - CVE-2021-3121
+      # # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.12.10-lts.0
@@ -62,6 +68,7 @@ releases:
       - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
+      # # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.11.10-lts.0
@@ -78,6 +85,7 @@ releases:
       - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
+      # # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.10.13-lts.0
@@ -95,6 +103,7 @@ releases:
       # - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
+      # # - CVE-2021-25741.1.18
       - nokmem.1.13
     test_failures_tolerated:
       # The failures add by CVE-2019-11251.1.10.patch
@@ -220,6 +229,16 @@ releases:
     test_integration_failures_tolerated: []
 
 patches:
+  # CVSS Score >= 8.0
+
+  # CVSS Score 8.8, < k8s1.19, https://www.cvedetails.com/cve/CVE-2021-25741/
+  - name: CVE-2021-25741
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/104340.patch
+  - name: CVE-2021-25741.1.18
+    patch:
+      - patches/CVE-2021-25741.1.18.patch # Conflict resolution
+
   # CVSS Score >= 7.0
 
   # CVSS Score 7.5, < k8s1.18, https://www.cvedetails.com/cve/CVE-2021-3121/
