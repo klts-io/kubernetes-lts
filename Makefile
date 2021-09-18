@@ -93,6 +93,10 @@ verify-pkg-deb-server:
 verify-build-image: 
 	./hack/verify_build_image.sh
 
+.PHONY: verify-k8s
+verify-k8s: 
+	./hack/verify_k8s.sh
+
 .PHONY: gen-verify-workflows
 gen-verify-workflows:
 	./hack/gen_verify_workflows.sh > .github/workflows/verify.yml

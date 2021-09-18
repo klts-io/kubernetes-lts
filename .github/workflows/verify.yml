@@ -110,6 +110,32 @@ jobs:
         run: |
           make test-integration
 
+  Verify-v1-18-20-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.18.20-lts.0
+        run: |
+          make v1.18.20-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
   Test-v1-17-17-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
@@ -187,6 +213,32 @@ jobs:
       - name: Test integration
         run: |
           make test-integration
+
+  Verify-v1-17-17-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.17.17-lts.0
+        run: |
+          make v1.17.17-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
 
   Test-v1-16-15-lts-0:
     needs: Patch
@@ -266,6 +318,32 @@ jobs:
         run: |
           make test-integration
 
+  Verify-v1-16-15-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.16.15-lts.0
+        run: |
+          make v1.16.15-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
   Test-v1-15-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
@@ -343,6 +421,32 @@ jobs:
       - name: Test integration
         run: |
           make test-integration
+
+  Verify-v1-15-12-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.15.12-lts.0
+        run: |
+          make v1.15.12-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
 
   Test-v1-14-10-lts-0:
     needs: Patch
@@ -422,6 +526,32 @@ jobs:
         run: |
           make test-integration
 
+  Verify-v1-14-10-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.14.10-lts.0
+        run: |
+          make v1.14.10-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
   Test-v1-13-12-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
@@ -499,6 +629,32 @@ jobs:
       - name: Test integration
         run: |
           make test-integration
+
+  Verify-v1-13-12-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.13.12-lts.0
+        run: |
+          make v1.13.12-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
 
   Test-v1-12-10-lts-0:
     needs: Patch
@@ -578,6 +734,32 @@ jobs:
         run: |
           make test-integration
 
+  Verify-v1-12-10-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.12.10-lts.0
+        run: |
+          make v1.12.10-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
   Test-v1-11-10-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
@@ -656,6 +838,32 @@ jobs:
         run: |
           make test-integration
 
+  Verify-v1-11-10-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.11.10-lts.0
+        run: |
+          make v1.11.10-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
   Test-v1-10-13-lts-0:
     needs: Patch
     runs-on: ubuntu-latest
@@ -733,4 +941,30 @@ jobs:
       - name: Test integration
         run: |
           make test-integration
+
+  Verify-v1-10-13-lts-0:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to v1.10.13-lts.0
+        run: |
+          make v1.10.13-lts.0
+      - name: Verify k8s
+        run: |
+          make verify-k8s
 

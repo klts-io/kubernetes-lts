@@ -126,6 +126,32 @@ for release in ${RELEASES}; do
         run: |
           make test-integration
 
+  Verify-${name}:
+    needs: Patch
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Cache workdir
+        uses: actions/cache@v2
+        env:
+          cache-name: workdir
+        with:
+          path: |
+            workdir
+            /tmp/kubernetes-lts/
+          key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
+          restore-keys: |
+            \${{ runner.os }}-build-\${{ env.cache-name }}
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout to ${release}
+        run: |
+          make ${release}
+      - name: Verify k8s
+        run: |
+          make verify-k8s
+
 EOF
 
 done
