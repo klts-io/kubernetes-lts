@@ -11,4 +11,8 @@ VERSION=$(helper::workdir::version)
 RELEASE="${VERSION##*-}"
 VERSION="${VERSION%-*}"
 
+if [[ "${VERSION}" == "${RELEASE}" ]]; then
+  RELEASE="00"
+fi
+
 ./hack/pkg_deb.sh kubeadm,kubelet amd64,arm64,arm,ppc64le,s390x "${VERSION}" "${RELEASE}"
