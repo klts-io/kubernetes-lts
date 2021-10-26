@@ -13,7 +13,7 @@ source "$(dirname "${BASH_SOURCE}")/helper.sh"
 cd "${ROOT}"
 
 PATCH_PATH=$1
-PATCH_PATH=$(helper::fullpath ${PATCH_PATH})
+PATCH_PATH=$(realpath ${PATCH_PATH})
 NAME=${PATCH_PATH##*/}
 BASENAME=${NAME%%.*}
 RELEASE=${NAME#*.}
