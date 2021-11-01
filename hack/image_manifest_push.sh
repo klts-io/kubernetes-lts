@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source "$(dirname "${BASH_SOURCE}")/helper.sh"
+source "kit/helper.sh"
 cd "${WORKDIR}"
 
 REGISTRY=${REGISTRY:-}
@@ -12,7 +12,13 @@ TAG=$(helper::workdir::version)
 
 DOCKER_CLI_EXPERIMENTAL=enabled
 
-IMAGES=$(docker images | awk '{print $1":"$2}' | grep -E "^${REGISTRY}/" | grep -E ":${TAG}$")
+docker images
+
+echo "REGISTRY: ${REGISTRY}"
+echo "TAG:      ${TAG}"
+
+IMAGES=$(docker images | awk '{print $1":"$2}' | grep -E "^${REGISTRY}/" | grep -E ":${TAG}$" || :)
+echo "IMAGES:   ${IMAGES}"
 
 declare -A IMAGE_ARCH=()
 

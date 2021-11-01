@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source "$(dirname "${BASH_SOURCE}")/helper.sh"
+source "kit/helper.sh"
 cd "${WORKDIR}"
 
 TMPFILE="${TMPDIR}/test.log"

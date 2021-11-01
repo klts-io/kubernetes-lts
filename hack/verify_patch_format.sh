@@ -4,7 +4,7 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source "$(dirname "${BASH_SOURCE}")/helper.sh"
+source "kit/helper.sh"
 cd "${ROOT}"
 
 cp -r patches patches.bak
@@ -14,6 +14,6 @@ function cleanup() {
 }
 trap cleanup EXIT
 
-./hack/format_all_patch.sh
+${KITDIR}/format_all_patch.sh
 
 diff -a patches patches.bak

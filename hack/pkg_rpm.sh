@@ -4,18 +4,15 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-source "$(dirname "${BASH_SOURCE}")/helper.sh"
+source "kit/helper.sh"
+cd "${ROOT}"
 
-NAMES="${1:-}"
-ARCHS="${2:-}"
-VERSION="${3:-}"
-RELEASE="${4:-}"
+VERSION=$(helper::workdir::version)
+RELEASE="${VERSION##*-}"
+VERSION="${VERSION%-*}"
 
-SRC="${ROOT}/hack/rpm"
-RPMBUILD="${ROOT}/rpmbuild"
-RPMREPO="${REPOSDIR}/rpm"
-BIN_PATH="${WORKDIR}/_output/dockerized/bin"
+if [[ "${VERSION}" == "${RELEASE}" ]]; then
+  RELEASE="00"
+fi
 
-docker build -t rpm-builder "${SRC}"
-
-docker run --rm -v "${SRC}:/root/src" -v "${BIN_PATH}:/root/output/bin" -v "${RPMBUILD}:/root/rpmbuild/" -v "${RPMREPO}:/root/rpmrepo/" rpm-builder "${NAMES}" "${ARCHS}" "${VERSION}" "${RELEASE}"
+${KITDIR}/pkg_rpm.sh kubectl,kubelet,kubeadm amd64,arm64 "${VERSION}" "${RELEASE}"

@@ -13,14 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
@@ -37,14 +36,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -54,6 +52,9 @@ jobs:
       - name: Checkout to v1.18.20-lts.0
         run: |
           make v1.18.20-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -63,14 +64,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -80,6 +80,9 @@ jobs:
       - name: Checkout to v1.18.20-lts.0
         run: |
           make v1.18.20-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -89,13 +92,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-18-20-lts-0
           restore-keys: |
@@ -106,6 +109,9 @@ jobs:
       - name: Checkout to v1.18.20-lts.0
         run: |
           make v1.18.20-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -115,14 +121,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -132,6 +137,9 @@ jobs:
       - name: Checkout to v1.17.17-lts.0
         run: |
           make v1.17.17-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -141,14 +149,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -158,6 +165,9 @@ jobs:
       - name: Checkout to v1.17.17-lts.0
         run: |
           make v1.17.17-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -167,13 +177,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-17-17-lts-0
           restore-keys: |
@@ -184,6 +194,9 @@ jobs:
       - name: Checkout to v1.17.17-lts.0
         run: |
           make v1.17.17-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -193,14 +206,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -210,6 +222,9 @@ jobs:
       - name: Checkout to v1.16.15-lts.0
         run: |
           make v1.16.15-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -219,14 +234,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -236,6 +250,9 @@ jobs:
       - name: Checkout to v1.16.15-lts.0
         run: |
           make v1.16.15-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -245,13 +262,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-16-15-lts-0
           restore-keys: |
@@ -262,6 +279,9 @@ jobs:
       - name: Checkout to v1.16.15-lts.0
         run: |
           make v1.16.15-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -271,14 +291,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -288,6 +307,9 @@ jobs:
       - name: Checkout to v1.15.12-lts.0
         run: |
           make v1.15.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -297,14 +319,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -314,6 +335,9 @@ jobs:
       - name: Checkout to v1.15.12-lts.0
         run: |
           make v1.15.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -323,13 +347,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-15-12-lts-0
           restore-keys: |
@@ -340,6 +364,9 @@ jobs:
       - name: Checkout to v1.15.12-lts.0
         run: |
           make v1.15.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -349,14 +376,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -366,6 +392,9 @@ jobs:
       - name: Checkout to v1.14.10-lts.0
         run: |
           make v1.14.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -375,14 +404,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -392,6 +420,9 @@ jobs:
       - name: Checkout to v1.14.10-lts.0
         run: |
           make v1.14.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -401,13 +432,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-14-10-lts-0
           restore-keys: |
@@ -418,6 +449,9 @@ jobs:
       - name: Checkout to v1.14.10-lts.0
         run: |
           make v1.14.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -427,14 +461,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -444,6 +477,9 @@ jobs:
       - name: Checkout to v1.13.12-lts.0
         run: |
           make v1.13.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -453,14 +489,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -470,6 +505,9 @@ jobs:
       - name: Checkout to v1.13.12-lts.0
         run: |
           make v1.13.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -479,13 +517,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-13-12-lts-0
           restore-keys: |
@@ -496,6 +534,9 @@ jobs:
       - name: Checkout to v1.13.12-lts.0
         run: |
           make v1.13.12-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -505,14 +546,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -522,6 +562,9 @@ jobs:
       - name: Checkout to v1.12.10-lts.0
         run: |
           make v1.12.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -531,14 +574,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -548,6 +590,9 @@ jobs:
       - name: Checkout to v1.12.10-lts.0
         run: |
           make v1.12.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -557,13 +602,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-12-10-lts-0
           restore-keys: |
@@ -574,6 +619,9 @@ jobs:
       - name: Checkout to v1.12.10-lts.0
         run: |
           make v1.12.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -583,14 +631,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -600,6 +647,9 @@ jobs:
       - name: Checkout to v1.11.10-lts.0
         run: |
           make v1.11.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -609,14 +659,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -626,6 +675,9 @@ jobs:
       - name: Checkout to v1.11.10-lts.0
         run: |
           make v1.11.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -635,13 +687,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-11-10-lts-0
           restore-keys: |
@@ -652,6 +704,9 @@ jobs:
       - name: Checkout to v1.11.10-lts.0
         run: |
           make v1.11.10-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
@@ -661,14 +716,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -678,6 +732,9 @@ jobs:
       - name: Checkout to v1.10.13-lts.0
         run: |
           make v1.10.13-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test
         run: |
           make test
@@ -687,14 +744,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
-            /tmp/kubernetes-lts/
+            src
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
@@ -704,6 +760,9 @@ jobs:
       - name: Checkout to v1.10.13-lts.0
         run: |
           make v1.10.13-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test cmd
         run: |
           make test-cmd
@@ -713,13 +772,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Cache workdir
+      - name: Cache
         uses: actions/cache@v2
         env:
-          cache-name: workdir
+          cache-name: src
         with:
           path: |
-            workdir
+            src
             /tmp/kubernetes-lts/
           key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-10-13-lts-0
           restore-keys: |
@@ -730,6 +789,9 @@ jobs:
       - name: Checkout to v1.10.13-lts.0
         run: |
           make v1.10.13-lts.0
+      - name: Install etcd
+        run: |
+          make install-etcd
       - name: Test integration
         run: |
           make test-integration
