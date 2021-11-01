@@ -1,0 +1,43 @@
+name: Releases Packages
+
+on:
+  push:
+    tags:
+      - v*
+
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
+      - name: Build binaries
+        run: |
+          make build-binaries
+
+      - name: Package rpm
+        run: |
+          make pkg-rpm
+      - name: Sync repository
+        env:
+          BRANCH_PREFIX: "rpm-"
+          REPOS: "rpm"
+        run: |
+          GH_TOKEN="${GH_TOKEN:-${{ secrets.GITHUB_TOKEN }}}" SOURCE="${SOURCE:-https://github.com/${{ github.repository }}}" make repos-sync
+
+      - name: Package deb
+        run: |
+          make pkg-deb
+      - name: Sync repository
+        env:
+          BRANCH_PREFIX: "deb-"
+          REPOS: "deb"
+        run: |
+          GH_TOKEN="${GH_TOKEN:-${{ secrets.GITHUB_TOKEN }}}" SOURCE="${SOURCE:-https://github.com/${{ github.repository }}}" make repos-sync

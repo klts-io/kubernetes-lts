@@ -1,4 +1,6 @@
-workdir/
+kit/
+src/
+output/
 release/
 rpmbuild/
 debbuild/

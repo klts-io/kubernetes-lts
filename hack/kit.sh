@@ -4,4 +4,4 @@ set -o errexit
 set -o nounset
 set -o pipefail
 
-kit/checkout.sh $@
+git clone --single-branch --depth 1 https://github.com/klts-io/kit
