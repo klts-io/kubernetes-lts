@@ -1,12 +1,18 @@
 base: https://github.com/kubernetes/kubernetes
 
 releases:
+  - name: v1.19.16-lts.0
+    base_release: v1.19.16-ci
+    must: true
+    patches:
+      - nokmem.1.19
+
   - name: v1.18.20-lts.0
     base_release: v1.18.20-ci
     must: true
     patches:
       - CVE-2021-25741.1.18
-      - nokmem.1.18
+      - nokmem.1.19
 
   - name: v1.17.17-lts.0
     base_release: v1.17.17-ci
@@ -14,7 +20,7 @@ releases:
     patches:
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.18
+      - nokmem.1.19
 
   - name: v1.16.15-lts.0
     base_release: v1.16.15-ci
@@ -22,7 +28,7 @@ releases:
     patches:
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.18
+      - nokmem.1.19
 
   - name: v1.15.12-lts.0
     base_release: v1.15.12-ci
@@ -32,7 +38,7 @@ releases:
       - CVE-2020-8559
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.18
+      - nokmem.1.19
 
   - name: v1.14.10-lts.0
     base_release: v1.14.10-ci
@@ -43,7 +49,7 @@ releases:
       - CVE-2020-8559
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.18
+      - nokmem.1.19
 
   - name: v1.13.12-lts.0
     base_release: v1.13.12-ci
@@ -111,12 +117,24 @@ releases:
       # TODO: Need to upgrade go version greater than 1.9 to remove this
       - k8s.io/kubernetes/pkg/kubectl/cmd
 
+  - name: v1.19.16-ci
+    base_release: v1.18.20
+    patches:
+      - fix-run-docker.1.19
+      - no-delete-images.1.19
+      - fix-etcd-put-key.1.19
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
+      - k8s.io/kubernetes/pkg/volume/csi
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+    test_integration_failures_tolerated: []
+
   - name: v1.18.20-ci
     base_release: v1.18.20
     patches:
-      - fix-run-docker.1.18
-      - no-delete-images.1.18
-      - fix-etcd-put-key.1.18
+      - fix-run-docker.1.19
+      - no-delete-images.1.19
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -126,9 +144,9 @@ releases:
   - name: v1.17.17-ci
     base_release: v1.17.17
     patches:
-      - fix-run-docker.1.18
-      - no-delete-images.1.18
-      - fix-etcd-put-key.1.18
+      - fix-run-docker.1.19
+      - no-delete-images.1.19
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -137,11 +155,11 @@ releases:
   - name: v1.16.15-ci
     base_release: v1.16.15
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - fix-test.1.16 # Fix test k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
-      - no-delete-images.1.18
+      - no-delete-images.1.19
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.18
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -151,11 +169,11 @@ releases:
   - name: v1.15.12-ci
     base_release: v1.15.12
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.18
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/master
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -164,11 +182,11 @@ releases:
   - name: v1.14.10-ci
     base_release: v1.14.10
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.18
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/controller/podautoscaler
       - k8s.io/kubernetes/pkg/controller/volume/persistentvolume
@@ -179,11 +197,11 @@ releases:
   - name: v1.13.12-ci
     base_release: v1.13.12
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.18
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/api/testing
       - k8s.io/kubernetes/pkg/controller/podautoscaler
@@ -194,11 +212,11 @@ releases:
   - name: v1.12.10-ci
     base_release: v1.12.10
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.18
+      - fix-etcd-put-key.1.19
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
@@ -206,7 +224,7 @@ releases:
   - name: v1.11.10-ci
     base_release: v1.11.10
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - release-images-script
       - no-delete-images.1.12
       - fix-image-name.1.12
@@ -219,7 +237,7 @@ releases:
   - name: v1.10.13-ci
     base_release: v1.10.13
     patches:
-      - fix-run-docker.1.18
+      - fix-run-docker.1.19
       - release-images-script
       - no-delete-images.1.10
       - fix-image-name.1.12
@@ -440,28 +458,28 @@ patches:
 
   # Bug
 
-  - name: nokmem.1.18 # < k8s1.22
+  - name: nokmem.1.19 # < k8s1.22
     patch:
       # Hard-coded disabling kmem to prevent seemingly disabling actually enabling
       # TODO: upgrade runc instead of this
-      - patches/nokmem.1.18.patch
+      - patches/nokmem.1.19.patch
   - name: nokmem.1.13
     patch:
       - patches/nokmem.1.13.patch
 
   # CI
 
-  - name: fix-run-docker.1.18
+  - name: fix-run-docker.1.19
     patch:
-      - patches/fix-run-docker.1.18.patch
+      - patches/fix-run-docker.1.19.patch
 
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch
 
-  - name: no-delete-images.1.18
+  - name: no-delete-images.1.19
     patch:
-      - patches/no-delete-images.1.18.patch
+      - patches/no-delete-images.1.19.patch
   - name: no-delete-images.1.15
     patch:
       - patches/no-delete-images.1.15.patch
@@ -491,9 +509,9 @@ patches:
     patch:
       - patches/fix-etcd-health.1.11.patch
 
-  - name: fix-etcd-put-key.1.18
+  - name: fix-etcd-put-key.1.19
     patch:
-      - patches/fix-etcd-put-key.1.18.patch
+      - patches/fix-etcd-put-key.1.19.patch
   - name: fix-etcd-put-key.1.11
     patch:
       - patches/fix-etcd-put-key.1.11.patch
