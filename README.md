@@ -26,7 +26,7 @@ https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=Kubernetes
 Defined in the [./releases.yml](https://github.com/klts-io/kubernetes-lts/blob/master/releases.yml)
 
 ``` bash
-make v1.18.18-lts.1
+make v1.19.16-lts.1
 ```
 
 ## Build
