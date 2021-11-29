@@ -1,5 +1,5 @@
 # kubernetes-lts
-Below lists the status of each release image and package and you can learn the detailed logs by clicking each image/package.
+Below lists the status of each release image and package and you can click it to learn the detailed logs for each version provided by KLTS.
 | |Images|Packages|
 |-|-|-|
 |v1.19.16|[![v1.19.16-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Images/v1.19.16-lts.1?label=v1.19.16-lts.1%20Releases%20Images)](https://klts.io/zh/docs/releases/v1.19.16/v1.19.16-lts.1/)|[![v1.19.16-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Packages/v1.19.16-lts.1?label=v1.19.16-lts.1%20Releases%20Packages)](https://klts.io/zh/docs/releases/v1.19.16/v1.19.16-lts.1/)|
