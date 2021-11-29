@@ -1,5 +1,5 @@
 # kubernetes-lts
-Below lists the status of each release image and package and you can click it to learn the detailed logs for each version provided by KLTS.
+Below lists the status of each release image and package and you can click it to learn the detailed logs for each release provided by KLTS.
 | |Images|Packages|
 |-|-|-|
 |v1.19.16|[![v1.19.16-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Images/v1.19.16-lts.1?label=v1.19.16-lts.1%20Releases%20Images)](https://klts.io/zh/docs/releases/v1.19.16/v1.19.16-lts.1/)|[![v1.19.16-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Packages/v1.19.16-lts.1?label=v1.19.16-lts.1%20Releases%20Packages)](https://klts.io/zh/docs/releases/v1.19.16/v1.19.16-lts.1/)|
@@ -17,13 +17,13 @@ Below lists the status of each release image and package and you can click it to
 
 [CVEs that were cherry-pick approved and merged after pull requests](https://github.com/kubernetes/kubernetes/pulls?q=is%3Apr+is%3Amerged+label%3Acherry-pick-approved+CVE)
 
-[Details about CVEs that were found and fixed recently](https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html)
+[CVEs that were found and fixed recently](https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html)
 
 [Kubernetes-related CVEs that were found and listed on cve.org recently](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=Kubernetes)
 
-## Check out to the specified patch release
+## Check out the specified patch release
 
-You can directly check out the specified version by running the following code. For details about the versions provided by KLTS, see [./releases.yml](https://github.com/klts-io/kubernetes-lts/blob/master/releases.yml)
+You can directly check out the specified release by running the following code. For details about the releases provided by KLTS, see [./releases.yml](https://github.com/klts-io/kubernetes-lts/blob/master/releases.yml)
 
 ``` bash
 make v1.18.18-lts.1
