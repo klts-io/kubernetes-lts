@@ -19,6 +19,7 @@ env:
     assign
     auto-cc
     cc
+    label-kind
     label-bug
     label-documentation
     label-enhancement
