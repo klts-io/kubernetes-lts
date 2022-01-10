@@ -7,12 +7,12 @@ Subject: [PATCH] reduce race risk in kubelet for missing
 ---
  pkg/kubelet/kubelet.go           |  19 +++-
  pkg/kubelet/kubelet_pods.go      |  12 +++
- pkg/kubelet/kubelet_pods_test.go | 152 +++++++++++++++++++------------
+ pkg/kubelet/kubelet_pods_test.go | 153 +++++++++++++++++++------------
  pkg/kubelet/kubelet_test.go      |   1 +
- 4 files changed, 121 insertions(+), 63 deletions(-)
+ 4 files changed, 122 insertions(+), 63 deletions(-)
 
 diff --git a/pkg/kubelet/kubelet.go b/pkg/kubelet/kubelet.go
-index 1d571c33..919629b3 100644
+index 1d571c33b07..919629b3709 100644
 --- a/pkg/kubelet/kubelet.go
 +++ b/pkg/kubelet/kubelet.go
 @@ -530,13 +530,18 @@ func NewMainKubelet(kubeCfg *kubeletconfiginternal.KubeletConfiguration,
@@ -58,7 +58,7 @@ index 1d571c33..919629b3 100644
  	nodeLister corelisters.NodeLister
  	// nodeHasSynced indicates whether nodes have been sync'd at least once.
 diff --git a/pkg/kubelet/kubelet_pods.go b/pkg/kubelet/kubelet_pods.go
-index 65a9fd74..4feff104 100644
+index 65a9fd74627..4feff10400d 100644
 --- a/pkg/kubelet/kubelet_pods.go
 +++ b/pkg/kubelet/kubelet_pods.go
 @@ -567,6 +567,18 @@ func (kl *Kubelet) makeEnvironmentVariables(pod *v1.Pod, container *v1.Container
@@ -81,7 +81,7 @@ index 65a9fd74..4feff104 100644
  	// Note:  These are added to the docker Config, but are not included in the checksum computed
  	// by kubecontainer.HashContainer(...).  That way, we can still determine whether an
 diff --git a/pkg/kubelet/kubelet_pods_test.go b/pkg/kubelet/kubelet_pods_test.go
-index a542845c..2fac3ba3 100644
+index a542845c46e..190a9f6af41 100644
 --- a/pkg/kubelet/kubelet_pods_test.go
 +++ b/pkg/kubelet/kubelet_pods_test.go
 @@ -48,6 +48,7 @@ import (
@@ -129,7 +129,7 @@ index a542845c..2fac3ba3 100644
  		{
  			name:               "api server = Y, kubelet = Y",
  			ns:                 "test1",
-@@ -1606,71 +1631,82 @@ func TestMakeEnvironmentVariables(t *testing.T) {
+@@ -1606,71 +1631,83 @@ func TestMakeEnvironmentVariables(t *testing.T) {
  	}
  
  	for _, tc := range testCases {
@@ -218,6 +218,7 @@ index a542845c..2fac3ba3 100644
 -			var err error
 -			if tc.secret == nil {
 -				err = errors.New("no secret defined")
++			t.Logf("makeEnvironmentVariables testPod %v; container: %v; pod IP: %v; pod IPs: %v.", testPod, tc.container, podIP, podIPs)
 +			result, err := kl.makeEnvironmentVariables(testPod, tc.container, podIP, podIPs)
 +			select {
 +			case e := <-fakeRecorder.Events:
@@ -271,7 +272,7 @@ index a542845c..2fac3ba3 100644
  }
  
 diff --git a/pkg/kubelet/kubelet_test.go b/pkg/kubelet/kubelet_test.go
-index 748a9246..9da1566f 100644
+index 748a92463ce..9da1566fe89 100644
 --- a/pkg/kubelet/kubelet_test.go
 +++ b/pkg/kubelet/kubelet_test.go
 @@ -180,6 +180,7 @@ func newTestKubeletWithImageList(
@@ -282,4 +283,3 @@ index 748a9246..9da1566f 100644
  	kubelet.nodeHasSynced = func() bool { return true }
  	kubelet.nodeLister = testNodeLister{
  		nodes: []*v1.Node{
-
