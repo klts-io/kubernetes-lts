@@ -11,6 +11,7 @@ releases:
     base_release: v1.18.20-ci
     must: true
     patches:
+      - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
       - nokmem.1.19
 
@@ -527,3 +528,8 @@ patches:
   - name: fix-etcd-put-key.1.11
     patch:
       - patches/fix-etcd-put-key.1.11.patch
+
+  # Pick commit from https://github.com/kubernetes/kubernetes/pull/91500.patch
+  - name: fix-missing-env-91500.1.18
+    patch:
+      - patches/fix-missing-env-91500.1.18.patch
