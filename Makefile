@@ -7,6 +7,11 @@ dependent:
 	pip3 install yq
 	./hack/kit.sh
 
+.PHONY: public-source
+public-source:
+	@echo Public Source
+	./hack/public_source.sh
+
 .PHONY: build-binaries
 build-binaries:
 	@echo Build binaries

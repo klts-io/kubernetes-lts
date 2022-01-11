@@ -1,0 +1,26 @@
+name: Releases Source
+
+on:
+  push:
+    tags:
+      - v*
+
+  workflow_dispatch:
+
+jobs:
+  Build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install dependent
+        run: |
+          make dependent
+      - name: Checkout
+        run: |
+          make $(basename ${GITHUB_REF})
+      - name: Release source
+        env:
+          SOURCE: https://github.com/klts-io/kubernetes
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          make public-source
