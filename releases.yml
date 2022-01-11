@@ -527,6 +527,7 @@ patches:
     patch:
       - patches/fix-etcd-put-key.1.11.patch
 
+  # Pick commit from https://github.com/kubernetes/kubernetes/pull/91500.patch
   - name: fix-missing-env-91500.1.18
     patch:
       - patches/fix-missing-env-91500.1.18.patch
