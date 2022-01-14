@@ -12,6 +12,7 @@ releases:
     base_release: v1.18.20-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
       - nokmem.1.19
@@ -20,6 +21,7 @@ releases:
     base_release: v1.17.17-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
       - nokmem.1.19
@@ -28,6 +30,7 @@ releases:
     base_release: v1.16.15-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
       - nokmem.1.19
@@ -36,6 +39,7 @@ releases:
     base_release: v1.15.12-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2020-8558
       - CVE-2020-8559
       - CVE-2021-3121
@@ -46,6 +50,7 @@ releases:
     base_release: v1.14.10-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2019-11243
       - CVE-2020-8552.1.14
       - CVE-2020-8555.1.14
@@ -59,19 +64,21 @@ releases:
     base_release: v1.13.12-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2019-11243
       - CVE-2020-8552.1.13
       - CVE-2020-8555.1.14
       - CVE-2020-8558
       # - CVE-2020-8559.1.13
       - CVE-2021-3121
-      # # - CVE-2021-25741.1.18
+      # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.12.10-lts.2
     base_release: v1.12.10-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2019-11243
       - CVE-2019-11245
       - CVE-2019-11247
@@ -81,13 +88,14 @@ releases:
       - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
-      # # - CVE-2021-25741.1.18
+      # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.11.10-lts.2
     base_release: v1.11.10-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2019-11245
       - CVE-2019-11246.1.11
       - CVE-2019-11247.1.11
@@ -98,13 +106,14 @@ releases:
       - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
-      # # - CVE-2021-25741.1.18
+      # - CVE-2021-25741.1.18
       - nokmem.1.13
 
   - name: v1.10.13-lts.2
     base_release: v1.10.13-ci
     must: true
     patches:
+      # - CVE-2020-8554.1.19
       - CVE-2019-11245
       - CVE-2019-1002100.1.10
       - CVE-2019-1002101.1.10
@@ -117,7 +126,7 @@ releases:
       # - CVE-2020-8558.1.12
       # - CVE-2020-8559.1.12
       - CVE-2021-3121
-      # # - CVE-2021-25741.1.18
+      # - CVE-2021-25741.1.18
       - nokmem.1.13
     test_failures_tolerated:
       # The failures add by CVE-2019-11251.1.10.patch
@@ -275,10 +284,15 @@ patches:
 
   # CVSS Score >= 6.0
 
-  # CVSS Score 6.0, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8559/
+  # CVSS Score 6.0, < k8s1.21, https://www.cvedetails.com/cve/CVE-2020-8554/
+  - name: CVE-2020-8554
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/97395.patch
   - name: CVE-2020-8554.1.19
     patch:
       - patches/CVE-2020-8554.1.19.patch
+      
+  # CVSS Score 6.0, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8559/
   - name: CVE-2020-8559
     patch:
       - https://github.com/kubernetes/kubernetes/pull/92971.patch
