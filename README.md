@@ -1,7 +1,7 @@
 
 
 # KLTS
-KLTS, known as Kubernetes Long Term Support, provides free maintenance support for early Kubernetes versions for up to three years, actively fix the CVE vulnerabilities and critical bugs, to help many enterprise users  to stay with early Kubernetes versions.
+KLTS, known as Kubernetes Long Term Support, provides free maintenance support for early Kubernetes versions for up to three years, actively fix the CVE vulnerabilities and critical bugs, to help many enterprise users to stay with early Kubernetes versions.
 
 ----
 
@@ -34,7 +34,7 @@ Below lists the status of each release image and package and you can click any t
 
 ### Documents
 
-- [Homepage](https://klts.io/docs/)
+- [Portal and Docs](https://klts.io/docs/)
 - [Install Guide](klts.io/docs/install/)
 
 
