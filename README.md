@@ -1,4 +1,13 @@
-# kubernetes-lts
+
+
+# KLTS
+KLTS, known as Kubernetes Long Term Support, provides free maintenance support for early Kubernetes versions for up to three years, actively fix the CVE vulnerabilities and critical bugs, to help many enterprise users to stay with early Kubernetes versions.
+
+----
+
+## To start using KLTS
+
+### Available KLTS Versions
 Below lists the status of each release image and package and you can click any to learn the detailed logs.
 | |Images|Packages|
 |-|-|-|
@@ -17,15 +26,27 @@ Below lists the status of each release image and package and you can click any t
 |v1.11.10|[![v1.11.10-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Images/v1.11.10-lts.1?label=v1.11.10-lts.1%20Releases%20Images)](https://klts.io/zh/docs/releases/v1.11.10/v1.11.10-lts.1/)|[![v1.11.10-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Packages/v1.11.10-lts.1?label=v1.11.10-lts.1%20Releases%20Packages)](https://klts.io/zh/docs/releases/v1.11.10/v1.11.10-lts.1/)|
 |v1.10.13|[![v1.10.13-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Images/v1.10.13-lts.1?label=v1.10.13-lts.1%20Releases%20Images)](https://klts.io/zh/docs/releases/v1.10.13/v1.10.13-lts.1/)|[![v1.10.13-lts.1](https://img.shields.io/github/workflow/status/klts-io/kubernetes-lts/Releases%20Packages/v1.10.13-lts.1?label=v1.10.13-lts.1%20Releases%20Packages)](https://klts.io/zh/docs/releases/v1.10.13/v1.10.13-lts.1/)|
 
-## CVE Source
+### CVE Source
 
-[CVEs that were cherry-pick approved and merged after pull requests](https://github.com/kubernetes/kubernetes/pulls?q=is%3Apr+is%3Amerged+label%3Acherry-pick-approved+CVE)
+- [CVEs that were cherry-pick approved and merged after pull requests](https://github.com/kubernetes/kubernetes/pulls?q=is%3Apr+is%3Amerged+label%3Acherry-pick-approved+CVE)
 
-[CVEs that were found and fixed recently](https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html)
+- [CVEs that were found and fixed recently](https://www.cvedetails.com/vulnerability-list/vendor_id-15867/product_id-34016/Kubernetes-Kubernetes.html)
 
-[Kubernetes-related CVEs that were found and listed on cve.org recently](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=Kubernetes)
+- [Kubernetes-related CVEs that were found and listed on cve.org recently](https://cve.mitre.org/cgi-bin/cvekey.cgi?keyword=Kubernetes)
 
-## Check out the specified patch release
+
+
+### Documents
+
+- [Portal and Docs](https://klts.io/docs/)
+- [Install Guide](klts.io/docs/install/)
+
+
+-----------------------
+
+## To start contributing KLTS
+
+### Check out the specified patch release
 
 You can directly check out the specified release by running the following code. For details about the releases provided by KLTS, see [./releases.yml](https://github.com/klts-io/kubernetes-lts/blob/master/releases.yml)
 
@@ -33,7 +54,7 @@ You can directly check out the specified release by running the following code. 
 make v1.19.16-lts.1
 ```
 
-## Build
+### Build
 
 Since the repos branch is used as a software source for RPM and DEB and direct cloning is very large, you can try to only clone a single branch as follows.
 
@@ -41,7 +62,7 @@ Since the repos branch is used as a software source for RPM and DEB and direct c
 git clone --single-branch -b main https://github.com/klts-io/kubernetes-lts
 ```
 
-### Build image
+#### Build image
 Run the following code to build your image:
 
 ``` bash
@@ -50,11 +71,11 @@ make build-image
 
 Check more images from [Images artifacts](https://github.com/orgs/klts-io/packages?repo_name=kubernetes-lts).
 
-### Build client and server
+#### Build client and server
 Run the following code to build the client and server:
 
 ``` bash
 make build-binaries
 ```
-### Official patch release
+#### Official patch release
 For details about Kubernetes patch releases, see [patch release](https://kubernetes.io/releases/patch-releases/).
