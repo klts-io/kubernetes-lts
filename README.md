@@ -79,3 +79,16 @@ make build-binaries
 ```
 #### Official patch release
 For details about Kubernetes patch releases, see [patch release](https://kubernetes.io/releases/patch-releases/).
+
+## Contributors
+
+<a href="https://github.com/klts-io/kubernetes-lts/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=klts-io/kubernetes-lts" />
+</a>
+
+Made with [contrib.rocks](https://contrib.rocks).
+
+## License
+Copyright 2022 the KLTS.io Authors. All rights reserved.
+
+Licensed under the Apache License, Version 2.0.
