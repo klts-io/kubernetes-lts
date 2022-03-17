@@ -8,7 +8,7 @@ Subject: [PATCH] Remove writable verification in etcd startup
  1 file changed, 1 deletion(-)
 
 diff --git a/hack/lib/etcd.sh b/hack/lib/etcd.sh
-index 88f64fb0a09..1a3a0b1eefb 100755
+index 756e342499c..f6a9d1fa393 100755
 --- a/hack/lib/etcd.sh
 +++ b/hack/lib/etcd.sh
 @@ -88,7 +88,6 @@ kube::etcd::start() {
@@ -18,4 +18,4 @@ index 88f64fb0a09..1a3a0b1eefb 100755
 -  curl -fs -X POST "${KUBE_INTEGRATION_ETCD_URL}/v3/kv/put" -d '{"key": "X3Rlc3Q=", "value": ""}'
  }
  
- kube::etcd::stop() {
+ kube::etcd::start_scraping() {
