@@ -5,39 +5,36 @@ releases:
   - name: v1.23.4-lts.1
     base_release: v1.23.4-ci
     must: true
-    patches:
-      - nokmem.1.19
+    patches: []
 
   - name: v1.22.7-lts.1
     base_release: v1.22.7-ci
     must: true
-    patches:
-      - nokmem.1.19
+    patches: []
 
   - name: v1.21.10-lts.1
     base_release: v1.21.10-ci
     must: true
-    patches:
-      - nokmem.1.19
+    patches: []
 
   - name: v1.20.16-lts.1
     base_release: v1.20.16-ci
     must: true
     patches:
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.20.2-lts.1
     base_release: v1.20.2-ci
     must: true
     patches:
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.19.16-lts.2
     base_release: v1.19.16-ci
     must: true
     patches:
       - CVE-2020-8554.1.19
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.18.20-lts.2
     base_release: v1.18.20-ci
@@ -46,7 +43,7 @@ releases:
       # - CVE-2020-8554.1.19
       - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.17.17-lts.2
     base_release: v1.17.17-ci
@@ -55,7 +52,7 @@ releases:
       # - CVE-2020-8554.1.19
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.16.15-lts.2
     base_release: v1.16.15-ci
@@ -64,7 +61,7 @@ releases:
       # - CVE-2020-8554.1.19
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.15.12-lts.1
     base_release: v1.15.12-ci
@@ -75,7 +72,7 @@ releases:
       - CVE-2020-8559
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.14.10-lts.2
     base_release: v1.14.10-ci
@@ -89,7 +86,7 @@ releases:
       - CVE-2020-8559
       - CVE-2021-3121
       # - CVE-2021-25741.1.18
-      - nokmem.1.19
+      - nokmem.1.20
 
   - name: v1.13.12-lts.2
     base_release: v1.13.12-ci
@@ -520,11 +517,11 @@ patches:
 
   # Bug
 
-  - name: nokmem.1.19 # < k8s1.22
+  - name: nokmem.1.20 # < k8s1.21
     patch:
       # Hard-coded disabling kmem to prevent seemingly disabling actually enabling
       # TODO: upgrade runc instead of this
-      - patches/nokmem.1.19.patch
+      - patches/nokmem.1.20.patch
   - name: nokmem.1.13
     patch:
       - patches/nokmem.1.13.patch
