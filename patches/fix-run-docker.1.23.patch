@@ -8,10 +8,10 @@ Subject: [PATCH 1/2] Run docker as root in tests
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/build/common.sh b/build/common.sh
-index 75dc82ed335..c54fe8269d1 100755
+index c59692408ae..da28826f108 100755
 --- a/build/common.sh
 +++ b/build/common.sh
-@@ -535,7 +535,7 @@ function kube::build::run_build_command_ex() {
+@@ -490,7 +490,7 @@ function kube::build::run_build_command_ex() {
  
    local -a docker_run_opts=(
      "--name=${container_name}"
@@ -31,10 +31,10 @@ Subject: [PATCH 2/2] Run docker with device kmsg
  1 file changed, 1 insertion(+)
 
 diff --git a/build/common.sh b/build/common.sh
-index c54fe8269d1..9cd95b5af51 100755
+index da28826f108..b1dc1a26a4e 100755
 --- a/build/common.sh
 +++ b/build/common.sh
-@@ -537,6 +537,7 @@ function kube::build::run_build_command_ex() {
+@@ -492,6 +492,7 @@ function kube::build::run_build_command_ex() {
      "--name=${container_name}"
      "--user=root"
      "--hostname=${HOSTNAME}"
