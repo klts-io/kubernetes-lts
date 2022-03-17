@@ -9,7 +9,7 @@ Subject: [PATCH] Disabled kmem
  2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
-index 69b5a1946c7..678faccd370 100644
+index 8d97a6791a4..8935e811742 100644
 --- a/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
 +++ b/vendor/github.com/opencontainers/runc/libcontainer/cgroups/fs/kmem.go
 @@ -1,4 +1,4 @@
