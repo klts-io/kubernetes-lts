@@ -165,44 +165,44 @@ releases:
   - name: v1.23.4-ci
     base_release: v1.23.4
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
 
   - name: v1.22.7-ci
     base_release: v1.22.7
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
 
   - name: v1.21.10-ci
     base_release: v1.21.10
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
 
   - name: v1.20.15-ci
     base_release: v1.20.15
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
 
   - name: v1.20.2-ci
     base_release: v1.20.2
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
 
   - name: v1.19.16-ci
     base_release: v1.19.16
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -212,9 +212,9 @@ releases:
   - name: v1.18.20-ci
     base_release: v1.18.20
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -224,9 +224,9 @@ releases:
   - name: v1.17.17-ci
     base_release: v1.17.17
     patches:
-      - fix-run-docker.1.19
-      - no-delete-images.1.19
-      - fix-etcd-put-key.1.19
+      - fix-run-docker.1.23
+      - no-delete-images.1.23
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -235,11 +235,11 @@ releases:
   - name: v1.16.15-ci
     base_release: v1.16.15
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - fix-test.1.16 # Fix test k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
-      - no-delete-images.1.19
+      - no-delete-images.1.23
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.19
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -249,11 +249,11 @@ releases:
   - name: v1.15.12-ci
     base_release: v1.15.12
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.19
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/master
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -263,11 +263,11 @@ releases:
   - name: v1.14.10-ci
     base_release: v1.14.10
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.19
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/controller/podautoscaler
       - k8s.io/kubernetes/pkg/controller/volume/persistentvolume
@@ -278,11 +278,11 @@ releases:
   - name: v1.13.12-ci
     base_release: v1.13.12
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.19
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/api/testing
       - k8s.io/kubernetes/pkg/controller/podautoscaler
@@ -293,11 +293,11 @@ releases:
   - name: v1.12.10-ci
     base_release: v1.12.10
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.16
-      - fix-etcd-put-key.1.19
+      - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
@@ -305,7 +305,7 @@ releases:
   - name: v1.11.10-ci
     base_release: v1.11.10
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - release-images-script
       - no-delete-images.1.12
       - fix-image-name.1.12
@@ -318,7 +318,7 @@ releases:
   - name: v1.10.13-ci
     base_release: v1.10.13
     patches:
-      - fix-run-docker.1.19
+      - fix-run-docker.1.23
       - release-images-script
       - no-delete-images.1.10
       - fix-image-name.1.12
@@ -563,17 +563,17 @@ patches:
 
   # CI
 
-  - name: fix-run-docker.1.19
+  - name: fix-run-docker.1.23
     patch:
-      - patches/fix-run-docker.1.19.patch
+      - patches/fix-run-docker.1.23.patch
 
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch
 
-  - name: no-delete-images.1.19
+  - name: no-delete-images.1.23
     patch:
-      - patches/no-delete-images.1.19.patch
+      - patches/no-delete-images.1.23.patch
   - name: no-delete-images.1.15
     patch:
       - patches/no-delete-images.1.15.patch
@@ -603,9 +603,9 @@ patches:
     patch:
       - patches/fix-etcd-health.1.11.patch
 
-  - name: fix-etcd-put-key.1.19
+  - name: fix-etcd-put-key.1.23
     patch:
-      - patches/fix-etcd-put-key.1.19.patch
+      - patches/fix-etcd-put-key.1.23.patch
   - name: fix-etcd-put-key.1.11
     patch:
       - patches/fix-etcd-put-key.1.11.patch
