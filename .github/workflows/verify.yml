@@ -24,6 +24,9 @@ jobs:
       - name: Install dependent
         run: |
           make dependent
+      - name: Verify releases
+        run: |
+          make verify-releases
       - name: Verify patch
         run: |
           make verify-patch
