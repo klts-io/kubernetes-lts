@@ -9,7 +9,12 @@ cd "${WORKDIR}"
 
 TMPFILE="${TMPDIR}/test-integration.log"
 
-./build/run.sh make test-integration 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
+# Etcd was added for testing in 1.21 and later
+function test-integration() {
+    ./build/shell.sh -c './hack/install-etcd.sh && PATH=$(pwd)/third_party/etcd:${PATH} make test-integration'
+}
+
+test-integration 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
 
 RETRY_CASES=$(cat "${TMPFILE}" | grep -E '^FAIL\s+k8s.io/kubernetes' | awk '{print $2}' || echo "")
 
@@ -35,7 +40,7 @@ for n in {1..5}; do
     echo "+++ Test retry ${n}, the case is as follows:"
     echo "${RETRY_CASES}"
     want=$(echo ${RETRY_CASES})
-    ./build/run.sh make test-integration WHAT="${want}" 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
+    test-integration WHAT="${want}" 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
     RETRY_CASES=$(cat "${TMPFILE}" | grep -E '^FAIL\s+k8s.io/kubernetes' | awk '{print $2}' || echo "")
 done
 
