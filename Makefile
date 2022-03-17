@@ -45,6 +45,10 @@ verify: verify-patch
 verify-patch: 
 	./hack/verify_patch.sh
 
+.PHONY: verify-releases
+verify-releases: 
+	./hack/verify_releases.sh
+
 .PHONY: verify-patch-format
 verify-patch-format: 
 	./hack/verify_patch_format.sh
