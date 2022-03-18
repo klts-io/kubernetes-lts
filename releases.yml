@@ -189,6 +189,9 @@ releases:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
+      - k8s.io/kubernetes/pkg/volume/csi
 
   - name: v1.20.2-ci
     base_release: v1.20.2
@@ -196,6 +199,9 @@ releases:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
+    test_failures_tolerated:
+      - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
+      - k8s.io/kubernetes/pkg/volume/csi
 
   - name: v1.19.16-ci
     base_release: v1.19.16

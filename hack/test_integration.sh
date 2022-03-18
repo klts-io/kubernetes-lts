@@ -11,7 +11,10 @@ TMPFILE="${TMPDIR}/test-integration.log"
 
 # Etcd was added for testing in 1.21 and later
 function test-integration() {
-    ./build/shell.sh -c './hack/install-etcd.sh && PATH=$(pwd)/third_party/etcd:${PATH} make test-integration'
+    ./build/shell.sh -c '
+./hack/install-etcd.sh
+PATH=$(pwd)/third_party/etcd:${PATH} make test-integration
+'
 }
 
 test-integration 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
