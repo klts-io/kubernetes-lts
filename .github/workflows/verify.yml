@@ -31,7 +31,7 @@ jobs:
         run: |
           make verify-patch-format
 
-  Test-v1-23-4-lts-2:
+  Test-v1-23-5-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -43,15 +43,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-4-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-5-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.23.4-lts.2
+      - name: Checkout to v1.23.5-lts.1
         run: |
-          make v1.23.4-lts.2
+          make v1.23.5-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -59,7 +59,7 @@ jobs:
         run: |
           make test
 
-  Test-Cmd-v1-23-4-lts-2:
+  Test-Cmd-v1-23-5-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -71,15 +71,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-4-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-5-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.23.4-lts.2
+      - name: Checkout to v1.23.5-lts.1
         run: |
-          make v1.23.4-lts.2
+          make v1.23.5-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -87,7 +87,7 @@ jobs:
         run: |
           make test-cmd
 
-  Test-Integration-v1-23-4-lts-2:
+  Test-Integration-v1-23-5-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -100,15 +100,15 @@ jobs:
           path: |
             src
             /tmp/kubernetes-lts/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-4-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-23-5-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.23.4-lts.2
+      - name: Checkout to v1.23.5-lts.1
         run: |
-          make v1.23.4-lts.2
+          make v1.23.5-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -116,7 +116,7 @@ jobs:
         run: |
           make test-integration
 
-  Test-v1-22-7-lts-2:
+  Test-v1-22-8-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -128,15 +128,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-7-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-8-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.22.7-lts.2
+      - name: Checkout to v1.22.8-lts.1
         run: |
-          make v1.22.7-lts.2
+          make v1.22.8-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -144,7 +144,7 @@ jobs:
         run: |
           make test
 
-  Test-Cmd-v1-22-7-lts-2:
+  Test-Cmd-v1-22-8-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -156,15 +156,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-7-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-8-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.22.7-lts.2
+      - name: Checkout to v1.22.8-lts.1
         run: |
-          make v1.22.7-lts.2
+          make v1.22.8-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -172,7 +172,7 @@ jobs:
         run: |
           make test-cmd
 
-  Test-Integration-v1-22-7-lts-2:
+  Test-Integration-v1-22-8-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -185,15 +185,15 @@ jobs:
           path: |
             src
             /tmp/kubernetes-lts/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-7-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-22-8-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.22.7-lts.2
+      - name: Checkout to v1.22.8-lts.1
         run: |
-          make v1.22.7-lts.2
+          make v1.22.8-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -201,7 +201,7 @@ jobs:
         run: |
           make test-integration
 
-  Test-v1-21-10-lts-2:
+  Test-v1-21-11-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -213,15 +213,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-10-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-11-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.21.10-lts.2
+      - name: Checkout to v1.21.11-lts.1
         run: |
-          make v1.21.10-lts.2
+          make v1.21.11-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -229,7 +229,7 @@ jobs:
         run: |
           make test
 
-  Test-Cmd-v1-21-10-lts-2:
+  Test-Cmd-v1-21-11-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -241,15 +241,15 @@ jobs:
         with:
           path: |
             src
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-10-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-11-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.21.10-lts.2
+      - name: Checkout to v1.21.11-lts.1
         run: |
-          make v1.21.10-lts.2
+          make v1.21.11-lts.1
       - name: Install etcd
         run: |
           make install-etcd
@@ -257,7 +257,7 @@ jobs:
         run: |
           make test-cmd
 
-  Test-Integration-v1-21-10-lts-2:
+  Test-Integration-v1-21-11-lts-1:
     needs: Patch
     runs-on: ubuntu-latest
     steps:
@@ -270,15 +270,15 @@ jobs:
           path: |
             src
             /tmp/kubernetes-lts/
-          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-10-lts-2
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-v1-21-11-lts-1
           restore-keys: |
             ${{ runner.os }}-build-${{ env.cache-name }}
       - name: Install dependent
         run: |
           make dependent
-      - name: Checkout to v1.21.10-lts.2
+      - name: Checkout to v1.21.11-lts.1
         run: |
-          make v1.21.10-lts.2
+          make v1.21.11-lts.1
       - name: Install etcd
         run: |
           make install-etcd
