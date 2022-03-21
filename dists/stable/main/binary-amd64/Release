@@ -1,0 +1,5 @@
+Origin: . stable
+Label: . stable
+Archive: stable
+Architecture: amd64
+Component: main
