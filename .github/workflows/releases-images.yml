@@ -28,5 +28,10 @@ jobs:
         run: |
           OLD_REGISTRY=k8s.gcr.io REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make push-image
       - name: Sync others image
+        env:
+          GH_ID: ${{ github.actor }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          sudo mkdir -p /run/containers && sudo chmod 777 /run/containers
+          skopeo login -u ${GH_ID} -p ${GH_TOKEN} ghcr.io
           REGISTRY="ghcr.io/$(echo ${{ github.repository }} | tr "A-Z" "a-z")" make image-other
