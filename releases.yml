@@ -636,4 +636,3 @@ patches:
   - name: fix-expired-cert-1.20.2
     patch:
       - patches/fix-expired-cert-1.20.2.patch
-
