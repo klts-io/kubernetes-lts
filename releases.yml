@@ -21,12 +21,14 @@ releases:
     base_release: v1.20.15-ci
     must: true
     patches:
+      - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
   - name: v1.20.2-lts.2
     base_release: v1.20.2-ci
     must: true
     patches:
+      - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
   - name: v1.19.16-lts.3
@@ -623,3 +625,8 @@ patches:
   - name: fix-missing-env-91500.1.18
     patch:
       - patches/fix-missing-env-91500.1.18.patch
+
+  # Pick commit from https://github.com/kubernetes/kubernetes/pull/97644.patch
+  - name: fix-kubectl-convert-97644.1.20
+    patch:
+      - patches/fix-kubectl-convert-97644.1.20.patch
