@@ -21,14 +21,12 @@ releases:
     base_release: v1.20.15-ci
     must: true
     patches:
-      - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
   - name: v1.20.2-lts.2
     base_release: v1.20.2-ci
     must: true
     patches:
-      - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
   - name: v1.19.16-lts.3
@@ -191,6 +189,7 @@ releases:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
+      - fix-kubectl-convert-97644.1.20 
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -201,6 +200,8 @@ releases:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
+      - fix-kubectl-convert-97644.1.20
+      - fix-expired-cert-102224.1.20
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -631,3 +632,8 @@ patches:
   - name: fix-kubectl-convert-97644.1.20
     patch:
       - patches/fix-kubectl-convert-97644.1.20.patch
+
+  # Pick commit from https://github.com/kubernetes/kubernetes/pull/102224.patch
+  - name: fix-expired-cert-102224.1.20
+    patch:
+      - patches/fix-expired-cert-1.20.2.patch
