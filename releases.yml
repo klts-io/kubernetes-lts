@@ -28,7 +28,6 @@ releases:
     base_release: v1.20.2-ci
     must: true
     patches:
-      - fix-expired-cert-1.20.2
       - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
@@ -631,9 +630,3 @@ patches:
   - name: fix-kubectl-convert-97644.1.20
     patch:
       - patches/fix-kubectl-convert-97644.1.20.patch
-
-  # Pick commit from https://github.com/kubernetes/kubernetes/pull/102224.patch
-  - name: fix-expired-cert-1.20.2
-    patch:
-      - patches/fix-expired-cert-1.20.2.patch
-
