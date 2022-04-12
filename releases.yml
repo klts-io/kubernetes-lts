@@ -204,7 +204,7 @@ releases:
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
-      - k8s.io/kube-aggregator/pkg/apiserver
+      - k8s.io/kubernetes/vendor/k8s.io/kube-aggregator/pkg/apiserver
 
   - name: v1.19.16-ci
     base_release: v1.19.16
