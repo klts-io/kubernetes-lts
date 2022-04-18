@@ -2,6 +2,7 @@ name: Verify
 
 on:
   workflow_dispatch:
+  workflow_call:
   schedule:
     - cron: "0 13 * * 1-5"
   push:
