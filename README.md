@@ -39,7 +39,7 @@ Below lists the status of each release image and package and you can click any t
 ### Documents
 
 - [Portal and Docs](https://klts.io/docs/)
-- [Install Guide](klts.io/docs/install/)
+- [Install Guide](https://klts.io/docs/install/)
 
 
 -----------------------
