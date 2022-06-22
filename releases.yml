@@ -2,18 +2,18 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
-  - name: v1.23.5-lts.1
-    base_release: v1.23.5-ci
+  - name: v1.23.8-lts.1
+    base_release: v1.23.8-ci
     must: true
     patches: []
 
-  - name: v1.22.8-lts.1
-    base_release: v1.22.8-ci
+  - name: v1.22.11-lts.1
+    base_release: v1.22.11-ci
     must: true
     patches: []
 
-  - name: v1.21.11-lts.1
-    base_release: v1.21.11-ci
+  - name: v1.21.14-lts.1
+    base_release: v1.21.14-ci
     must: true
     patches: []
 
@@ -164,22 +164,22 @@ releases:
       # TODO: Need to upgrade go version greater than 1.9 to remove this
       - k8s.io/kubernetes/pkg/kubectl/cmd
 
-  - name: v1.23.5-ci
-    base_release: v1.23.5
+  - name: v1.23.8-ci
+    base_release: v1.23.8
     patches:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
 
-  - name: v1.22.8-ci
-    base_release: v1.22.8
+  - name: v1.22.11-ci
+    base_release: v1.22.11
     patches:
       - fix-run-docker.1.23
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
 
-  - name: v1.21.11-ci
-    base_release: v1.21.11
+  - name: v1.21.14-ci
+    base_release: v1.21.14
     patches:
       - fix-run-docker.1.23
       - no-delete-images.1.23
