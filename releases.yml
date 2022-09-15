@@ -7,8 +7,8 @@ releases:
     must: true
     patches: []
 
-  - name: v1.23.8-lts.1
-    base_release: v1.23.8-ci
+  - name: v1.23.11-lts.1
+    base_release: v1.23.11-ci
     must: true
     patches: []
 
@@ -176,8 +176,8 @@ releases:
       - no-delete-images.1.23
       - fix-etcd-put-key.1.23
 
-  - name: v1.23.8-ci
-    base_release: v1.23.8
+  - name: v1.23.11-ci
+    base_release: v1.23.11
     patches:
       - fix-run-docker.1.23
       - no-delete-images.1.23
