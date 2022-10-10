@@ -72,7 +72,7 @@ releases:
 
   - name: v1.15.12-lts.1
     base_release: v1.15.12-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2020-8558
@@ -83,7 +83,7 @@ releases:
 
   - name: v1.14.10-lts.2
     base_release: v1.14.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -97,7 +97,7 @@ releases:
 
   - name: v1.13.12-lts.2
     base_release: v1.13.12-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -111,7 +111,7 @@ releases:
 
   - name: v1.12.10-lts.2
     base_release: v1.12.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -128,7 +128,7 @@ releases:
 
   - name: v1.11.10-lts.2
     base_release: v1.11.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11245
@@ -146,7 +146,7 @@ releases:
 
   - name: v1.10.13-lts.2
     base_release: v1.10.13-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11245
