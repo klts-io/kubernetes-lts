@@ -2,18 +2,18 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
-  - name: v1.24.5-lts.0
-    base_release: v1.24.5-ci
+  - name: v1.24.6-lts.0
+    base_release: v1.24.6-ci
     must: true
     patches: []
 
-  - name: v1.23.8-lts.1
-    base_release: v1.23.8-ci
+  - name: v1.23.12-lts.0
+    base_release: v1.23.12-ci
     must: true
     patches: []
 
-  - name: v1.22.11-lts.1
-    base_release: v1.22.11-ci
+  - name: v1.22.15-lts.0
+    base_release: v1.22.15-ci
     must: true
     patches: []
 
@@ -72,7 +72,7 @@ releases:
 
   - name: v1.15.12-lts.1
     base_release: v1.15.12-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2020-8558
@@ -83,7 +83,7 @@ releases:
 
   - name: v1.14.10-lts.2
     base_release: v1.14.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -97,7 +97,7 @@ releases:
 
   - name: v1.13.12-lts.2
     base_release: v1.13.12-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -111,7 +111,7 @@ releases:
 
   - name: v1.12.10-lts.2
     base_release: v1.12.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11243
@@ -128,7 +128,7 @@ releases:
 
   - name: v1.11.10-lts.2
     base_release: v1.11.10-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11245
@@ -146,7 +146,7 @@ releases:
 
   - name: v1.10.13-lts.2
     base_release: v1.10.13-ci
-    must: true
+    must: false # Over 3 years no longer maintained
     patches:
       # - CVE-2020-8554.1.18
       - CVE-2019-11245
@@ -169,39 +169,39 @@ releases:
       # TODO: Need to upgrade go version greater than 1.9 to remove this
       - k8s.io/kubernetes/pkg/kubectl/cmd
 
-  - name: v1.24.5-ci
-    base_release: v1.24.5
+  - name: v1.24.6-ci
+    base_release: v1.24.6
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
+      - fix-etcd-put-key.1.24
+
+  - name: v1.23.12-ci
+    base_release: v1.23.12
+    patches:
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
 
-  - name: v1.23.8-ci
-    base_release: v1.23.8
+  - name: v1.22.15-ci
+    base_release: v1.22.15
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
-      - fix-etcd-put-key.1.23
-
-  - name: v1.22.11-ci
-    base_release: v1.22.11
-    patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
 
   - name: v1.21.14-ci
     base_release: v1.21.14
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
 
   - name: v1.20.15-ci
     base_release: v1.20.15
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
@@ -210,8 +210,8 @@ releases:
   - name: v1.20.2-ci
     base_release: v1.20.2
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
@@ -221,8 +221,8 @@ releases:
   - name: v1.19.16-ci
     base_release: v1.19.16
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
@@ -233,8 +233,8 @@ releases:
   - name: v1.18.20-ci
     base_release: v1.18.20
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
@@ -245,8 +245,8 @@ releases:
   - name: v1.17.17-ci
     base_release: v1.17.17
     patches:
-      - fix-run-docker.1.23
-      - no-delete-images.1.23
+      - fix-run-docker.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
@@ -256,9 +256,9 @@ releases:
   - name: v1.16.15-ci
     base_release: v1.16.15
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - fix-test.1.16 # Fix test k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions
-      - no-delete-images.1.23
+      - no-delete-images.1.24
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
@@ -270,7 +270,7 @@ releases:
   - name: v1.15.12-ci
     base_release: v1.15.12
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -284,7 +284,7 @@ releases:
   - name: v1.14.10-ci
     base_release: v1.14.10
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -299,7 +299,7 @@ releases:
   - name: v1.13.12-ci
     base_release: v1.13.12
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - no-delete-images.1.15
       - fix-image-name
       - fix-etcd-health.1.16
@@ -314,7 +314,7 @@ releases:
   - name: v1.12.10-ci
     base_release: v1.12.10
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - no-delete-images.1.12
       - fix-image-name.1.12
       - fix-etcd-health.1.16
@@ -326,7 +326,7 @@ releases:
   - name: v1.11.10-ci
     base_release: v1.11.10
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - release-images-script
       - no-delete-images.1.12
       - fix-image-name.1.12
@@ -339,7 +339,7 @@ releases:
   - name: v1.10.13-ci
     base_release: v1.10.13
     patches:
-      - fix-run-docker.1.23
+      - fix-run-docker.1.24
       - release-images-script
       - no-delete-images.1.10
       - fix-image-name.1.12
@@ -587,17 +587,17 @@ patches:
 
   # CI
 
-  - name: fix-run-docker.1.23
+  - name: fix-run-docker.1.24
     patch:
-      - patches/fix-run-docker.1.23.patch
+      - patches/fix-run-docker.1.24.patch
 
   - name: release-images-script
     patch:
       - https://github.com/kubernetes/kubernetes/pull/68096.patch
 
-  - name: no-delete-images.1.23
+  - name: no-delete-images.1.24
     patch:
-      - patches/no-delete-images.1.23.patch
+      - patches/no-delete-images.1.24.patch
   - name: no-delete-images.1.15
     patch:
       - patches/no-delete-images.1.15.patch
@@ -627,6 +627,9 @@ patches:
     patch:
       - patches/fix-etcd-health.1.11.patch
 
+  - name: fix-etcd-put-key.1.24
+    patch:
+      - patches/fix-etcd-put-key.1.24.patch
   - name: fix-etcd-put-key.1.23
     patch:
       - patches/fix-etcd-put-key.1.23.patch
