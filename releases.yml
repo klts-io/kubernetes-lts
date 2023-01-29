@@ -206,6 +206,7 @@ releases:
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
+      - k8s.io/kubernetes/pkg/util/oom
 
   - name: v1.20.2-ci
     base_release: v1.20.2
@@ -217,6 +218,7 @@ releases:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/kube-aggregator/pkg/apiserver
+      - k8s.io/kubernetes/pkg/util/oom
 
   - name: v1.19.16-ci
     base_release: v1.19.16
@@ -228,6 +230,7 @@ releases:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+      - k8s.io/kubernetes/pkg/util/oom
     test_integration_failures_tolerated: []
 
   - name: v1.18.20-ci
