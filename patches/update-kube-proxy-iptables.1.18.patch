@@ -1,0 +1,44 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: cyclinder <qifeng.guo@daocloud.io>
+Date: Fri, 22 Dec 2023 14:23:10 +0800
+Subject: [PATCH] kube-proxy: update iptables version
+
+---
+ build/BUILD     | 2 +-
+ build/common.sh | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/build/BUILD b/build/BUILD
+index 70e3874b441..4c67a178517 100644
+--- a/build/BUILD
++++ b/build/BUILD
+@@ -42,7 +42,7 @@ DOCKERIZED_BINARIES = {
+         "target": "//cmd/kube-scheduler:kube-scheduler",
+     },
+     "kube-proxy": {
+-        "base": "@debian-iptables-{ARCH}//image",
++        "base": "@distroless-iptables//image",
+         "target": "//cmd/kube-proxy:kube-proxy",
+     },
+ }
+diff --git a/build/common.sh b/build/common.sh
+index 9cd95b5af51..13c15466c39 100755
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -95,14 +95,14 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
+ kube::build::get_docker_wrapped_binaries() {
+   local arch=$1
+   local debian_base_version=v2.1.3
+-  local debian_iptables_version=v12.1.2
++  local distroless_iptables_version=v0.4.2
+   ### If you change any of these lists, please also update DOCKERIZED_BINARIES
+   ### in build/BUILD. And kube::golang::server_image_targets
+   local targets=(
+     "kube-apiserver,${KUBE_BASE_IMAGE_REGISTRY}/debian-base-${arch}:${debian_base_version}"
+     "kube-controller-manager,${KUBE_BASE_IMAGE_REGISTRY}/debian-base-${arch}:${debian_base_version}"
+     "kube-scheduler,${KUBE_BASE_IMAGE_REGISTRY}/debian-base-${arch}:${debian_base_version}"
+-    "kube-proxy,${KUBE_BASE_IMAGE_REGISTRY}/debian-iptables-${arch}:${debian_iptables_version}"
++    "kube-proxy,registry.k8s.io/build-image/distroless-iptables:${distroless_iptables_version}"
+   )
+ 
+   echo "${targets[@]}"
