@@ -59,7 +59,7 @@ releases:
       - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
       - nokmem.1.20
-      - update-kube-proxy-iptables.1.18.patch
+      - update-kube-proxy-iptables.1.18
 
   - name: v1.17.17-lts.2
     base_release: v1.17.17-ci
@@ -658,3 +658,7 @@ patches:
   - name: fix-kubectl-convert-97644.1.20
     patch:
       - patches/fix-kubectl-convert-97644.1.20.patch
+      
+  - name: update-kube-proxy-iptables.1.18
+    patch:
+      - patches/update-kube-proxy-iptables.1.18.patch
