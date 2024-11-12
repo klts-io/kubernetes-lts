@@ -8,7 +8,7 @@ Subject: [PATCH 1/2] Run docker as root in tests
  1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/build/common.sh b/build/common.sh
-index 4cc487a78a7..4fc04033c17 100755
+index 257d36b2fa7..96852d940f2 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -490,7 +490,7 @@ function kube::build::run_build_command_ex() {
@@ -31,7 +31,7 @@ Subject: [PATCH 2/2] Run docker with device kmsg
  1 file changed, 1 insertion(+)
 
 diff --git a/build/common.sh b/build/common.sh
-index 4fc04033c17..07779138041 100755
+index 96852d940f2..48998f4a21a 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -492,6 +492,7 @@ function kube::build::run_build_command_ex() {

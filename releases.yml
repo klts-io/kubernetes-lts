@@ -73,12 +73,8 @@ releases:
       - nokmem.1.20
       
   - name: v1.18.20-dce.1
-    base_release: v1.18.20-ci
+    base_release: v1.18.20-lts.2
     patches:
-      - CVE-2020-8554.1.18
-      - fix-missing-env-91500.1.18
-      - CVE-2021-25741.1.18
-      - nokmem.1.20
       - update-kube-proxy-iptables.1.18
 
   - name: v1.17.17-lts.2
@@ -293,7 +289,7 @@ releases:
     base_release: v1.18.20
     patches:
       - fix-run-docker.1.24
-      # - no-delete-images.1.24
+      - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler

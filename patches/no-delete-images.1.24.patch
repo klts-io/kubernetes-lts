@@ -8,10 +8,10 @@ Subject: [PATCH] No delete images
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/build/lib/release.sh b/build/lib/release.sh
-index 6bc6624951e..cb8455b298a 100644
+index ef262b5ed04..2130f1e239a 100644
 --- a/build/lib/release.sh
 +++ b/build/lib/release.sh
-@@ -408,8 +408,8 @@ function kube::release::create_docker_images_for_server() {
+@@ -364,8 +364,8 @@ function kube::release::create_docker_images_for_server() {
          rm -rf "${docker_build_path}"
          ln "${binary_file_path}.tar" "${images_dir}/"
  
