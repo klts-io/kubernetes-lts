@@ -293,7 +293,7 @@ releases:
     base_release: v1.18.20
     patches:
       - fix-run-docker.1.24
-      - no-delete-images.1.24
+      # - no-delete-images.1.24
       - fix-etcd-put-key.1.23
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
