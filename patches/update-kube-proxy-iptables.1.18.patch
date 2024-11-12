@@ -22,7 +22,7 @@ index 70e3874b441..4c67a178517 100644
      },
  }
 diff --git a/build/common.sh b/build/common.sh
-index 9cd95b5af51..13c15466c39 100755
+index 75dc82ed335..3771dafdaf5 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -95,14 +95,14 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730

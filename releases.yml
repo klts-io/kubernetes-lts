@@ -49,12 +49,13 @@ releases:
       - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
-  - name: v1.20.2-lts.2
-    base_release: v1.20.2-ci
-    must: true
-    patches:
-      - fix-kubectl-convert-97644.1.20 
-      - nokmem.1.20
+  # use v1.20.15-lts.2 instead
+  # - name: v1.20.2-lts.2
+  #   base_release: v1.20.2-ci
+  #   must: true
+  #   patches:
+  #     - fix-kubectl-convert-97644.1.20 
+  #     - nokmem.1.20
 
   - name: v1.19.16-lts.3
     base_release: v1.19.16-ci
@@ -64,18 +65,23 @@ releases:
       - nokmem.1.20
 
   - name: v1.18.20-lts.2
-    base_release: v1.18.20-ci
+    base_release: v1.18.20
     must: true
     patches:
       - CVE-2020-8554.1.18
       - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
       - nokmem.1.20
-      
-  - name: v1.18.20-dce.1
-    base_release: v1.18.20-lts.2
-    patches:
-      - update-kube-proxy-iptables.1.18
+
+  # comments this as dce.1 do not needs to be updated
+  # - name: v1.18.20-dce.1
+  #   base_release: release-1.18
+  #   patches:
+  #     - update-kube-proxy-iptables.1.18
+  #     - CVE-2020-8554.1.18
+  #     - fix-missing-env-91500.1.18
+  #     - CVE-2021-25741.1.18
+  #     - nokmem.1.20
 
   - name: v1.17.17-lts.2
     base_release: v1.17.17-ci
@@ -260,17 +266,18 @@ releases:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/pkg/util/oom
 
-  - name: v1.20.2-ci
-    base_release: v1.20.2
-    patches:
-      - fix-run-docker.1.24
-      - no-delete-images.1.24
-      - fix-etcd-put-key.1.23
-    test_failures_tolerated:
-      - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
-      - k8s.io/kubernetes/pkg/volume/csi
-      - k8s.io/kubernetes/vendor/k8s.io/kube-aggregator/pkg/apiserver
-      - k8s.io/kubernetes/pkg/util/oom
+  # use v1.20.15-ci instead 
+  # - name: v1.20.2-ci
+  #   base_release: v1.20.2
+  #   patches:
+  #     - fix-run-docker.1.24
+  #     - no-delete-images.1.24
+  #     - fix-etcd-put-key.1.23
+  #   test_failures_tolerated:
+  #     - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
+  #     - k8s.io/kubernetes/pkg/volume/csi
+  #     - k8s.io/kubernetes/vendor/k8s.io/kube-aggregator/pkg/apiserver
+  #     - k8s.io/kubernetes/pkg/util/oom
 
   - name: v1.19.16-ci
     base_release: v1.19.16
