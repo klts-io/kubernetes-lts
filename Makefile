@@ -101,9 +101,15 @@ format-all-patch:
 test:
 	./hack/test.sh
 
+# before v1.25
 .PHONY: test-cmd
 test-cmd:
 	./hack/test_cmd.sh
+
+# after v1.26
+.PHONY: test-cmd-2
+test-cmd-2:
+	./hack/test_cmd_2.sh
 
 .PHONY: test-integration
 test-integration:
