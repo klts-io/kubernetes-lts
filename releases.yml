@@ -65,7 +65,7 @@ releases:
       - nokmem.1.20
 
   - name: v1.18.20-lts.2
-    base_release: v1.18.20
+    base_release: v1.18.20-ci
     must: true
     patches:
       - CVE-2020-8554.1.18
