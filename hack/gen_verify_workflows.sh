@@ -32,6 +32,10 @@ jobs:
           path: |
             src
           key: \${{ runner.os }}-build-\${{ env.cache-name }}
+      - name: Config Github
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub"
       - name: Install dependent
         run: |
           make dependent
@@ -62,6 +66,10 @@ for release in ${RELEASES}; do
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
+      - name: Config Github
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub"
       - name: Install dependent
         run: |
           make dependent
@@ -90,6 +98,10 @@ for release in ${RELEASES}; do
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
+      - name: Config Github
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub"
       - name: Install dependent
         run: |
           make dependent
@@ -119,6 +131,10 @@ for release in ${RELEASES}; do
           key: \${{ runner.os }}-build-\${{ env.cache-name }}-${name}
           restore-keys: |
             \${{ runner.os }}-build-\${{ env.cache-name }}
+      - name: Config Github
+        run: |
+          git config --global user.email "noreply@github.com"
+          git config --global user.name "GitHub"
       - name: Install dependent
         run: |
           make dependent
