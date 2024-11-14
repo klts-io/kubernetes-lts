@@ -1,0 +1,3921 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Tim Hockin <thockin@google.com>
+Date: Sat, 17 Sep 2022 17:28:44 -0700
+Subject: [PATCH] Codegens: Do not auto-set boilerplate path
+
+Make each invocation pass it explicitly.  This will make later commits
+cleaner.
+
+Format calls to codegens
+
+No functional changes here,just formatting.  Makes future commits
+easier.
+
+update-codegen: reorder some lines for later diffs
+
+Copy make's codegen logic to update-codegen.sh
+
+The `make` rules which auto-generate some of our API stuff are
+incredibly baroque, and hard to maintain.  They were originally added on
+the assumption that we would stop checking generated files into git.
+Since then we have moved away from that goal, and the worst problems
+with generated files have been resolved.
+
+Reasons to kill this:
+* It is slow on every build, as opposed to just being slow when running
+  the generators.  It is even slow to calculate that there's nothing to
+  update.
+* Most development work doesn't involve changing APIs.
+* It only covers about half (or less) of the generated code, and making
+  it cover more would be even slower.
+* Approximately 1 person knows how this all works.
+* We have CI to make sure changes do not get merged without updating
+  this code.
+* We have corner cases where this does the WRONG thing and tracking
+  those down is ugly and hard in perpetuity.
+
+So this commit puts all the same logic that WAS in the
+Makefile.generated_files into update-codegen.sh.
+
+I do not love this script, especially WRT sub-packages, but I am trying
+not to boil the ocean.  I hope to follow up with some more cleanups over
+time.
+
+I have tested this manually and with the scripts and it still seems to
+catch errors properly.
+
+This includes a change to kube::util::read-array to make it not unset
+variables and not over-write non-array variables.
+
+Remove generated file rules in make
+
+This is all covered by update-codegen.sh now.
+
+The old `make generated_files` rule still exists, but just prints a
+warning.
+
+Neutralize obsolete verify scripts
+
+This is all obsolete or covered by verify-codegen now.
+
+Remove go2make
+
+Remove old make-helper script
+
+Remove refs to .make
+---
+ .gitignore                                    |   3 -
+ Makefile.generated_files                      |   1 -
+ api/api-rules/README.md                       |   2 +-
+ build/build-image/rsyncd.sh                   |   2 +-
+ build/common.sh                               |   3 -
+ build/root/Makefile                           |  80 +-
+ build/root/Makefile.generated_files           | 664 -------------
+ hack/jenkins/test-dockerized.sh               |   1 -
+ hack/lib/util.sh                              |  47 +-
+ hack/make-rules/helpers/cache_go_dirs.sh      |  79 --
+ hack/make-rules/helpers/go2make/go2make.go    | 215 -----
+ hack/make-rules/helpers/go2make/pkgwalk.go    | 117 ---
+ .../helpers/go2make/pkgwalk_test.go           | 222 -----
+ .../testdata/dir-with-gofiles/.dot/README     |   1 -
+ .../dir-with-gofiles/.dot/subsubdir/README    |   1 -
+ .../go2make/testdata/dir-with-gofiles/README  |   1 -
+ .../dir-with-gofiles/_underscore/README       |   1 -
+ .../_underscore/subsubdir/README              |   1 -
+ .../go2make/testdata/dir-with-gofiles/foo.go  |  20 -
+ .../testdata/dir-with-gofiles/skipme/README   |   1 -
+ .../dir-with-gofiles/skipme/subsubdir/README  |   1 -
+ .../testdata/dir-with-gofiles/subdir/README   |   1 -
+ .../testdata/dir-with-gofiles/testdata/README |   1 -
+ .../testdata/subsubdir/README                 |   1 -
+ .../testdata/dir-without-gofiles/README       |   1 -
+ hack/make-rules/update.sh                     |   8 -
+ hack/make-rules/verify.sh                     |   7 -
+ hack/make-rules/vet.sh                        |   8 -
+ hack/update-codegen.sh                        | 898 ++++++++++++++++--
+ hack/verify-codegen.sh                        |  18 +-
+ hack/verify-flags-underscore.py               |   2 -
+ hack/verify-generated-files-remake.sh         | 405 +-------
+ hack/verify-generated-files.sh                |  40 +-
+ hack/verify-typecheck.sh                      |   2 -
+ hack/verify-yamlfmt.sh                        |   2 +-
+ .../client-go/hack/boilerplate.go.txt         |   6 +-
+ .../examples/client-go/hack/update-codegen.sh |   4 +-
+ .../cmd/applyconfiguration-gen/main.go        |   2 -
+ .../code-generator/cmd/client-gen/main.go     |   1 -
+ .../code-generator/cmd/conversion-gen/main.go |   5 -
+ .../code-generator/cmd/deepcopy-gen/main.go   |   5 -
+ .../code-generator/cmd/defaulter-gen/main.go  |   5 -
+ .../cmd/go-to-protobuf/protobuf/cmd.go        |   4 +-
+ .../code-generator/cmd/import-boss/main.go    |   3 -
+ .../code-generator/cmd/informer-gen/main.go   |   1 -
+ .../code-generator/cmd/lister-gen/main.go     |   1 -
+ .../cmd/prerelease-lifecycle-gen/main.go      |   5 -
+ .../code-generator/cmd/register-gen/main.go   |   2 -
+ .../k8s.io/code-generator/cmd/set-gen/main.go |   2 -
+ .../k8s.io/code-generator/generate-groups.sh  |  27 +-
+ .../generate-internal-groups.sh               |  53 +-
+ .../k8s.io/code-generator/pkg/util/build.go   |  39 -
+ .../src/k8s.io/metrics/hack/update-codegen.sh |   2 +-
+ test/conformance/gen-specsummaries.sh         |   3 -
+ .../conformance/conformance-jenkins.sh        |   2 -
+ test/integration/ipamperf/README.md           |   2 -
+ vendor/modules.txt                            |   1 -
+ 57 files changed, 944 insertions(+), 2088 deletions(-)
+ delete mode 120000 Makefile.generated_files
+ delete mode 100644 build/root/Makefile.generated_files
+ delete mode 100755 hack/make-rules/helpers/cache_go_dirs.sh
+ delete mode 100644 hack/make-rules/helpers/go2make/go2make.go
+ delete mode 100644 hack/make-rules/helpers/go2make/pkgwalk.go
+ delete mode 100644 hack/make-rules/helpers/go2make/pkgwalk_test.go
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/subsubdir/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/subsubdir/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/foo.go
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/subsubdir/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/subdir/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/subsubdir/README
+ delete mode 100644 hack/make-rules/helpers/go2make/testdata/dir-without-gofiles/README
+ rename hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/bar.go => staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/boilerplate.go.txt (88%)
+
+diff --git a/.gitignore b/.gitignore
+index 63ce72ea78a..889e9c8481e 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -109,9 +109,6 @@ kubernetes.tar.gz
+ # Phony test files used as part of coverage generation
+ zz_generated_*_test.go
+ 
+-# make-related metadata
+-/.make/
+-
+ # Just in time generated data in the source, should never be committed
+ /test/e2e/generated/bindata.go
+ 
+diff --git a/Makefile.generated_files b/Makefile.generated_files
+deleted file mode 120000
+index 31d7e4ec6b2..00000000000
+--- a/Makefile.generated_files
++++ /dev/null
+@@ -1 +0,0 @@
+-build/root/Makefile.generated_files
+\ No newline at end of file
+diff --git a/api/api-rules/README.md b/api/api-rules/README.md
+index 026e5923ba9..5edeaa77a5d 100644
+--- a/api/api-rules/README.md
++++ b/api/api-rules/README.md
+@@ -29,7 +29,7 @@ exception.
+ If you're removing violations from the exception list, or if you have good
+ reasons to add new violations to this list, please update the file using:
+ 
+- - `make generated_files UPDATE_API_KNOWN_VIOLATIONS=true`
++ - `UPDATE_API_KNOWN_VIOLATIONS=true ./hack/update-codegen.sh`
+ 
+ It is up to API reviewers to review the list and make sure new APIs follow our API conventions.
+ 
+diff --git a/build/build-image/rsyncd.sh b/build/build-image/rsyncd.sh
+index 8c00838be10..2801fa6a387 100755
+--- a/build/build-image/rsyncd.sh
++++ b/build/build-image/rsyncd.sh
+@@ -77,7 +77,7 @@ port = 8730
+   secrets file = ${SECRETS}
+   read only = false
+   path = ${VOLUME}
+-  filter = - /.make/ - /_tmp/
++  filter = - /_tmp/
+ EOF
+ 
+ exec /usr/bin/rsync --no-detach --daemon --config="${CONFFILE}" "$@"
+diff --git a/build/common.sh b/build/common.sh
+index 56f1149d416..ea4ceb3ec94 100755
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -666,12 +666,9 @@ function kube::build::sync_to_container() {
+   kube::build::rsync \
+     --delete \
+     --filter='H /.git' \
+-    --filter='- /.make/' \
+     --filter='- /_tmp/' \
+     --filter='- /_output/' \
+     --filter='- /' \
+-    --filter='H zz_generated.*' \
+-    --filter='H generated.proto' \
+     "${KUBE_ROOT}/" "rsync://k8s@${KUBE_RSYNC_ADDR}/k8s/"
+ 
+   kube::build::stop_rsyncd_container
+diff --git a/build/root/Makefile b/build/root/Makefile
+index c99ef99b54a..ead4c496731 100644
+--- a/build/root/Makefile
++++ b/build/root/Makefile
+@@ -45,10 +45,6 @@ MAKEFLAGS += --no-builtin-rules
+ OUT_DIR ?= _output
+ BIN_DIR := $(OUT_DIR)/bin
+ PRJ_SRC_PATH := k8s.io/kubernetes
+-GENERATED_FILE_PREFIX := zz_generated.
+-
+-# Metadata for driving the build lives here.
+-META_DIR := .make
+ 
+ ifdef KUBE_GOFLAGS
+ $(info KUBE_GOFLAGS is now deprecated. Please use GOFLAGS instead.)
+@@ -92,7 +88,7 @@ ifeq ($(PRINT_HELP),y)
+ all:
+ 	echo "$$ALL_HELP_INFO"
+ else
+-all: generated_files
++all:
+ 	hack/make-rules/build.sh $(WHAT)
+ endif
+ 
+@@ -148,7 +144,7 @@ quick-verify:
+ endif
+ 
+ define UPDATE_HELP_INFO
+-# Runs all the generated updates.
++# Runs all the update scripts.
+ #
+ # Example:
+ # make update
+@@ -158,8 +154,8 @@ ifeq ($(PRINT_HELP),y)
+ update:
+ 	echo "$$UPDATE_HELP_INFO"
+ else
+-update: generated_files
+-	CALLED_FROM_MAIN_MAKEFILE=1 hack/make-rules/update.sh
++update:
++	hack/make-rules/update.sh
+ endif
+ 
+ define CHECK_TEST_HELP_INFO
+@@ -184,7 +180,7 @@ ifeq ($(PRINT_HELP),y)
+ check test:
+ 	echo "$$CHECK_TEST_HELP_INFO"
+ else
+-check test: generated_files
++check test:
+ 	hack/make-rules/test.sh $(WHAT) $(TESTS)
+ endif
+ 
+@@ -203,7 +199,7 @@ ifeq ($(PRINT_HELP),y)
+ test-integration:
+ 	echo "$$TEST_IT_HELP_INFO"
+ else
+-test-integration: generated_files
++test-integration:
+ 	hack/make-rules/test-integration.sh $(WHAT)
+ endif
+ 
+@@ -272,7 +268,7 @@ ifeq ($(PRINT_HELP),y)
+ test-e2e-node:
+ 	echo "$$TEST_E2E_NODE_HELP_INFO"
+ else
+-test-e2e-node: ginkgo generated_files
++test-e2e-node: ginkgo
+ 	hack/make-rules/test-e2e-node.sh
+ endif
+ 
+@@ -291,7 +287,7 @@ ifeq ($(PRINT_HELP),y)
+ test-cmd:
+ 	echo "$$TEST_CMD_HELP_INFO"
+ else
+-test-cmd: generated_files
++test-cmd:
+ 	hack/make-rules/test-cmd.sh
+ endif
+ 
+@@ -300,49 +296,22 @@ define CLEAN_HELP_INFO
+ #
+ # Example:
+ #   make clean
+-#
+-# TODO(thockin): call clean_generated when we stop committing generated code.
+ endef
+ .PHONY: clean
+ ifeq ($(PRINT_HELP),y)
+ clean:
+ 	echo "$$CLEAN_HELP_INFO"
+ else
+-clean: clean_meta
++clean:
+ 	build/make-clean.sh
+ 	hack/make-rules/clean.sh
+ endif
+ 
+-define CLEAN_META_HELP_INFO
+-# Remove make-related metadata files.
+-#
+-# Example:
+-#   make clean_meta
+-endef
+-.PHONY: clean_meta
+-ifeq ($(PRINT_HELP),y)
+-clean_meta:
+-	echo "$$CLEAN_META_HELP_INFO"
+-else
+-clean_meta:
+-	rm -rf $(META_DIR)
+-endif
+-
+-define CLEAN_GENERATED_HELP_INFO
+-# Remove all auto-generated artifacts. Generated artifacts in staging folder should not be removed as they are not
+-# generated using generated_files.
+-#
+-# Example:
+-#   make clean_generated
+-endef
+-.PHONY: clean_generated
+-ifeq ($(PRINT_HELP),y)
+-clean_generated:
+-	echo "$$CLEAN_GENERATED_HELP_INFO"
+-else
+-clean_generated:
+-	find . -type f -name '$(GENERATED_FILE_PREFIX)*'  | xargs rm -f
+-endif
++# TODO(thockin): Remove this in v1.29.
++.PHONY: generated_files
++generated_files:
++	echo "'make generated_files' is deprecated.  Please use hack/update-codgen.sh instead."
++	true # TODO(thockin): change to false once tests are updated
+ 
+ define VET_HELP_INFO
+ # Run 'go vet'.
+@@ -361,8 +330,8 @@ ifeq ($(PRINT_HELP),y)
+ vet:
+ 	echo "$$VET_HELP_INFO"
+ else
+-vet: generated_files
+-	CALLED_FROM_MAIN_MAKEFILE=1 hack/make-rules/vet.sh $(WHAT)
++vet:
++	hack/make-rules/vet.sh $(WHAT)
+ endif
+ 
+ define RELEASE_HELP_INFO
+@@ -509,25 +478,10 @@ ifeq ($(PRINT_HELP),y)
+ $(CMD_TARGET):
+ 	echo "$$CMD_HELP_INFO"
+ else
+-$(CMD_TARGET): generated_files
++$(CMD_TARGET):
+ 	hack/make-rules/build.sh cmd/$@
+ endif
+ 
+-define GENERATED_FILES_HELP_INFO
+-# Produce auto-generated files needed for the build.
+-#
+-# Example:
+-#   make generated_files
+-endef
+-.PHONY: generated_files
+-ifeq ($(PRINT_HELP),y)
+-generated_files:
+-	echo "$$GENERATED_FILES_HELP_INFO"
+-else
+-generated_files gen_openapi:
+-	$(MAKE) -f Makefile.generated_files $@ CALLED_FROM_MAIN_MAKEFILE=1 SHELL="$(SHELL)"
+-endif
+-
+ define HELP_INFO
+ # Print make targets and help info
+ #
+diff --git a/build/root/Makefile.generated_files b/build/root/Makefile.generated_files
+deleted file mode 100644
+index cc57704b8a9..00000000000
+--- a/build/root/Makefile.generated_files
++++ /dev/null
+@@ -1,664 +0,0 @@
+-# Copyright 2016 The Kubernetes Authors.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-
+-# Don't allow users to call this directly.  There are too many variables this
+-# assumes to inherit from the main Makefile.  This is not a user-facing file.
+-ifeq ($(CALLED_FROM_MAIN_MAKEFILE),)
+-    $(error Please use the main Makefile, e.g. `make generated_files`)
+-endif
+-
+-# Don't allow an implicit 'all' rule.  This is not a user-facing file.
+-ifeq ($(MAKECMDGOALS),)
+-    $(error This Makefile requires an explicit rule to be specified)
+-endif
+-
+-ifeq ($(DBG_MAKEFILE),1)
+-    ifeq ($(MAKE_RESTARTS),)
+-        $(warning ***** starting Makefile.generated_files for goal(s) "$(MAKECMDGOALS)")
+-    else
+-        $(warning ***** restarting Makefile.generated_files for goal(s) "$(MAKECMDGOALS)")
+-    endif
+-    $(warning ***** $(shell date))
+-endif
+-
+-
+-# Define variables so `make --warn-undefined-variables` works.
+-DBG_CODEGEN ?=
+-UPDATE_API_KNOWN_VIOLATIONS ?=
+-
+-# This rule collects all the generated file sets into a single rule.  Other
+-# rules should depend on this to ensure generated files are rebuilt.
+-.PHONY: generated_files
+-generated_files: gen_prerelease_lifecycle gen_deepcopy gen_defaulter gen_conversion gen_openapi
+-
+-#
+-# Helper logic to calculate Go's dependency DAG ourselves.
+-#
+-
+-# This is a file that will be emitted by the go2make tool, containing a
+-# variable for each Go package in the project (including deps) which lists all
+-# of the transitive deps of that package.  Each variable is named the same as
+-# the package - for example the variable for `k8s.io/kubernetes/pkg/api` is
+-# $(k8s.io/kubernetes/pkg/api).  This is roughly the same DAG that the Go
+-# compiler uses.  These variables can be used to figure out if, for example,
+-# generated code needs to be regenerated.
+-GO_PKGDEPS_FILE = go-pkgdeps.mk
+-
+-# Include the Go package dependencies file.  This will cause the rule of
+-# the same name to be considered and if it is updated, make will restart and
+-# reload the updated deps.
+-include $(META_DIR)/$(GO_PKGDEPS_FILE)
+-
+-# Only build and run go2make on the first pass.  If that generates a new
+-# GO_PKGDEPS_FILE, make will restart the whole process and set MAKE_RESTARTS to
+-# a numeric value.
+-ifeq ($(MAKE_RESTARTS),)
+-# Update the set of Go deps for our project.  This will let us determine if
+-# we really need to do expensive codegen.  We use FORCE because it is not a
+-# PHONY file, but we do want it to be re-evaluated every time make is run.  The
+-# file will only be touched if it actually changes.
+-$(META_DIR)/$(GO_PKGDEPS_FILE): FORCE
+-	if [[ "$(DBG_CODEGEN)" == 1 ]]; then          \
+-	    echo "DBG: calculating Go dependencies";  \
+-	fi
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh hack/make-rules/helpers/go2make
+-	hack/run-in-gopath.sh go2make            \
+-	    k8s.io/kubernetes/...                \
+-	    --prune  k8s.io/kubernetes/staging   \
+-	    --prune  k8s.io/kubernetes/vendor    \
+-	    k8s.io/kubernetes/vendor/k8s.io/...  \
+-	    > $@.tmp
+-	if [[ -s $@.tmp ]]; then                             \
+-	    if ! cmp -s $@.tmp $@; then                      \
+-	        if [[ "$(DBG_CODEGEN)" == 1 ]]; then         \
+-	            echo "DBG: $(GO_PKGDEPS_FILE) changed";  \
+-	        fi;                                          \
+-	        cat $@.tmp > $@;                             \
+-	    fi                                               \
+-	else                                                 \
+-	    kube::log::error "go2make produced no results";  \
+-	    rm -f $@;                                        \
+-	    false;                                           \
+-	fi
+-	rm -f $@.tmp
+-endif # MAKE_RESTARTS
+-
+-.PHONY: FORCE
+-FORCE:
+-
+-#
+-# Helper logic to find which directories need codegen as quickly as possible.
+-#
+-
+-# This variable holds a list of every directory that contains Go files in this
+-# project.  Other rules and variables can use this as a starting point to
+-# reduce filesystem accesses.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all *.go dirs)
+-endif
+-ALL_GO_DIRS := $(shell                                                   \
+-    hack/make-rules/helpers/cache_go_dirs.sh $(META_DIR)/all_go_dirs.mk  \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(ALL_GO_DIRS) | wc -w) *.go dirs)
+-endif
+-
+-# Generate a list of all files that have a `+k8s:` comment-tag.  This will be
+-# used to derive lists of files/dirs for generation tools.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all +k8s: tags)
+-endif
+-ALL_K8S_TAG_FILES := $(shell                             \
+-    find $(ALL_GO_DIRS) -maxdepth 1 -type f -name \*.go  \
+-        | xargs grep --color=never -l '^// *+k8s:'       \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(ALL_K8S_TAG_FILES) | wc -w) +k8s: tagged files)
+-endif
+-
+-#
+-# Code generation logic.
+-#
+-
+-
+-# prerelease-lifecycle generation
+-#
+-# Any package that wants prerelease-lifecycle functions generated must include a
+-# comment-tag in column 0 of one file of the form:
+-#     // +k8s:prerelease-lifecycle-gen=true
+-#
+-
+-# The result file, in each pkg, of prerelease-lifecycle generation.
+-PRERELEASE_LIFECYCLE_BASENAME := $(GENERATED_FILE_PREFIX)prerelease-lifecycle
+-PRERELEASE_LIFECYCLE_FILENAME := $(PRERELEASE_LIFECYCLE_BASENAME).go
+-
+-# The tool used to generate prerelease-lifecycle code.
+-PRERELEASE_LIFECYCLE_GEN := $(BIN_DIR)/prerelease-lifecycle-gen
+-
+-# Find all the directories that request prerelease-lifecycle generation.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all +k8s:prerelease-lifecycle-gen tags)
+-endif
+-PRERELEASE_LIFECYCLE_DIRS := $(shell                                                 \
+-    grep --color=never -l '+k8s:prerelease-lifecycle-gen=true' $(ALL_K8S_TAG_FILES)  \
+-        | xargs -n1 dirname                                                          \
+-        | LC_ALL=C sort -u                                                           \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(PRERELEASE_LIFECYCLE_DIRS) | wc -w) +k8s:prerelease-lifecycle-gen tagged dirs)
+-endif
+-PRERELEASE_LIFECYCLE_FILES := $(addsuffix /$(PRERELEASE_LIFECYCLE_FILENAME), $(PRERELEASE_LIFECYCLE_DIRS))
+-
+-# Reset the list of packages that need generation.
+-$(shell mkdir -p $$(dirname $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN)))
+-$(shell rm -f $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo)
+-
+-# This rule aggregates the set of files to generate and then generates them all
+-# in a single run of the tool.
+-.PHONY: gen_prerelease_lifecycle
+-gen_prerelease_lifecycle: $(PRERELEASE_LIFECYCLE_GEN) $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo
+-	if [[ -s $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo ]]; then                 \
+-	    pkgs=$$(cat $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo | paste -sd, -);  \
+-	    if [[ "$(DBG_CODEGEN)" == 1 ]]; then                                       \
+-	        echo "DBG: running $(PRERELEASE_LIFECYCLE_GEN) for $$pkgs";            \
+-	    fi;                                                                        \
+-	    N=$$(cat $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo | wc -l);            \
+-	    kube::log::status "Generating prerelease lifecycle code for $$N targets";  \
+-	    ./hack/run-in-gopath.sh $(PRERELEASE_LIFECYCLE_GEN)                        \
+-	        --v $(KUBE_VERBOSE)                                                    \
+-	        --logtostderr                                                          \
+-	        -i "$$pkgs"                                                            \
+-	        -O $(PRERELEASE_LIFECYCLE_BASENAME)                                    \
+-	        "$$@";                                                                 \
+-	fi
+-
+-# For each dir in PRERELEASE_LIFECYCLE_DIRS, this establishes a dependency between the
+-# output file and the input files that should trigger a rebuild.
+-#
+-# Note that this is a deps-only statement, not a full rule (see below).  This
+-# has to be done in a distinct step because wildcards don't work in static
+-# pattern rules.
+-#
+-# The 'eval' is needed because this has a different RHS for each LHS, and
+-# would otherwise produce results that make can't parse.
+-$(foreach dir, $(PRERELEASE_LIFECYCLE_DIRS), $(eval                            \
+-    $(dir)/$(PRERELEASE_LIFECYCLE_FILENAME): $(GODEPS_$(PRJ_SRC_PATH)/$(dir))  \
+-))
+-
+-# How to regenerate prerelease-lifecycle code.  This is a little slow to run,
+-# so we batch it up and trigger the batch from the 'generated_files' target.
+-$(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo: $(PRERELEASE_LIFECYCLE_FILES)
+-
+-$(PRERELEASE_LIFECYCLE_FILES): $(PRERELEASE_LIFECYCLE_GEN)
+-	if [[ "$(DBG_CODEGEN)" == 1 ]]; then                    \
+-	    echo "DBG: prerelease-lifecycle needed in $(@D):";  \
+-	    ls -lft --full-time $@ || true;                     \
+-	    ls -lft --full-time $? || true;                     \
+-	fi
+-	echo $(PRJ_SRC_PATH)/$(@D) >> $(META_DIR)/$(PRERELEASE_LIFECYCLE_GEN).todo
+-
+-# How to build the generator tool.  The deps for this are defined in
+-# the $(GO_PKGDEPS_FILE), above.
+-#
+-# A word on the need to touch: This rule might trigger if, for example, a
+-# non-Go file was added or deleted from a directory on which this depends.
+-# This target needs to be reconsidered, but Go realizes it doesn't actually
+-# have to be rebuilt.  In that case, make will forever see the dependency as
+-# newer than the binary, and try to "rebuild" it over and over.  So we touch
+-# it, and make is happy.
+-$(PRERELEASE_LIFECYCLE_GEN): $(GODEPS_k8s.io/kubernetes/vendor/k8s.io/code-generator/cmd/prerelease-lifecycle-gen)
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh k8s.io/code-generator/cmd/prerelease-lifecycle-gen
+-	touch $@
+-
+-
+-# Deep-copy generation
+-#
+-# Any package that wants deep-copy functions generated must include a
+-# comment-tag in column 0 of one file of the form:
+-#     // +k8s:deepcopy-gen=<VALUE>
+-#
+-# The <VALUE> may be one of:
+-#     generate: generate deep-copy functions into the package
+-#     register: generate deep-copy functions and register them with a
+-#               scheme
+-
+-# The result file, in each pkg, of deep-copy generation.
+-DEEPCOPY_BASENAME := $(GENERATED_FILE_PREFIX)deepcopy
+-DEEPCOPY_FILENAME := $(DEEPCOPY_BASENAME).go
+-
+-# The tool used to generate deep copies.
+-DEEPCOPY_GEN := $(BIN_DIR)/deepcopy-gen
+-
+-# Find all the directories that request deep-copy generation.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all +k8s:deepcopy-gen tags)
+-endif
+-DEEPCOPY_DIRS := $(shell                                             \
+-    grep --color=never -l '+k8s:deepcopy-gen=' $(ALL_K8S_TAG_FILES)  \
+-        | xargs -n1 dirname                                          \
+-        | LC_ALL=C sort -u                                           \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(DEEPCOPY_DIRS) | wc -w) +k8s:deepcopy-gen tagged dirs)
+-endif
+-DEEPCOPY_FILES := $(addsuffix /$(DEEPCOPY_FILENAME), $(DEEPCOPY_DIRS))
+-
+-# Reset the list of packages that need generation.
+-$(shell mkdir -p $$(dirname $(META_DIR)/$(DEEPCOPY_GEN)))
+-$(shell rm -f $(META_DIR)/$(DEEPCOPY_GEN).todo)
+-
+-# This rule aggregates the set of files to generate and then generates them all
+-# in a single run of the tool.
+-.PHONY: gen_deepcopy
+-gen_deepcopy: $(DEEPCOPY_GEN) $(META_DIR)/$(DEEPCOPY_GEN).todo
+-	if [[ -s $(META_DIR)/$(DEEPCOPY_GEN).todo ]]; then                 \
+-	    pkgs=$$(cat $(META_DIR)/$(DEEPCOPY_GEN).todo | paste -sd, -);  \
+-	    if [[ "$(DBG_CODEGEN)" == 1 ]]; then                           \
+-	        echo "DBG: running $(DEEPCOPY_GEN) for $$pkgs";            \
+-	    fi;                                                            \
+-	    N=$$(cat $(META_DIR)/$(DEEPCOPY_GEN).todo | wc -l);            \
+-	    kube::log::status "Generating deepcopy code for $$N targets";  \
+-	    ./hack/run-in-gopath.sh $(DEEPCOPY_GEN)                        \
+-	        --v $(KUBE_VERBOSE)                                        \
+-	        --logtostderr                                              \
+-	        -i "$$pkgs"                                                \
+-	        --bounding-dirs $(PRJ_SRC_PATH),"k8s.io/api"               \
+-	        -O $(DEEPCOPY_BASENAME)                                    \
+-	        "$$@";                                                     \
+-	fi
+-
+-# For each dir in DEEPCOPY_DIRS, this establishes a dependency between the
+-# output file and the input files that should trigger a rebuild.
+-#
+-# Note that this is a deps-only statement, not a full rule (see below).  This
+-# has to be done in a distinct step because wildcards don't work in static
+-# pattern rules.
+-#
+-# The 'eval' is needed because this has a different RHS for each LHS, and
+-# would otherwise produce results that make can't parse.
+-$(foreach dir, $(DEEPCOPY_DIRS), $(eval                            \
+-    $(dir)/$(DEEPCOPY_FILENAME): $(GODEPS_$(PRJ_SRC_PATH)/$(dir))  \
+-))
+-
+-# How to regenerate deep-copy code.  This is a little slow to run, so we batch
+-# it up and trigger the batch from the 'generated_files' target.
+-$(META_DIR)/$(DEEPCOPY_GEN).todo: $(DEEPCOPY_FILES)
+-
+-$(DEEPCOPY_FILES): $(DEEPCOPY_GEN)
+-	if [[ "$(DBG_CODEGEN)" == 1 ]]; then        \
+-	    echo "DBG: deepcopy needed in $(@D):";  \
+-	    ls -lft --full-time $@ || true;         \
+-	    ls -lft --full-time $? || true;         \
+-	fi
+-	echo $(PRJ_SRC_PATH)/$(@D) >> $(META_DIR)/$(DEEPCOPY_GEN).todo
+-
+-# How to build the generator tool.  The deps for this are defined in
+-# the $(GO_PKGDEPS_FILE), above.
+-#
+-# A word on the need to touch: This rule might trigger if, for example, a
+-# non-Go file was added or deleted from a directory on which this depends.
+-# This target needs to be reconsidered, but Go realizes it doesn't actually
+-# have to be rebuilt.  In that case, make will forever see the dependency as
+-# newer than the binary, and try to "rebuild" it over and over.  So we touch
+-# it, and make is happy.
+-$(DEEPCOPY_GEN): $(GODEPS_k8s.io/kubernetes/vendor/k8s.io/code-generator/cmd/deepcopy-gen)
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh k8s.io/code-generator/cmd/deepcopy-gen
+-	touch $@
+-
+-
+-# Defaulter generation
+-#
+-# Any package that wants defaulter functions generated must include a
+-# comment-tag in column 0 of one file of the form:
+-#     // +k8s:defaulter-gen=<VALUE>
+-#
+-# The <VALUE> depends on context:
+-#     on types:
+-#       true:  always generate a defaulter for this type
+-#       false: never generate a defaulter for this type
+-#     on functions:
+-#       covers: if the function name matches SetDefault_NAME, instructs
+-#               the generator not to recurse
+-#     on packages:
+-#       FIELDNAME: any object with a field of this name is a candidate
+-#                  for having a defaulter generated
+-
+-# The result file, in each pkg, of defaulter generation.
+-DEFAULTER_BASENAME := $(GENERATED_FILE_PREFIX)defaults
+-DEFAULTER_FILENAME := $(DEFAULTER_BASENAME).go
+-
+-# The tool used to generate defaulters.
+-DEFAULTER_GEN := $(BIN_DIR)/defaulter-gen
+-
+-# All directories that request any form of defaulter generation.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all +k8s:defaulter-gen tags)
+-endif
+-DEFAULTER_DIRS := $(shell                                            \
+-    grep --color=never -l '+k8s:defaulter-gen=' $(ALL_K8S_TAG_FILES) \
+-        | xargs -n1 dirname                                          \
+-        | LC_ALL=C sort -u                                           \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(DEFAULTER_DIRS) | wc -w) +k8s:defaulter-gen tagged dirs)
+-endif
+-DEFAULTER_FILES := $(addsuffix /$(DEFAULTER_FILENAME), $(DEFAULTER_DIRS))
+-DEFAULTER_EXTRA_PEER_PKGS := \
+-    $(addprefix $(PRJ_SRC_PATH)/, $(DEFAULTER_DIRS))
+-
+-# Reset the list of packages that need generation.
+-$(shell mkdir -p $$(dirname $(META_DIR)/$(DEFAULTER_GEN)))
+-$(shell rm -f $(META_DIR)/$(DEFAULTER_GEN).todo)
+-
+-# This rule aggregates the set of files to generate and then generates them all
+-# in a single run of the tool.
+-.PHONY: gen_defaulter
+-gen_defaulter: $(DEFAULTER_GEN) $(META_DIR)/$(DEFAULTER_GEN).todo
+-	if [[ -s $(META_DIR)/$(DEFAULTER_GEN).todo ]]; then                 \
+-	    pkgs=$$(cat $(META_DIR)/$(DEFAULTER_GEN).todo | paste -sd, -);  \
+-	    if [[ "$(DBG_CODEGEN)" == 1 ]]; then                            \
+-	        echo "DBG: running $(DEFAULTER_GEN) for $$pkgs";            \
+-	    fi;                                                             \
+-	    N=$$(cat $(META_DIR)/$(DEFAULTER_GEN).todo | wc -l);            \
+-	    kube::log::status "Generating defaulter code for $$N targets";  \
+-	    ./hack/run-in-gopath.sh $(DEFAULTER_GEN)                        \
+-	        --v $(KUBE_VERBOSE)                                         \
+-	        --logtostderr                                               \
+-	        -i "$$pkgs"                                                 \
+-	        --extra-peer-dirs $$(echo $(DEFAULTER_EXTRA_PEER_PKGS) | sed 's/ /,/g') \
+-	        -O $(DEFAULTER_BASENAME)                                    \
+-	        "$$@";                                                      \
+-	fi
+-
+-# For each dir in DEFAULTER_DIRS, this establishes a dependency between the
+-# output file and the input files that should trigger a rebuild.
+-#
+-# Note that this is a deps-only statement, not a full rule (see below for that).
+-#
+-# The 'eval' is needed because this has a different RHS for each LHS, and
+-# would otherwise produce results that make can't parse.
+-$(foreach dir, $(DEFAULTER_DIRS), $(eval                            \
+-    $(dir)/$(DEFAULTER_FILENAME): $(GODEPS_$(PRJ_SRC_PATH)/$(dir))  \
+-))
+-
+-# How to regenerate defaulter code.  This is a little slow to run, so we batch
+-# it up and trigger the batch from the 'generated_files' target.
+-$(META_DIR)/$(DEFAULTER_GEN).todo: $(DEFAULTER_FILES)
+-
+-$(DEFAULTER_FILES): $(DEFAULTER_GEN)
+-	if [[ "$(DBG_CODEGEN)" == 1 ]]; then         \
+-	    echo "DBG: defaulter needed in $(@D):";  \
+-	    ls -lft --full-time $@ || true;          \
+-	    ls -lft --full-time $? || true;          \
+-	fi
+-	echo $(PRJ_SRC_PATH)/$(@D) >> $(META_DIR)/$(DEFAULTER_GEN).todo
+-
+-# How to build the generator tool.  The deps for this are defined in
+-# the $(GO_PKGDEPS_FILE), above.
+-#
+-# A word on the need to touch: This rule might trigger if, for example, a
+-# non-Go file was added or deleted from a directory on which this depends.
+-# This target needs to be reconsidered, but Go realizes it doesn't actually
+-# have to be rebuilt.  In that case, make will forever see the dependency as
+-# newer than the binary, and try to "rebuild" it over and over.  So we touch
+-# it, and make is happy.
+-$(DEFAULTER_GEN): $(GODEPS_k8s.io/kubernetes/vendor/k8s.io/code-generator/cmd/defaulter-gen)
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh k8s.io/code-generator/cmd/defaulter-gen
+-	touch $@
+-
+-
+-# Conversion generation
+-
+-# Any package that wants conversion functions generated into it must
+-# include one or more comment-tags in its `doc.go` file, of the form:
+-#     // +k8s:conversion-gen=<INTERNAL_TYPES_DIR>
+-#
+-# The INTERNAL_TYPES_DIR is a project-local path to another directory
+-# which should be considered when evaluating peer types for
+-# conversions.  An optional additional comment of the form
+-#     // +k8s:conversion-gen-external-types=<EXTERNAL_TYPES_DIR>
+-#
+-# identifies where to find the external types; if there is no such
+-# comment then the external types are sought in the package where the
+-# `k8s:conversion` tag is found.
+-#
+-# Conversions, in both directions, are generated for every type name
+-# that is defined in both an internal types package and the external
+-# types package.
+-#
+-# TODO: it might be better in the long term to make peer-types explicit in the
+-# IDL.
+-
+-# The result file, in each pkg, of conversion generation.
+-CONVERSION_BASENAME := $(GENERATED_FILE_PREFIX)conversion
+-CONVERSION_FILENAME := $(CONVERSION_BASENAME).go
+-
+-# The tool used to generate conversions.
+-CONVERSION_GEN := $(BIN_DIR)/conversion-gen
+-
+-# The name of the metadata file listing conversion peers for each pkg.
+-CONVERSIONS_META := conversions.mk
+-
+-# All directories that request any form of conversion generation.
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** finding all +k8s:conversion-gen tags)
+-endif
+-CONVERSION_DIRS := $(shell                                              \
+-    grep --color=never '^// *+k8s:conversion-gen=' $(ALL_K8S_TAG_FILES) \
+-        | cut -f1 -d:                                                   \
+-        | xargs -n1 dirname                                             \
+-        | LC_ALL=C sort -u                                              \
+-)
+-ifeq ($(DBG_MAKEFILE),1)
+-    $(warning ***** found $(shell echo $(CONVERSION_DIRS) | wc -w) +k8s:conversion-gen tagged dirs)
+-endif
+-CONVERSION_FILES := $(addsuffix /$(CONVERSION_FILENAME), $(CONVERSION_DIRS))
+-CONVERSION_EXTRA_PEER_PKGS := \
+-    k8s.io/kubernetes/pkg/apis/core \
+-    k8s.io/kubernetes/pkg/apis/core/v1 \
+-    k8s.io/api/core/v1
+-CONVERSION_EXTRA_PKGS := $(addprefix $(PRJ_SRC_PATH)/, $(CONVERSION_DIRS))
+-
+-# Reset the list of packages that need generation.
+-$(shell mkdir -p $$(dirname $(META_DIR)/$(CONVERSION_GEN)))
+-$(shell rm -f $(META_DIR)/$(CONVERSION_GEN).todo)
+-
+-# This rule aggregates the set of files to generate and then generates them all
+-# in a single run of the tool.
+-.PHONY: gen_conversion
+-gen_conversion: $(CONVERSION_GEN) $(META_DIR)/$(CONVERSION_GEN).todo
+-	if [[ -s $(META_DIR)/$(CONVERSION_GEN).todo ]]; then                 \
+-	    pkgs=$$(cat $(META_DIR)/$(CONVERSION_GEN).todo | paste -sd, -);  \
+-	    if [[ "$(DBG_CODEGEN)" == 1 ]]; then                             \
+-	        echo "DBG: running $(CONVERSION_GEN) for $$pkgs";            \
+-	    fi;                                                              \
+-	    N=$$(cat $(META_DIR)/$(CONVERSION_GEN).todo | wc -l);            \
+-	    kube::log::status "Generating conversion code for $$N targets";  \
+-	    ./hack/run-in-gopath.sh $(CONVERSION_GEN)                        \
+-	        --extra-peer-dirs $$(echo $(CONVERSION_EXTRA_PEER_PKGS) | sed 's/ /,/g') \
+-	        --extra-dirs $$(echo $(CONVERSION_EXTRA_PKGS) | sed 's/ /,/g') \
+-	        --v $(KUBE_VERBOSE)                                          \
+-	        --logtostderr                                                \
+-	        -i "$$pkgs"                                                  \
+-	        -O $(CONVERSION_BASENAME)                                    \
+-	        "$$@";                                                       \
+-	fi
+-
+-# For each dir in CONVERSION_DIRS, this establishes a dependency between the
+-# output file and the input files that should trigger a rebuild.
+-#
+-# Note that this is a deps-only statement, not a full rule (see below for that).
+-#
+-# The 'eval' is needed because this has a different RHS for each LHS, and
+-# would otherwise produce results that make can't parse.
+-$(foreach dir, $(CONVERSION_DIRS), $(eval                            \
+-    $(dir)/$(CONVERSION_FILENAME): $(GODEPS_$(PRJ_SRC_PATH)/$(dir))  \
+-))
+-
+-# How to regenerate conversion code.  This is a little slow to run, so we batch
+-# it up and trigger the batch from the 'generated_files' target.
+-$(META_DIR)/$(CONVERSION_GEN).todo: $(CONVERSION_FILES)
+-
+-$(CONVERSION_FILES): $(CONVERSION_GEN)
+-	if [[ "$(DBG_CODEGEN)" == 1 ]]; then          \
+-	    echo "DBG: conversion needed in $(@D):";  \
+-	    ls -lft --full-time $@ || true;           \
+-	    ls -lft --full-time $? || true;           \
+-	fi
+-	echo $(PRJ_SRC_PATH)/$(@D) >> $(META_DIR)/$(CONVERSION_GEN).todo
+-
+-# How to build the generator tool.  The deps for this are defined in
+-# the $(GO_PKGDEPS_FILE), above.
+-#
+-# A word on the need to touch: This rule might trigger if, for example, a
+-# non-Go file was added or deleted from a directory on which this depends.
+-# This target needs to be reconsidered, but Go realizes it doesn't actually
+-# have to be rebuilt.  In that case, make will forever see the dependency as
+-# newer than the binary, and try to rebuild it over and over.  So we touch it,
+-# and make is happy.
+-$(CONVERSION_GEN): $(GODEPS_k8s.io/kubernetes/vendor/k8s.io/code-generator/cmd/conversion-gen)
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh k8s.io/code-generator/cmd/conversion-gen
+-	touch $@
+-
+-
+-# OpenAPI generation
+-#
+-# Any package that wants open-api functions generated must include a
+-# comment-tag in column 0 of one file of the form:
+-#     // +k8s:openapi-gen=true
+-#
+-# The result file, in each pkg, of open-api generation.
+-OPENAPI_BASENAME := $(GENERATED_FILE_PREFIX)openapi
+-OPENAPI_FILENAME := $(OPENAPI_BASENAME).go
+-BOILERPLATE_FILENAME := vendor/k8s.io/code-generator/hack/boilerplate.go.txt
+-IGNORED_REPORT_FILENAME := $(OUT_DIR)/ignored_violations.report
+-
+-API_RULE_CHECK_FAILURE_MESSAGE = "ERROR: \n\t $(1) API rule check failed. Reported violations differ from known violations. Please read api/api-rules/README.md to resolve the failure in $(2). \n"
+-
+-# The tool used to generate open apis.
+-OPENAPI_GEN := $(BIN_DIR)/openapi-gen
+-
+-KUBE_KNOWN_VIOLATION_FILENAME := api/api-rules/violation_exceptions.list
+-AGGREGATOR_KNOWN_VIOLATION_FILENAME := api/api-rules/aggregator_violation_exceptions.list
+-APIEXTENSIONS_KNOWN_VIOLATION_FILENAME := api/api-rules/apiextensions_violation_exceptions.list
+-CODEGEN_KNOWN_VIOLATION_FILENAME := api/api-rules/codegen_violation_exceptions.list
+-SAMPLEAPISERVER_KNOWN_VIOLATION_FILENAME := api/api-rules/sample_apiserver_violation_exceptions.list
+-
+-APIMACHINERY_DEFAULT_TAG_FILES := vendor/k8s.io/apimachinery/pkg/apis/meta/v1/% vendor/k8s.io/apimachinery/pkg/runtime/% vendor/k8s.io/apimachinery/pkg/version/%
+-
+-KUBE_OPENAPI_TAG_FILES :=            $(filter-out vendor/k8s.io/code-generator/% vendor/k8s.io/sample-apiserver/%, $(ALL_K8S_TAG_FILES))
+-AGGREGATOR_OPENAPI_TAG_FILES :=      $(filter $(APIMACHINERY_DEFAULT_TAG_FILES) vendor/k8s.io/kube-aggregator/%, $(ALL_K8S_TAG_FILES))
+-APIEXTENSIONS_OPENAPI_TAG_FILES :=   $(filter $(APIMACHINERY_DEFAULT_TAG_FILES) vendor/k8s.io/apiextensions/% vendor/k8s.io/api/autoscaling/v1/%, $(ALL_K8S_TAG_FILES))
+-CODEGEN_OPENAPI_TAG_FILES :=         $(filter $(APIMACHINERY_DEFAULT_TAG_FILES) vendor/k8s.io/code-generator/%, $(ALL_K8S_TAG_FILES))
+-SAMPLEAPISERVER_OPENAPI_TAG_FILES := $(filter $(APIMACHINERY_DEFAULT_TAG_FILES) vendor/k8s.io/sample-apiserver/%, $(ALL_K8S_TAG_FILES))
+-
+-KUBE_OPENAPI_OUTPUT_PKG := pkg/generated/openapi
+-AGGREGATOR_OPENAPI_OUTPUT_PKG := staging/src/k8s.io/kube-aggregator/pkg/generated/openapi
+-APIEXTENSIONS_OPENAPI_OUTPUT_PKG := staging/src/k8s.io/apiextensions-apiserver/pkg/generated/openapi
+-CODEGEN_OPENAPI_OUTPUT_PKG := staging/src/k8s.io/code-generator/examples/apiserver/openapi
+-SAMPLEAPISERVER_OPENAPI_OUTPUT_PKG := staging/src/k8s.io/sample-apiserver/pkg/generated/openapi
+-
+-OPENAPI_TARGETS := KUBE AGGREGATOR APIEXTENSIONS CODEGEN SAMPLEAPISERVER
+-
+-# Find all the directories that request openapi generation.
+-# - required input: $(prefix)
+-define OPENAPI_DIR_DEF
+-ifeq ($$(DBG_MAKEFILE),1)
+-    $$(warning ***** finding all +k8s:openapi-gen tags for $(prefix))
+-endif
+-$(prefix)_OPENAPI_DIRS := $$(shell                                            \
+-    grep --color=never -l '+k8s:openapi-gen=' $$($(prefix)_OPENAPI_TAG_FILES) \
+-        | xargs -n1 dirname                                                   \
+-        | LC_ALL=C sort -u                                                    \
+-)
+-ifeq ($$(DBG_MAKEFILE),1)
+-    $$(warning ***** found $$(shell echo $$($(prefix)_OPENAPI_TAG_FILES) | wc -w) +k8s:openapi-gen tagged dirs for $(prefix))
+-endif
+-endef # OPENAPI_DIR_DEF
+-$(foreach prefix, $(OPENAPI_TARGETS), $(eval $(OPENAPI_DIR_DEF)))
+-
+-# Compute all openapi output file names
+-$(foreach prefix, $(OPENAPI_TARGETS), $(eval                                         \
+-    $(prefix)_OPENAPI_OUTFILE := $($(prefix)_OPENAPI_OUTPUT_PKG)/$(OPENAPI_FILENAME) \
+-))
+-
+-# For each openapi target compute the spec
+-# - required input: $(prefix)
+-define OPENAPI_TARGETS_DEF
+-# For each dir in $(prefix)_OPENAPI_DIRS, this establishes a dependency
+-# between the output file and the input files that should trigger a rebuild.
+-#
+-# Note that this is a deps-only statement, not a full rule
+-# (see below for that).
+-#
+-# The 'eval' is needed because this has a different RHS for each LHS, and
+-# would otherwise produce results that make can't parse.
+-$$(foreach dir, $$($(prefix)_OPENAPI_DIRS), $$(eval                     \
+-    $$($(prefix)_OPENAPI_OUTFILE): $$(GODEPS_$$(PRJ_SRC_PATH)/$$(dir))  \
+-))
+-
+-# When UPDATE_API_KNOWN_VIOLATIONS is set to be true, let the generator to write
+-# updated API violations to the known API violation exceptions list.
+-ifeq ($$(UPDATE_API_KNOWN_VIOLATIONS),true)
+-    $(prefix)_REPORT_FILENAME := $$($(prefix)_KNOWN_VIOLATION_FILENAME)
+-    # When UPDATE_API_KNOWN_VIOLATIONS is set to be true, touch the exceptions
+-    # list so that the $(prefix)_OPENAPI_OUTFILE target re-run instead of being cached.
+-    $$(shell touch $$($(prefix)_KNOWN_VIOLATION_FILENAME))
+-else
+-    $(prefix)_REPORT_FILENAME := $$(OUT_DIR)/$(prefix)_violations.report
+-endif
+-
+-# How to regenerate open-api code.  This emits a single file for all results.
+-# The Make rule fails if generated API rule violation report differs from the
+-# checked-in violation file, and prints error message to request developer to
+-# fix either the API source code, or the known API rule violation file.
+-$$($(prefix)_OPENAPI_OUTFILE): $$(OPENAPI_GEN) $$($(prefix)_KNOWN_VIOLATION_FILENAME)
+-	kube::log::status "Generating openapi code for $(prefix)";                                   \
+-	./hack/run-in-gopath.sh $$(OPENAPI_GEN)                                                      \
+-	    --v $$(KUBE_VERBOSE)                                                                     \
+-	    --logtostderr                                                                            \
+-	    -i $$$$(echo $$(addprefix $(PRJ_SRC_PATH)/, $$($(prefix)_OPENAPI_DIRS)) | sed 's/ /,/g') \
+-	    -p $$(PRJ_SRC_PATH)/$$($(prefix)_OPENAPI_OUTPUT_PKG)                                     \
+-	    -O $$(OPENAPI_BASENAME)                                                                  \
+-	    -h $$(BOILERPLATE_FILENAME)                                                              \
+-	    -r $$($(prefix)_REPORT_FILENAME)                                                         \
+-	    "$$$$@"
+-	test -f $$($(prefix)_KNOWN_VIOLATION_FILENAME) || touch $$($(prefix)_KNOWN_VIOLATION_FILENAME)
+-	diff $$($(prefix)_REPORT_FILENAME) $$($(prefix)_KNOWN_VIOLATION_FILENAME) || \
+-	(echo -e $$(call API_RULE_CHECK_FAILURE_MESSAGE,$(prefix),$$($(prefix)_KNOWN_VIOLATION_FILENAME)); exit 1)
+-endef # OPENAPI_TARGETS_DEF
+-$(foreach prefix, $(OPENAPI_TARGETS), $(eval $(OPENAPI_TARGETS_DEF)))
+-
+-# This rule is the user-friendly entrypoint for openapi generation.
+-.PHONY: gen_openapi
+-gen_openapi: $(OPENAPI_GEN) $(KUBE_OPENAPI_OUTFILE) $(AGGREGATOR_OPENAPI_OUTFILE) $(APIEXTENSIONS_OPENAPI_OUTFILE) $(CODEGEN_OPENAPI_OUTFILE) $(SAMPLEAPISERVER_OPENAPI_OUTFILE)
+-
+-# How to build the generator tool.  The deps for this are defined in
+-# the $(GO_PKGDEPS_FILE), above.
+-#
+-# A word on the need to touch: This rule might trigger if, for example, a
+-# non-Go file was added or deleted from a directory on which this depends.
+-# This target needs to be reconsidered, but Go realizes it doesn't actually
+-# have to be rebuilt.  In that case, make will forever see the dependency as
+-# newer than the binary, and try to "rebuild" it over and over.  So we touch
+-# it, and make is happy.
+-$(OPENAPI_GEN): $(GODEPS_k8s.io/kubernetes/vendor/k8s.io/kube-openapi/cmd/openapi-gen)
+-	KUBE_BUILD_PLATFORMS="" \
+-	    hack/make-rules/build.sh k8s.io/kube-openapi/cmd/openapi-gen
+-	touch $@
+diff --git a/hack/jenkins/test-dockerized.sh b/hack/jenkins/test-dockerized.sh
+index 12e8515dda7..54c79724315 100755
+--- a/hack/jenkins/test-dockerized.sh
++++ b/hack/jenkins/test-dockerized.sh
+@@ -47,7 +47,6 @@ export LOG_LEVEL=4
+ 
+ cd "${GOPATH}/src/k8s.io/kubernetes"
+ 
+-make generated_files
+ ./hack/install-etcd.sh
+ 
+ make test-cmd
+diff --git a/hack/lib/util.sh b/hack/lib/util.sh
+index 67454132c99..3160c15c68c 100755
+--- a/hack/lib/util.sh
++++ b/hack/lib/util.sh
+@@ -798,19 +798,54 @@ function kube::util::md5() {
+ 
+ # kube::util::read-array
+ # Reads in stdin and adds it line by line to the array provided. This can be
+-# used instead of "mapfile -t", and is bash 3 compatible.
++# used instead of "mapfile -t", and is bash 3 compatible.  If the named array
++# exists and is an array, it will be used.  Otherwise it will be unset and
++# recreated.
+ #
+ # Assumed vars:
+ #   $1 (name of array to create/modify)
+ #
+ # Example usage:
+-# kube::util::read-array files < <(ls -1)
++#   kube::util::read-array files < <(ls -1)
+ #
++# When in doubt:
++#  $ W=abc         # a string
++#  $ X=(a b c)     # an array
++#  $ declare -A Y  # an associative array
++#  $ unset Z       # not set at all
++#  $ declare -p W X Y Z
++#  declare -- W="abc"
++#  declare -a X=([0]="a" [1]="b" [2]="c")
++#  declare -A Y
++#  bash: line 26: declare: Z: not found
++#  $ kube::util::read-array W < <(echo -ne "1 1\n2 2\n3 3\n")
++#  bash: W is defined but isn't an array
++#  $ kube::util::read-array X < <(echo -ne "1 1\n2 2\n3 3\n")
++#  $ kube::util::read-array Y < <(echo -ne "1 1\n2 2\n3 3\n")
++#  bash: Y is defined but isn't an array
++#  $ kube::util::read-array Z < <(echo -ne "1 1\n2 2\n3 3\n")
++#  $ declare -p W X Y Z
++#  declare -- W="abc"
++#  declare -a X=([0]="1 1" [1]="2 2" [2]="3 3")
++#  declare -A Y
++#  declare -a Z=([0]="1 1" [1]="2 2" [2]="3 3")
+ function kube::util::read-array {
+-  local i=0
+-  unset -v "$1"
+-  while IFS= read -r "$1[i++]"; do :; done
+-  eval "[[ \${$1[--i]} ]]" || unset "$1[i]" # ensures last element isn't empty
++  if [[ -z "$1" ]]; then
++    echo "usage: ${FUNCNAME[0]} <varname>" >&2
++    return 1
++  fi
++  if [[ -n $(declare -p "$1" 2>/dev/null) ]]; then
++    if ! declare -p "$1" 2>/dev/null | grep -q '^declare -a'; then
++      echo "${FUNCNAME[0]}: $1 is defined but isn't an array" >&2
++      return 2
++    fi
++  fi
++  # shellcheck disable=SC2034 # this variable _is_ used
++  local __read_array_i=0
++  while IFS= read -r "$1[__read_array_i++]"; do :; done
++  if ! eval "[[ \${$1[--__read_array_i]} ]]"; then
++    unset "$1[__read_array_i]" # ensures last element isn't empty
++  fi
+ }
+ 
+ # Some useful colors.
+diff --git a/hack/make-rules/helpers/cache_go_dirs.sh b/hack/make-rules/helpers/cache_go_dirs.sh
+deleted file mode 100755
+index cfd4fa25af1..00000000000
+--- a/hack/make-rules/helpers/cache_go_dirs.sh
++++ /dev/null
+@@ -1,79 +0,0 @@
+-#!/usr/bin/env bash
+-
+-# Copyright 2014 The Kubernetes Authors.
+-#
+-# Licensed under the Apache License, Version 2.0 (the "License");
+-# you may not use this file except in compliance with the License.
+-# You may obtain a copy of the License at
+-#
+-#     http://www.apache.org/licenses/LICENSE-2.0
+-#
+-# Unless required by applicable law or agreed to in writing, software
+-# distributed under the License is distributed on an "AS IS" BASIS,
+-# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-# See the License for the specific language governing permissions and
+-# limitations under the License.
+-
+-# This script finds, caches, and prints a list of all directories that hold
+-# *.go files.  If any directory is newer than the cache, re-find everything and
+-# update the cache.  Otherwise use the cached file.
+-
+-set -o errexit
+-set -o nounset
+-set -o pipefail
+-
+-if [[ -z "${1:-}" ]]; then
+-    echo "usage: $0 <cache-file>"
+-    exit 1
+-fi
+-CACHE="$1"; shift
+-
+-trap 'rm -f "${CACHE}"' HUP INT TERM ERR
+-
+-# This is a partial 'find' command.  The caller is expected to pass the
+-# remaining arguments.
+-#
+-# Example:
+-#   kfind -type f -name foobar.go
+-function kfind() {
+-    # We want to include the "special" vendor directories which are actually
+-    # part of the Kubernetes source tree (./staging/*) but we need them to be
+-    # named as their ./vendor/* equivalents.  Also, we do not want all of
+-    # ./vendor nor ./hack/tools/vendor nor even all of ./vendor/k8s.io.
+-    find -H .                      \
+-        \(                         \
+-        -not \(                    \
+-            \(                     \
+-                -name '_*' -o      \
+-                -name '.[^.]*' -o  \
+-                \(                 \
+-                  -name 'vendor'   \
+-                  -type d          \
+-                \) -o              \
+-                \(                 \
+-                  -name 'testdata' \
+-                  -type d          \
+-                \)                 \
+-            \) -prune              \
+-        \)                         \
+-        \)                         \
+-        "$@"                       \
+-        | sed 's|^./staging/src|vendor|'
+-}
+-
+-# It's *significantly* faster to check whether any directories are newer than
+-# the cache than to blindly rebuild it.
+-if [[ -f "${CACHE}" && -n "${CACHE}" ]]; then
+-    N=$(kfind -type d -newer "${CACHE}" -print -quit | wc -l)
+-    if [[ "${N}" == 0 ]]; then
+-        cat "${CACHE}"
+-        exit
+-    fi
+-fi
+-
+-mkdir -p "$(dirname "${CACHE}")"
+-kfind -type f -name \*.go  \
+-    | sed 's|/[^/]*$||'    \
+-    | sed 's|^./||'        \
+-    | LC_ALL=C sort -u     \
+-    | tee "${CACHE}"
+diff --git a/hack/make-rules/helpers/go2make/go2make.go b/hack/make-rules/helpers/go2make/go2make.go
+deleted file mode 100644
+index ceaeed0e550..00000000000
+--- a/hack/make-rules/helpers/go2make/go2make.go
++++ /dev/null
+@@ -1,215 +0,0 @@
+-/*
+-Copyright 2017 The Kubernetes Authors.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-*/
+-
+-package main
+-
+-import (
+-	"bytes"
+-	goflag "flag"
+-	"fmt"
+-	"go/build"
+-	"io"
+-	"os"
+-	"sort"
+-	"strings"
+-
+-	"github.com/spf13/pflag"
+-)
+-
+-var flPrune = pflag.StringSlice("prune", nil, "sub-packages to prune (recursive, may be specified multiple times)")
+-var flDebug = pflag.BoolP("debug", "d", false, "enable debugging output")
+-var flHelp = pflag.BoolP("help", "h", false, "print help and exit")
+-
+-func main() {
+-	pflag.CommandLine.AddGoFlagSet(goflag.CommandLine)
+-	pflag.Usage = func() { help(os.Stderr) }
+-	pflag.Parse()
+-
+-	debug("PWD", getwd())
+-
+-	build.Default.BuildTags = []string{"ignore_autogenerated"}
+-	build.Default.UseAllFiles = false
+-
+-	if *flHelp {
+-		help(os.Stdout)
+-		os.Exit(0)
+-	}
+-	if len(pflag.Args()) == 0 {
+-		help(os.Stderr)
+-		os.Exit(1)
+-	}
+-	for _, in := range pflag.Args() {
+-		if strings.HasSuffix(in, "/...") {
+-			// Recurse.
+-			debug("starting", in)
+-			pkgName := strings.TrimSuffix(in, "/...")
+-			if err := WalkPkg(pkgName, visitPkg); err != nil {
+-				fmt.Fprintln(os.Stderr, err)
+-				os.Exit(1)
+-			}
+-		} else {
+-			// Import one package.
+-			if err := saveImport(in); err != nil {
+-				fmt.Fprintln(os.Stderr, err)
+-				os.Exit(2)
+-			}
+-		}
+-	}
+-}
+-
+-func help(out io.Writer) {
+-	fmt.Fprintf(out, "Usage: %s [FLAG...] <PKG...>\n", os.Args[0])
+-	fmt.Fprintf(out, "\n")
+-	fmt.Fprintf(out, "go2make calculates all of the dependencies of a set of Go packages and prints\n")
+-	fmt.Fprintf(out, "them as variable definitions suitable for use as a Makefile.\n")
+-	fmt.Fprintf(out, "\n")
+-	fmt.Fprintf(out, "Package specifications may be simple (e.g. 'example.com/txt/color') or\n")
+-	fmt.Fprintf(out, "recursive (e.g. 'example.com/txt/...')\n")
+-	fmt.Fprintf(out, " Example:\n")
+-	fmt.Fprintf(out, "  $ %s ./example.com/pretty\n", os.Args[0])
+-	fmt.Fprintf(out, "  example.com/txt/split := \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/txt/split/ \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/txt/split/split.go \\\n")
+-	fmt.Fprintf(out, "  ./example.com/pretty := \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/pretty/ \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/pretty/print.go \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/txt/split/ \\\n")
+-	fmt.Fprintf(out, "    /go/src/example.com/txt/split/split.go\n")
+-	fmt.Fprintf(out, "\n")
+-	fmt.Fprintf(out, " Flags:\n")
+-
+-	pflag.PrintDefaults()
+-}
+-
+-func debug(items ...interface{}) {
+-	if *flDebug {
+-		x := []interface{}{"DBG:"}
+-		x = append(x, items...)
+-		fmt.Println(x...)
+-	}
+-}
+-
+-func visitPkg(importPath, absPath string) error {
+-	debug("visit", importPath)
+-	return saveImport(importPath)
+-}
+-
+-func prune(pkgName string) bool {
+-	for _, pr := range *flPrune {
+-		if pr == pkgName {
+-			return true
+-		}
+-	}
+-	return false
+-}
+-
+-// cache keeps track of which packages we have already loaded.
+-var cache = map[string]*build.Package{}
+-
+-func saveImport(pkgName string) error {
+-	if cache[pkgName] != nil {
+-		return nil
+-	}
+-	if prune(pkgName) {
+-		debug("prune", pkgName)
+-		return ErrSkipPkg
+-	}
+-	pkg, err := loadPackage(pkgName)
+-	if err != nil {
+-		return err
+-	}
+-	debug("save", pkgName)
+-	cache[pkgName] = pkg
+-
+-	debug("recurse", pkgName)
+-	defer func() { debug("done   ", pkgName) }()
+-	if !pkg.Goroot && (len(pkg.GoFiles)+len(pkg.Imports) > 0) {
+-		// Process deps of this package before the package itself.
+-		for _, impName := range pkg.Imports {
+-			if impName == "C" {
+-				continue
+-			}
+-			debug("depends on", impName)
+-			saveImport(impName)
+-		}
+-
+-		// Emit a variable for each package.
+-		var buf bytes.Buffer
+-		buf.WriteString("GODEPS_" + pkgName)
+-		buf.WriteString(" := ")
+-
+-		// Packages depend on their own directories, their own files, and
+-		// transitive list of all deps' directories and files.
+-		all := map[string]struct{}{}
+-		all[pkg.Dir+"/"] = struct{}{}
+-		filesForPkg(pkg, all)
+-		for _, imp := range pkg.Imports {
+-			pkg := cache[imp]
+-			if pkg == nil || pkg.Goroot {
+-				continue
+-			}
+-			all[pkg.Dir+"/"] = struct{}{}
+-			filesForPkg(pkg, all)
+-		}
+-		// Sort and de-dup them.
+-		files := flatten(all)
+-		for _, f := range files {
+-			buf.WriteString(" \\\n  ")
+-			buf.WriteString(f)
+-		}
+-
+-		fmt.Println(buf.String())
+-	}
+-	return nil
+-}
+-
+-func filesForPkg(pkg *build.Package, all map[string]struct{}) {
+-	for _, file := range pkg.GoFiles {
+-		if pkg.Dir != "." {
+-			file = pkg.Dir + "/" + file
+-		}
+-		all[file] = struct{}{}
+-	}
+-}
+-
+-func flatten(all map[string]struct{}) []string {
+-	list := make([]string, 0, len(all))
+-	for k := range all {
+-		list = append(list, k)
+-	}
+-	sort.Strings(list)
+-	return list
+-}
+-
+-func loadPackage(pkgName string) (*build.Package, error) {
+-	debug("load", pkgName)
+-	pkg, err := build.Import(pkgName, getwd(), 0)
+-	if err != nil {
+-		// We can ignore NoGoError.  Anything else is real.
+-		if _, ok := err.(*build.NoGoError); !ok {
+-			return nil, err
+-		}
+-	}
+-	return pkg, nil
+-}
+-
+-func getwd() string {
+-	pwd, err := os.Getwd()
+-	if err != nil {
+-		panic(fmt.Sprintf("can't get working directory: %v", err))
+-	}
+-	return pwd
+-}
+diff --git a/hack/make-rules/helpers/go2make/pkgwalk.go b/hack/make-rules/helpers/go2make/pkgwalk.go
+deleted file mode 100644
+index 6d8dfdb0f7a..00000000000
+--- a/hack/make-rules/helpers/go2make/pkgwalk.go
++++ /dev/null
+@@ -1,117 +0,0 @@
+-/*
+-Copyright 2017 The Kubernetes Authors.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-*/
+-
+-package main
+-
+-import (
+-	"fmt"
+-	"go/build"
+-	"os"
+-	"path"
+-	"sort"
+-)
+-
+-// VisitFunc is a function called by WalkPkg to examine a single package.
+-type VisitFunc func(importPath string, absPath string) error
+-
+-// ErrSkipPkg can be returned by a VisitFunc to indicate that the package in
+-// question should not be walked any further.
+-var ErrSkipPkg = fmt.Errorf("package skipped")
+-
+-// WalkPkg recursively visits all packages under pkgName.  This is similar
+-// to filepath.Walk, except that it follows symlinks.  A package is always
+-// visited before the children of that package.  If visit returns ErrSkipPkg,
+-// pkgName will not be walked.
+-func WalkPkg(pkgName string, visit VisitFunc) error {
+-	// Visit the package itself.
+-	pkg, err := findPackage(pkgName)
+-	if err != nil {
+-		return err
+-	}
+-	if err := visit(pkg.ImportPath, pkg.Dir); err == ErrSkipPkg {
+-		return nil
+-	} else if err != nil {
+-		return err
+-	}
+-
+-	// Read all of the child dirents and find sub-packages.
+-	infos, err := readDirInfos(pkg.Dir)
+-	if err != nil {
+-		return err
+-	}
+-	for _, info := range infos {
+-		if !info.IsDir() {
+-			continue
+-		}
+-		name := info.Name()
+-		if name[0] == '_' || (len(name) > 1 && name[0] == '.') || name == "testdata" {
+-			continue
+-		}
+-		// Don't use path.Join() because it drops leading `./` via path.Clean().
+-		err := WalkPkg(pkgName+"/"+name, visit)
+-		if err != nil {
+-			return err
+-		}
+-	}
+-	return nil
+-}
+-
+-// findPackage finds a Go package.
+-func findPackage(pkgName string) (*build.Package, error) {
+-	debug("find", pkgName)
+-	pkg, err := build.Import(pkgName, getwd(), build.FindOnly)
+-	if err != nil {
+-		return nil, err
+-	}
+-	return pkg, nil
+-}
+-
+-// readDirInfos returns a list of os.FileInfo structures for the dirents under
+-// dirPath.  The result list is sorted by name.  This is very similar to
+-// ioutil.ReadDir, except that it follows symlinks.
+-func readDirInfos(dirPath string) ([]os.FileInfo, error) {
+-	names, err := readDirNames(dirPath)
+-	if err != nil {
+-		return nil, err
+-	}
+-	sort.Strings(names)
+-
+-	infos := make([]os.FileInfo, 0, len(names))
+-	for _, n := range names {
+-		info, err := os.Stat(path.Join(dirPath, n))
+-		if err != nil {
+-			return nil, err
+-		}
+-		infos = append(infos, info)
+-	}
+-	return infos, nil
+-}
+-
+-// readDirNames returns a list of all dirents in dirPath.  The result list is
+-// not sorted or filtered.
+-func readDirNames(dirPath string) ([]string, error) {
+-	d, err := os.Open(dirPath)
+-	if err != nil {
+-		return nil, err
+-	}
+-	defer d.Close()
+-
+-	names, err := d.Readdirnames(-1)
+-	if err != nil {
+-		return nil, err
+-	}
+-	return names, nil
+-}
+diff --git a/hack/make-rules/helpers/go2make/pkgwalk_test.go b/hack/make-rules/helpers/go2make/pkgwalk_test.go
+deleted file mode 100644
+index 140f5121558..00000000000
+--- a/hack/make-rules/helpers/go2make/pkgwalk_test.go
++++ /dev/null
+@@ -1,222 +0,0 @@
+-/*
+-Copyright 2017 The Kubernetes Authors.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-*/
+-
+-package main
+-
+-import (
+-	"path"
+-	"reflect"
+-	"sort"
+-	"testing"
+-)
+-
+-func Test_WalkPkg(t *testing.T) {
+-	testCases := []struct {
+-		pkg      string
+-		fail     bool
+-		expected []string
+-	}{
+-		{
+-			pkg:  "./testdata/nonexistent-dir",
+-			fail: true,
+-		},
+-		{
+-			pkg:      "./testdata/dir-without-gofiles",
+-			expected: []string{"./testdata/dir-without-gofiles"},
+-		},
+-		{
+-			pkg:      "./testdata/dir-with-gofiles",
+-			expected: []string{"./testdata/dir-with-gofiles", "./testdata/dir-with-gofiles/subdir"},
+-		},
+-	}
+-
+-	for i, tc := range testCases {
+-		visited := []string{}
+-		err := WalkPkg(tc.pkg, func(imp, abs string) error {
+-			if _, base := path.Split(imp); base == "skipme" {
+-				return ErrSkipPkg
+-			}
+-			visited = append(visited, imp)
+-			return nil
+-		})
+-		if err != nil && tc.fail {
+-			continue
+-		}
+-		if err != nil {
+-			t.Errorf("[%d] unexpected error: %v", i, err)
+-			continue
+-		}
+-		if tc.fail {
+-			t.Errorf("[%d] expected error", i)
+-			continue
+-		}
+-		if !reflect.DeepEqual(visited, tc.expected) {
+-			t.Errorf("[%d] unexpected results: %v", i, visited)
+-		}
+-	}
+-}
+-func Test_findPackage(t *testing.T) {
+-	testCases := []struct {
+-		pkg  string
+-		fail bool
+-	}{
+-		{
+-			pkg:  "./testdata/nonexistent-dir",
+-			fail: true,
+-		},
+-		{
+-			pkg: "./testdata/dir-without-gofiles",
+-		},
+-		{
+-			pkg: "./testdata/dir-with-gofiles",
+-		},
+-	}
+-
+-	for i, tc := range testCases {
+-		_, err := findPackage(tc.pkg)
+-		if err != nil && tc.fail {
+-			continue
+-		}
+-		if err != nil {
+-			t.Errorf("[%d] unexpected error: %v", i, err)
+-			continue
+-		}
+-		if tc.fail {
+-			t.Errorf("[%d] expected error", i)
+-			continue
+-		}
+-	}
+-}
+-
+-func Test_readDirInfos(t *testing.T) {
+-	testCases := []struct {
+-		dir      string
+-		fail     bool
+-		expected map[string]bool
+-	}{
+-		{
+-			dir:  "./testdata/nonexistent-dir",
+-			fail: true,
+-		},
+-		{
+-			dir:      "./testdata/dir-without-gofiles",
+-			expected: map[string]bool{"README": true},
+-		},
+-		{
+-			dir: "./testdata/dir-with-gofiles",
+-			expected: map[string]bool{
+-				"README":      true,
+-				"foo.go":      true,
+-				"bar.go":      true,
+-				"subdir":      true,
+-				"testdata":    true,
+-				"_underscore": true,
+-				".dot":        true,
+-				"skipme":      true,
+-			},
+-		},
+-	}
+-
+-	for i, tc := range testCases {
+-		infos, err := readDirInfos(tc.dir)
+-		if err != nil && tc.fail {
+-			continue
+-		}
+-		if err != nil {
+-			t.Errorf("[%d] unexpected error: %v", i, err)
+-			continue
+-		}
+-		if tc.fail {
+-			t.Errorf("[%d] expected error", i)
+-			continue
+-		}
+-		result := make([]string, len(infos))
+-		sorted := make([]string, len(infos))
+-		for i, inf := range infos {
+-			result[i] = inf.Name()
+-			sorted[i] = inf.Name()
+-		}
+-		sort.Strings(sorted)
+-		if !reflect.DeepEqual(result, sorted) {
+-			t.Errorf("[%d] result was not sorted: %v", i, result)
+-		}
+-		for _, r := range result {
+-			if !tc.expected[r] {
+-				t.Errorf("[%d] got unexpected result: %s", i, r)
+-			} else {
+-				delete(tc.expected, r)
+-			}
+-		}
+-		for r := range tc.expected {
+-			t.Errorf("[%d] missing expected result: %s", i, r)
+-		}
+-	}
+-}
+-
+-func Test_readDirNames(t *testing.T) {
+-	testCases := []struct {
+-		dir      string
+-		fail     bool
+-		expected map[string]bool
+-	}{
+-		{
+-			dir:  "./testdata/nonexistent-dir",
+-			fail: true,
+-		},
+-		{
+-			dir:      "./testdata/dir-without-gofiles",
+-			expected: map[string]bool{"README": true},
+-		},
+-		{
+-			dir: "./testdata/dir-with-gofiles",
+-			expected: map[string]bool{
+-				"README":      true,
+-				"foo.go":      true,
+-				"bar.go":      true,
+-				"subdir":      true,
+-				"testdata":    true,
+-				"_underscore": true,
+-				".dot":        true,
+-				"skipme":      true,
+-			},
+-		},
+-	}
+-
+-	for i, tc := range testCases {
+-		result, err := readDirNames(tc.dir)
+-		if err != nil && tc.fail {
+-			continue
+-		}
+-		if err != nil {
+-			t.Errorf("[%d] unexpected error: %v", i, err)
+-			continue
+-		}
+-		if tc.fail {
+-			t.Errorf("[%d] expected error", i)
+-			continue
+-		}
+-		for _, r := range result {
+-			if !tc.expected[r] {
+-				t.Errorf("[%d] got unexpected result: %s", i, r)
+-			} else {
+-				delete(tc.expected, r)
+-			}
+-		}
+-		for r := range tc.expected {
+-			t.Errorf("[%d] missing expected result: %s", i, r)
+-		}
+-	}
+-}
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/subsubdir/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/subsubdir/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/.dot/subsubdir/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/subsubdir/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/subsubdir/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/_underscore/subsubdir/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/foo.go b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/foo.go
+deleted file mode 100644
+index 4b6f08251ea..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/foo.go
++++ /dev/null
+@@ -1,20 +0,0 @@
+-/*
+-Copyright 2017 The Kubernetes Authors.
+-
+-Licensed under the Apache License, Version 2.0 (the "License");
+-you may not use this file except in compliance with the License.
+-You may obtain a copy of the License at
+-
+-    http://www.apache.org/licenses/LICENSE-2.0
+-
+-Unless required by applicable law or agreed to in writing, software
+-distributed under the License is distributed on an "AS IS" BASIS,
+-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+-See the License for the specific language governing permissions and
+-limitations under the License.
+-*/
+-
+-package gofiles
+-
+-func Foo() {
+-}
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/subsubdir/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/subsubdir/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/skipme/subsubdir/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/subdir/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/subdir/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/subdir/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/subsubdir/README b/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/subsubdir/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/testdata/subsubdir/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-without-gofiles/README b/hack/make-rules/helpers/go2make/testdata/dir-without-gofiles/README
+deleted file mode 100644
+index e845566c06f..00000000000
+--- a/hack/make-rules/helpers/go2make/testdata/dir-without-gofiles/README
++++ /dev/null
+@@ -1 +0,0 @@
+-README
+diff --git a/hack/make-rules/update.sh b/hack/make-rules/update.sh
+index b41e6191ea8..25f8dc3be3a 100755
+--- a/hack/make-rules/update.sh
++++ b/hack/make-rules/update.sh
+@@ -22,14 +22,6 @@ set -o pipefail
+ KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/../..
+ source "${KUBE_ROOT}/hack/lib/init.sh"
+ 
+-# If called directly, exit.
+-if [[ "${CALLED_FROM_MAIN_MAKEFILE:-""}" == "" ]]; then
+-    echo "ERROR: $0 should not be run directly." >&2
+-    echo >&2
+-    echo "Please run this command using \"make update\""
+-    exit 1
+-fi
+-
+ SILENT=${SILENT:-true}
+ ALL=${FORCE_ALL:-false}
+ 
+diff --git a/hack/make-rules/verify.sh b/hack/make-rules/verify.sh
+index 7f56de372c9..ab412dbda88 100755
+--- a/hack/make-rules/verify.sh
++++ b/hack/make-rules/verify.sh
+@@ -38,13 +38,6 @@ EXCLUDED_PATTERNS=(
+   "verify-licenses.sh"           # runs in a separate job to monitor availability of the dependencies periodically
+   )
+ 
+-# Exclude generated-files-remake in certain cases, if they're running in a separate job.
+-if [[ ${EXCLUDE_FILES_REMAKE:-} =~ ^[yY]$ ]]; then
+-  EXCLUDED_PATTERNS+=(
+-    "verify-generated-files-remake.sh" # run in a separate job
+-    )
+-fi
+-
+ # Exclude typecheck in certain cases, if they're running in a separate job.
+ if [[ ${EXCLUDE_TYPECHECK:-} =~ ^[yY]$ ]]; then
+   EXCLUDED_PATTERNS+=(
+diff --git a/hack/make-rules/vet.sh b/hack/make-rules/vet.sh
+index c63d6f778d6..a8b2ab3ada9 100755
+--- a/hack/make-rules/vet.sh
++++ b/hack/make-rules/vet.sh
+@@ -23,14 +23,6 @@ source "${KUBE_ROOT}/hack/lib/init.sh"
+ 
+ cd "${KUBE_ROOT}"
+ 
+-# If called directly, exit.
+-if [[ "${CALLED_FROM_MAIN_MAKEFILE:-""}" == "" ]]; then
+-    echo "ERROR: $0 should not be run directly." >&2
+-    echo >&2
+-    echo "Please run this command using \"make vet\""
+-    exit 1
+-fi
+-
+ # Filter out arguments that start with "-" and move them to goflags.
+ targets=()
+ for arg; do
+diff --git a/hack/update-codegen.sh b/hack/update-codegen.sh
+index c4bbfb5e9be..4e606d95550 100755
+--- a/hack/update-codegen.sh
++++ b/hack/update-codegen.sh
+@@ -1,5 +1,4 @@
+ #!/usr/bin/env bash
+-
+ # Copyright 2014 The Kubernetes Authors.
+ #
+ # Licensed under the Apache License, Version 2.0 (the "License");
+@@ -14,104 +13,821 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# Please do not add any logic to this shell script. Add logic to the go code
+-# that generates the set-gen program.
++# shellcheck disable=2046 # printf word-splitting is intentional
+ 
+ set -o errexit
+ set -o nounset
+ set -o pipefail
+ 
++# This tool wants a different default than usual.
++KUBE_VERBOSE="${KUBE_VERBOSE:-1}"
++
+ KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+ source "${KUBE_ROOT}/hack/lib/init.sh"
++cd "${KUBE_ROOT}"
+ 
+ kube::golang::setup_env
+ 
+-GO111MODULE=on GOPROXY=off go install k8s.io/kubernetes/pkg/generated/openapi/cmd/models-schema
+-GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/client-gen
+-GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/lister-gen
+-GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/informer-gen
+-GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/applyconfiguration-gen
+-
+-modelsschema=$(kube::util::find-binary "models-schema")
+-clientgen=$(kube::util::find-binary "client-gen")
+-listergen=$(kube::util::find-binary "lister-gen")
+-informergen=$(kube::util::find-binary "informer-gen")
+-applyconfigurationgen=$(kube::util::find-binary "applyconfiguration-gen")
+-
+-IFS=" " read -r -a GROUP_VERSIONS <<< "${KUBE_AVAILABLE_GROUP_VERSIONS}"
+-GV_DIRS=()
+-for gv in "${GROUP_VERSIONS[@]}"; do
+-  # add items, but strip off any leading apis/ you find to match command expectations
+-  api_dir=$(kube::util::group-version-to-pkg-path "${gv}")
+-  nopkg_dir=${api_dir#pkg/}
+-  nopkg_dir=${nopkg_dir#vendor/k8s.io/api/}
+-  pkg_dir=${nopkg_dir#apis/}
+-
+-
+-  # skip groups that aren't being served, clients for these don't matter
+-  if [[ " ${KUBE_NONSERVER_GROUP_VERSIONS} " == *" ${gv} "* ]]; then
+-    continue
+-  fi
+-
+-  GV_DIRS+=("${pkg_dir}")
++DBG_CODEGEN="${DBG_CODEGEN:-0}"
++GENERATED_FILE_PREFIX="${GENERATED_FILE_PREFIX:-zz_generated.}"
++UPDATE_API_KNOWN_VIOLATIONS="${UPDATE_API_KNOWN_VIOLATIONS:-}"
++
++OUT_DIR="_output"
++BIN_DIR="${OUT_DIR}/bin"
++PRJ_SRC_PATH="k8s.io/kubernetes"
++BOILERPLATE_FILENAME="vendor/k8s.io/code-generator/hack/boilerplate.go.txt"
++APPLYCONFIG_PKG="k8s.io/client-go/applyconfigurations"
++
++if [[ "${DBG_CODEGEN}" == 1 ]]; then
++    kube::log::status "DBG: starting generated_files"
++fi
++
++# This is a partial 'find' command.  The caller is expected to pass the
++# remaining arguments.
++#
++# Example:
++#   kfind -type f -name foobar.go
++function kfind() {
++    # We want to include the "special" vendor directories which are actually
++    # part of the Kubernetes source tree (./staging/*) but we need them to be
++    # named as their ./vendor/* equivalents.  Also, we do not want all of
++    # ./vendor nor ./hack/tools/vendor nor even all of ./vendor/k8s.io.
++    find -H .                      \
++        \(                         \
++        -not \(                    \
++            \(                     \
++                -name '_*' -o      \
++                -name '.[^.]*' -o  \
++                \(                 \
++                  -name 'vendor'   \
++                  -type d          \
++                \) -o              \
++                \(                 \
++                  -name 'testdata' \
++                  -type d          \
++                \)                 \
++            \) -prune              \
++        \)                         \
++        \)                         \
++        "$@"                       \
++        | sed 's|^./staging/src|vendor|'
++}
++
++function find_all_go_dirs() {
++    kfind -type f -name \*.go  \
++        | sed 's|/[^/]*$||'    \
++        | sed 's|^./||'        \
++        | LC_ALL=C sort -u
++}
++
++# This variable holds a list of every directory that contains Go files in this
++# project.  Other rules and variables can use this as a starting point to
++# reduce filesystem accesses.
++if [[ "${DBG_CODEGEN}" == 1 ]]; then
++    kube::log::status "DBG: finding all *.go dirs"
++fi
++ALL_GO_DIRS=()
++kube::util::read-array ALL_GO_DIRS < <(find_all_go_dirs)
++if [[ "${DBG_CODEGEN}" == 1 ]]; then
++    kube::log::status "DBG: found ${#ALL_GO_DIRS[@]} *.go dirs"
++fi
++
++# Generate a list of all files that have a `+k8s:` comment-tag.  This will be
++# used to derive lists of files/dirs for generation tools.
++if [[ "${DBG_CODEGEN}" == 1 ]]; then
++    kube::log::status "DBG: finding all +k8s: tags"
++fi
++ALL_K8S_TAG_FILES=()
++kube::util::read-array ALL_K8S_TAG_FILES < <(
++    find "${ALL_GO_DIRS[@]}" -maxdepth 1 -type f -name \*.go -print0 \
++        | xargs -0 grep --color=never -l '^// *+k8s:')
++if [[ "${DBG_CODEGEN}" == 1 ]]; then
++    kube::log::status "DBG: found ${#ALL_K8S_TAG_FILES[@]} +k8s: tagged files"
++fi
++
++#
++# Code generation logic.
++#
++
++# prerelease-lifecycle generation
++#
++# Any package that wants prerelease-lifecycle functions generated must include a
++# comment-tag in column 0 of one file of the form:
++#     // +k8s:prerelease-lifecycle-gen=true
++function codegen::prerelease() {
++    # Build the tool.
++    hack/make-rules/build.sh k8s.io/code-generator/cmd/prerelease-lifecycle-gen
++
++    # The result file, in each pkg, of prerelease-lifecycle generation.
++    local output_base="${GENERATED_FILE_PREFIX}prerelease-lifecycle"
++
++    # The tool used to generate prerelease-lifecycle code.
++    local gen_prerelease_bin="${BIN_DIR}/prerelease-lifecycle-gen"
++
++    # Find all the directories that request prerelease-lifecycle generation.
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: finding all +k8s:prerelease-lifecycle-gen tags"
++    fi
++    local tag_dirs=()
++    kube::util::read-array tag_dirs < <( \
++        grep --color=never -l '+k8s:prerelease-lifecycle-gen=true' "${ALL_K8S_TAG_FILES[@]}" \
++            | xargs -n1 dirname \
++            | LC_ALL=C sort -u)
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: found ${#tag_dirs[@]} +k8s:prerelease-lifecycle-gen tagged dirs"
++    fi
++
++    local tag_pkgs=()
++    for dir in "${tag_dirs[@]}"; do
++        tag_pkgs+=("${PRJ_SRC_PATH}/$dir")
++    done
++
++    kube::log::status "Generating prerelease-lifecycle code for ${#tag_pkgs[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${gen_prerelease_bin} for:"
++        for dir in "${tag_dirs[@]}"; do
++            kube::log::status "DBG:     $dir"
++        done
++    fi
++
++    ./hack/run-in-gopath.sh "${gen_prerelease_bin}" \
++        --v "${KUBE_VERBOSE}" \
++        --logtostderr \
++        -h "${BOILERPLATE_FILENAME}" \
++        -O "${output_base}" \
++        $(printf -- " -i %s" "${tag_pkgs[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated prerelease-lifecycle code"
++    fi
++}
++
++# Deep-copy generation
++#
++# Any package that wants deep-copy functions generated must include a
++# comment-tag in column 0 of one file of the form:
++#     // +k8s:deepcopy-gen=<VALUE>
++#
++# The <VALUE> may be one of:
++#     generate: generate deep-copy functions into the package
++#     register: generate deep-copy functions and register them with a
++#               scheme
++function codegen::deepcopy() {
++    # Build the tool.
++    hack/make-rules/build.sh k8s.io/code-generator/cmd/deepcopy-gen
++
++    # The result file, in each pkg, of deep-copy generation.
++    local output_base="${GENERATED_FILE_PREFIX}deepcopy"
++
++    # The tool used to generate deep copies.
++    local gen_deepcopy_bin="${BIN_DIR}/deepcopy-gen"
++
++    # Find all the directories that request deep-copy generation.
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: finding all +k8s:deepcopy-gen tags"
++    fi
++    local tag_dirs=()
++    kube::util::read-array tag_dirs < <( \
++        grep --color=never -l '+k8s:deepcopy-gen=' "${ALL_K8S_TAG_FILES[@]}" \
++            | xargs -n1 dirname \
++            | LC_ALL=C sort -u)
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: found ${#tag_dirs[@]} +k8s:deepcopy-gen tagged dirs"
++    fi
++
++    local tag_pkgs=()
++    for dir in "${tag_dirs[@]}"; do
++        tag_pkgs+=("${PRJ_SRC_PATH}/$dir")
++    done
++
++    kube::log::status "Generating deepcopy code for ${#tag_pkgs[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${gen_deepcopy_bin} for:"
++        for dir in "${tag_dirs[@]}"; do
++            kube::log::status "DBG:     $dir"
++        done
++    fi
++
++    ./hack/run-in-gopath.sh "${gen_deepcopy_bin}" \
++        --v "${KUBE_VERBOSE}" \
++        --logtostderr \
++        -h "${BOILERPLATE_FILENAME}" \
++        -O "${output_base}" \
++        --bounding-dirs "${PRJ_SRC_PATH},k8s.io/api" \
++        $(printf -- " -i %s" "${tag_pkgs[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated deepcopy code"
++    fi
++}
++
++# Defaulter generation
++#
++# Any package that wants defaulter functions generated must include a
++# comment-tag in column 0 of one file of the form:
++#     // +k8s:defaulter-gen=<VALUE>
++#
++# The <VALUE> depends on context:
++#     on types:
++#       true:  always generate a defaulter for this type
++#       false: never generate a defaulter for this type
++#     on functions:
++#       covers: if the function name matches SetDefault_NAME, instructs
++#               the generator not to recurse
++#     on packages:
++#       FIELDNAME: any object with a field of this name is a candidate
++#                  for having a defaulter generated
++function codegen::defaults() {
++    # Build the tool.
++    hack/make-rules/build.sh k8s.io/code-generator/cmd/defaulter-gen
++
++    # The result file, in each pkg, of defaulter generation.
++    local output_base="${GENERATED_FILE_PREFIX}defaults"
++
++    # The tool used to generate defaulters.
++    local gen_defaulter_bin="${BIN_DIR}/defaulter-gen"
++
++    # All directories that request any form of defaulter generation.
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: finding all +k8s:defaulter-gen tags"
++    fi
++    local tag_dirs=()
++    kube::util::read-array tag_dirs < <( \
++        grep --color=never -l '+k8s:defaulter-gen=' "${ALL_K8S_TAG_FILES[@]}" \
++            | xargs -n1 dirname \
++            | LC_ALL=C sort -u)
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: found ${#tag_dirs[@]} +k8s:defaulter-gen tagged dirs"
++    fi
++
++    local tag_pkgs=()
++    for dir in "${tag_dirs[@]}"; do
++        tag_pkgs+=("${PRJ_SRC_PATH}/$dir")
++    done
++
++    kube::log::status "Generating defaulter code for ${#tag_pkgs[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${gen_defaulter_bin} for:"
++        for dir in "${tag_dirs[@]}"; do
++            kube::log::status "DBG:     $dir"
++        done
++    fi
++
++    ./hack/run-in-gopath.sh "${gen_defaulter_bin}" \
++        --v "${KUBE_VERBOSE}" \
++        --logtostderr \
++        -h "${BOILERPLATE_FILENAME}" \
++        -O "${output_base}" \
++        $(printf -- " --extra-peer-dirs %s" "${tag_pkgs[@]}") \
++        $(printf -- " -i %s" "${tag_pkgs[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated defaulter code"
++    fi
++}
++
++# Conversion generation
++
++# Any package that wants conversion functions generated into it must
++# include one or more comment-tags in its `doc.go` file, of the form:
++#     // +k8s:conversion-gen=<INTERNAL_TYPES_DIR>
++#
++# The INTERNAL_TYPES_DIR is a project-local path to another directory
++# which should be considered when evaluating peer types for
++# conversions.  An optional additional comment of the form
++#     // +k8s:conversion-gen-external-types=<EXTERNAL_TYPES_DIR>
++#
++# identifies where to find the external types; if there is no such
++# comment then the external types are sought in the package where the
++# `k8s:conversion` tag is found.
++#
++# Conversions, in both directions, are generated for every type name
++# that is defined in both an internal types package and the external
++# types package.
++#
++# TODO: it might be better in the long term to make peer-types explicit in the
++# IDL.
++function codegen::conversions() {
++    # Build the tool.
++    hack/make-rules/build.sh k8s.io/code-generator/cmd/conversion-gen
++
++    # The result file, in each pkg, of conversion generation.
++    local output_base="${GENERATED_FILE_PREFIX}conversion"
++
++    # The tool used to generate conversions.
++    local gen_conversion_bin="${BIN_DIR}/conversion-gen"
++
++    # All directories that request any form of conversion generation.
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: finding all +k8s:conversion-gen tags"
++    fi
++    local tag_dirs=()
++    kube::util::read-array tag_dirs < <(\
++        grep --color=never -l '^// *+k8s:conversion-gen=' "${ALL_K8S_TAG_FILES[@]}" \
++            | xargs -n1 dirname \
++            | LC_ALL=C sort -u)
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: found ${#tag_dirs[@]} +k8s:conversion-gen tagged dirs"
++    fi
++
++    local tag_pkgs=()
++    for dir in "${tag_dirs[@]}"; do
++        tag_pkgs+=("${PRJ_SRC_PATH}/$dir")
++    done
++
++    local extra_peer_pkgs=(
++        k8s.io/kubernetes/pkg/apis/core
++        k8s.io/kubernetes/pkg/apis/core/v1
++        k8s.io/api/core/v1
++    )
++
++    kube::log::status "Generating conversion code for ${#tag_pkgs[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${gen_conversion_bin} for:"
++        for dir in "${tag_dirs[@]}"; do
++            kube::log::status "DBG:     $dir"
++        done
++    fi
++
++    ./hack/run-in-gopath.sh "${gen_conversion_bin}" \
++        --v "${KUBE_VERBOSE}" \
++        --logtostderr \
++        -h "${BOILERPLATE_FILENAME}" \
++        -O "${output_base}" \
++        $(printf -- " --extra-peer-dirs %s" "${extra_peer_pkgs[@]}") \
++        $(printf -- " --extra-dirs %s" "${tag_pkgs[@]}") \
++        $(printf -- " -i %s" "${tag_pkgs[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated conversion code"
++    fi
++}
++
++# $@: directories to exclude
++# example:
++#    k8s_tag_files_except foo bat/qux
++function k8s_tag_files_except() {
++    for f in "${ALL_K8S_TAG_FILES[@]}"; do
++        local excl=""
++        for x in "$@"; do
++            if [[ "$f" =~ "$x"/.* ]]; then
++                excl="true"
++                break
++            fi
++        done
++        if [[ "${excl}" != true ]]; then
++            echo "$f"
++        fi
++    done
++}
++
++# $@: directories to exclude
++# example:
++#    k8s_tag_files_matching foo bat/qux
++function k8s_tag_files_matching() {
++    for f in "${ALL_K8S_TAG_FILES[@]}"; do
++        for x in "$@"; do
++            if [[ "$f" =~ "${x}"/.* ]]; then
++                echo "$f"
++                break
++            fi
++        done
++    done
++}
++
++# $1: the name of a scalar variable to read
++# example:
++#    FOO_VAR="foo value"
++#    BAR_VAR="bar value"
++#    x=FOO
++#    indirect "${x}_VAR" # -> "foo value\n"
++function indirect() {
++    # This is a trick to get bash to indirectly read a variable.
++    # Thanks StackOverflow!
++    local var="$1"
++    echo "${!var}"
++}
++
++# $1: the name of an array variable to read
++#    FOO_ARR=(a b c)
++#    BAR_ARR=(1 2 3)
++#    x=FOO
++#    indirect_array "${x}_ARR" # -> "a\nb\nc\n"
++function indirect_array() {
++    # This is a trick to get bash to indirectly read an array.
++    # Thanks StackOverflow!
++    local arrayname="$1"
++    # shellcheck disable=SC1087 # intentional
++    local tmp="$arrayname[@]"
++    printf -- "%s\n" "${!tmp}"
++}
++
++# OpenAPI generation
++#
++# Any package that wants open-api functions generated must include a
++# comment-tag in column 0 of one file of the form:
++#     // +k8s:openapi-gen=true
++function codegen::openapi() {
++    # Build the tool.
++    hack/make-rules/build.sh k8s.io/kube-openapi/cmd/openapi-gen
++
++    # The result file, in each pkg, of open-api generation.
++    local output_base="${GENERATED_FILE_PREFIX}openapi"
++
++    # The tool used to generate open apis.
++    local gen_openapi_bin="${BIN_DIR}/openapi-gen"
++
++    # Standard dirs which all targets need.
++    local apimachinery_dirs=(
++        vendor/k8s.io/apimachinery/pkg/apis/meta/v1
++        vendor/k8s.io/apimachinery/pkg/runtime
++        vendor/k8s.io/apimachinery/pkg/version
++    )
++
++    # These should probably be configured by tags in code-files somewhere.
++    local targets=(
++        KUBE
++        AGGREGATOR
++        APIEXTENSIONS
++        CODEGEN
++        SAMPLEAPISERVER
++    )
++
++    # shellcheck disable=SC2034 # used indirectly
++    local KUBE_output_dir="pkg/generated/openapi"
++    # shellcheck disable=SC2034 # used indirectly
++    local KUBE_known_violations_file="api/api-rules/violation_exceptions.list"
++    # shellcheck disable=SC2034 # used indirectly
++    local KUBE_tag_files=()
++    kube::util::read-array KUBE_tag_files < <(
++        k8s_tag_files_except \
++            vendor/k8s.io/code-generator \
++            vendor/k8s.io/sample-apiserver
++        )
++
++    # shellcheck disable=SC2034 # used indirectly
++    local AGGREGATOR_output_dir="staging/src/k8s.io/kube-aggregator/pkg/generated/openapi"
++    # shellcheck disable=SC2034 # used indirectly
++    local AGGREGATOR_known_violations_file="api/api-rules/aggregator_violation_exceptions.list"
++    # shellcheck disable=SC2034 # used indirectly
++    local AGGREGATOR_tag_files=()
++    kube::util::read-array AGGREGATOR_tag_files < <(
++        k8s_tag_files_matching \
++            vendor/k8s.io/kube-aggregator \
++            "${apimachinery_dirs[@]}"
++        )
++
++    # shellcheck disable=SC2034 # used indirectly
++    local APIEXTENSIONS_output_dir="staging/src/k8s.io/apiextensions-apiserver/pkg/generated/openapi"
++    # shellcheck disable=SC2034 # used indirectly
++    local APIEXTENSIONS_known_violations_file="api/api-rules/apiextensions_violation_exceptions.list"
++    # shellcheck disable=SC2034 # used indirectly
++    local APIEXTENSIONS_tag_files=()
++    kube::util::read-array APIEXTENSIONS_tag_files < <(
++        k8s_tag_files_matching \
++            vendor/k8s.io/apiextensions \
++            vendor/k8s.io/api/autoscaling/v1 \
++            "${apimachinery_dirs[@]}"
++        )
++
++    # shellcheck disable=SC2034 # used indirectly
++    local CODEGEN_output_dir="staging/src/k8s.io/code-generator/examples/apiserver/openapi"
++    # shellcheck disable=SC2034 # used indirectly
++    local CODEGEN_known_violations_file="api/api-rules/codegen_violation_exceptions.list"
++    # shellcheck disable=SC2034 # used indirectly
++    local CODEGEN_tag_files=()
++    kube::util::read-array CODEGEN_tag_files < <(
++        k8s_tag_files_matching \
++            vendor/k8s.io/code-generator \
++            "${apimachinery_dirs[@]}"
++        )
++
++    # shellcheck disable=SC2034 # used indirectly
++    local SAMPLEAPISERVER_output_dir="staging/src/k8s.io/sample-apiserver/pkg/generated/openapi"
++    # shellcheck disable=SC2034 # used indirectly
++    local SAMPLEAPISERVER_known_violations_file="api/api-rules/sample_apiserver_violation_exceptions.list"
++    # shellcheck disable=SC2034 # used indirectly
++    local SAMPLEAPISERVER_tag_files=()
++    kube::util::read-array SAMPLEAPISERVER_tag_files < <(
++        k8s_tag_files_matching \
++            vendor/k8s.io/sample-apiserver \
++            "${apimachinery_dirs[@]}"
++        )
++
++    for prefix in "${targets[@]}"; do
++        local report_file="${OUT_DIR}/${prefix}_violations.report"
++        # When UPDATE_API_KNOWN_VIOLATIONS is set to be true, let the generator to write
++        # updated API violations to the known API violation exceptions list.
++        if [[ "${UPDATE_API_KNOWN_VIOLATIONS}" == true ]]; then
++            report_file=$(indirect "${prefix}_known_violations_file")
++        fi
++
++        # 2 lines because shellcheck
++        local output_dir
++        output_dir=$(indirect "${prefix}_output_dir")
++
++        if [[ "${DBG_CODEGEN}" == 1 ]]; then
++            kube::log::status "DBG: finding all +k8s:openapi-gen tags for ${prefix}"
++        fi
++
++        local tag_dirs=()
++        kube::util::read-array tag_dirs < <(
++            grep --color=never -l '+k8s:openapi-gen=' $(indirect_array "${prefix}_tag_files") \
++                | xargs -n1 dirname \
++                | LC_ALL=C sort -u
++            )
++
++        if [[ "${DBG_CODEGEN}" == 1 ]]; then
++            kube::log::status "DBG: found ${#tag_dirs[@]} +k8s:openapi-gen tagged dirs for ${prefix}"
++        fi
++
++        local tag_pkgs=()
++        for dir in "${tag_dirs[@]}"; do
++            tag_pkgs+=("${PRJ_SRC_PATH}/$dir")
++        done
++
++        kube::log::status "Generating openapi code for ${prefix}"
++        if [[ "${DBG_CODEGEN}" == 1 ]]; then
++            kube::log::status "DBG: running ${gen_openapi_bin} for:"
++            for dir in "${tag_dirs[@]}"; do
++                kube::log::status "DBG:     $dir"
++            done
++        fi
++
++        ./hack/run-in-gopath.sh ${gen_openapi_bin} \
++            --v "${KUBE_VERBOSE}" \
++            --logtostderr \
++            -h "${BOILERPLATE_FILENAME}" \
++            -O "${output_base}" \
++            -p "${PRJ_SRC_PATH}/${output_dir}" \
++            -r "${report_file}" \
++            $(printf -- " -i %s" "${tag_pkgs[@]}") \
++            "$@"
++
++        touch "${report_file}"
++        # 2 lines because shellcheck
++        local known_filename
++        known_filename=$(indirect "${prefix}_known_violations_file")
++        if ! diff -u "${known_filename}" "${report_file}"; then
++            echo -e "ERROR:"
++            echo -e "\t'${prefix}' API rule check failed - reported violations differ from known violations"
++            echo -e "\tPlease read api/api-rules/README.md to resolve the failure in ${known_filename}"
++        fi
++
++        if [[ "${DBG_CODEGEN}" == 1 ]]; then
++            kube::log::status "Generated openapi code"
++        fi
++    done # for each prefix
++}
++
++function codegen::applyconfigs() {
++    GO111MODULE=on GOPROXY=off go install \
++        k8s.io/kubernetes/pkg/generated/openapi/cmd/models-schema \
++        k8s.io/code-generator/cmd/applyconfiguration-gen
++
++    local modelsschema
++    modelsschema=$(kube::util::find-binary "models-schema")
++    local applyconfigurationgen
++    applyconfigurationgen=$(kube::util::find-binary "applyconfiguration-gen")
++
++    # because client-gen doesn't do policy/v1alpha1, we have to skip it too
++    local ext_apis=()
++    kube::util::read-array ext_apis < <(
++      cd "${KUBE_ROOT}/staging/src"
++      find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort | grep -v pkg.apis.policy.v1alpha1
++    )
++    ext_apis+=("k8s.io/apimachinery/pkg/apis/meta/v1")
++
++    kube::log::status "Generating apply-config code for ${#ext_apis[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${applyconfigurationgen} for:"
++        for api in "${ext_apis[@]}"; do
++            kube::log::status "DBG:     $api"
++        done
++    fi
++
++    "${applyconfigurationgen}" \
++        --openapi-schema <("${modelsschema}") \
++        --go-header-file "${BOILERPLATE_FILENAME}" \
++        --output-base "${KUBE_ROOT}/vendor" \
++        --output-package "${APPLYCONFIG_PKG}" \
++        $(printf -- " --input-dirs %s" "${ext_apis[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated apply-config code"
++    fi
++}
++
++function codegen::clients() {
++    GO111MODULE=on GOPROXY=off go install \
++        k8s.io/code-generator/cmd/client-gen
++
++    local clientgen
++    clientgen=$(kube::util::find-binary "client-gen")
++
++    IFS=" " read -r -a group_versions <<< "${KUBE_AVAILABLE_GROUP_VERSIONS}"
++    local gv_dirs=()
++    for gv in "${group_versions[@]}"; do
++        # add items, but strip off any leading apis/ you find to match command expectations
++        local api_dir
++        api_dir=$(kube::util::group-version-to-pkg-path "${gv}")
++        local nopkg_dir=${api_dir#pkg/}
++        nopkg_dir=${nopkg_dir#vendor/k8s.io/api/}
++        local pkg_dir=${nopkg_dir#apis/}
++
++        # skip groups that aren't being served, clients for these don't matter
++        if [[ " ${KUBE_NONSERVER_GROUP_VERSIONS} " == *" ${gv} "* ]]; then
++          continue
++        fi
++
++        gv_dirs+=("${pkg_dir}")
++    done
++
++    kube::log::status "Generating client code for ${#gv_dirs[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${clientgen} for:"
++        for dir in "${gv_dirs[@]}"; do
++            kube::log::status "DBG:     $dir"
++        done
++    fi
++
++    "${clientgen}" \
++        --go-header-file "${BOILERPLATE_FILENAME}" \
++        --output-base "${KUBE_ROOT}/vendor" \
++        --output-package="k8s.io/client-go" \
++        --clientset-name="kubernetes" \
++        --input-base="k8s.io/api" \
++        --apply-configuration-package "${APPLYCONFIG_PKG}" \
++        $(printf -- " --input %s" "${gv_dirs[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated client code"
++    fi
++}
++
++function codegen::listers() {
++    GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/lister-gen
++
++    local listergen
++    listergen=$(kube::util::find-binary "lister-gen")
++
++    local ext_apis=()
++    kube::util::read-array ext_apis < <(
++        cd "${KUBE_ROOT}/staging/src"
++        find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort
++    )
++
++    kube::log::status "Generating lister code for ${#ext_apis[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${listergen} for:"
++        for api in "${ext_apis[@]}"; do
++            kube::log::status "DBG:     $api"
++        done
++    fi
++
++    "${listergen}" \
++        --go-header-file "${BOILERPLATE_FILENAME}" \
++        --output-base "${KUBE_ROOT}/vendor" \
++        --output-package "k8s.io/client-go/listers" \
++        $(printf -- " --input-dirs %s" "${ext_apis[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated lister code"
++    fi
++}
++
++function codegen::informers() {
++    GO111MODULE=on GOPROXY=off go install \
++        k8s.io/code-generator/cmd/informer-gen
++
++    local informergen
++    informergen=$(kube::util::find-binary "informer-gen")
++
++    # because client-gen doesn't do policy/v1alpha1, we have to skip it too
++    local ext_apis=()
++    kube::util::read-array ext_apis < <(
++        cd "${KUBE_ROOT}/staging/src"
++        find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort | grep -v pkg.apis.policy.v1alpha1
++    )
++
++    kube::log::status "Generating informer code for ${#ext_apis[@]} targets"
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "DBG: running ${informergen} for:"
++        for api in "${ext_apis[@]}"; do
++            kube::log::status "DBG:     $api"
++        done
++    fi
++
++    "${informergen}" \
++        --go-header-file "${BOILERPLATE_FILENAME}" \
++        --output-base "${KUBE_ROOT}/vendor" \
++        --output-package "k8s.io/client-go/informers" \
++        --single-directory \
++        --versioned-clientset-package k8s.io/client-go/kubernetes \
++        --listers-package k8s.io/client-go/listers \
++        $(printf -- " --input-dirs %s" "${ext_apis[@]}") \
++        "$@"
++
++    if [[ "${DBG_CODEGEN}" == 1 ]]; then
++        kube::log::status "Generated informer code"
++    fi
++}
++
++function codegen::subprojects() {
++    # Call generation on sub-projects.
++    # TODO(thockin): make these take a list of codegens and flags
++    local subs=(
++        vendor/k8s.io/code-generator/hack/update-codegen.sh
++        vendor/k8s.io/kube-aggregator/hack/update-codegen.sh
++        vendor/k8s.io/sample-apiserver/hack/update-codegen.sh
++        vendor/k8s.io/sample-controller/hack/update-codegen.sh
++        vendor/k8s.io/apiextensions-apiserver/hack/update-codegen.sh
++        vendor/k8s.io/metrics/hack/update-codegen.sh
++        vendor/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh
++    )
++
++    for s in "${subs[@]}"; do 
++        CODEGEN_PKG=./vendor/k8s.io/code-generator "$s"
++    done
++}
++
++
++#
++# main
++#
++
++function list_codegens() {
++    (
++        shopt -s extdebug
++        declare -F \
++            | cut -f3 -d' ' \
++            | grep "^codegen::" \
++            | while read -r fn; do declare -F "$fn"; done \
++            | sort -n -k2 \
++            | cut -f1 -d' ' \
++            | sed 's/^codegen:://'
++    )
++}
++
++# shellcheck disable=SC2207 # safe, no functions have spaces
++all_codegens=($(list_codegens))
++
++function print_codegens() {
++    echo "available codegens:"
++    for g in "${all_codegens[@]}"; do
++        echo "    $g"
++    done
++}
++
++# Validate and accumulate flags to pass thru and codegens to run if args are
++# specified.
++flags_to_pass=()
++codegens_to_run=()
++for arg; do
++    # Use -? to list known codegens.
++    if [[ "${arg}" == "-?" ]]; then
++        print_codegens
++        exit 0
++    fi
++    if [[ "${arg}" =~ ^- ]]; then
++        flags_to_pass+=("${arg}")
++        continue
++    fi
++    # Make sure each non-flag arg matches at least one codegen.
++    nmatches=0
++    for t in "${all_codegens[@]}"; do
++        if [[ "$t" =~ ${arg} ]]; then
++            nmatches=$((nmatches+1))
++            # Don't run codegens twice, just keep the first match.
++            # shellcheck disable=SC2076 # we want literal matching
++            if [[ " ${codegens_to_run[*]} " =~ " $t " ]]; then
++                continue
++            fi
++            codegens_to_run+=("$t")
++            continue
++        fi
++    done
++    if [[ ${nmatches} == 0 ]]; then
++        echo "ERROR: no codegens match pattern '${arg}'"
++        echo
++        print_codegens
++        exit 1
++    fi
++    codegens_to_run+=("${matches[@]}")
++done
++
++# If no codegens were specified, run them all.
++if [[ "${#codegens_to_run[@]}" == 0 ]]; then
++    codegens_to_run=("${all_codegens[@]}")
++fi
++
++for g in "${codegens_to_run[@]}"; do
++    "codegen::${g}" "${flags_to_pass[@]}"
+ done
+-# delimit by commas for the command
+-GV_DIRS_CSV=$(IFS=',';echo "${GV_DIRS[*]// /,}";IFS=$)
+-
+-applyconfigurationgen_external_apis=()
+-# because client-gen doesn't do policy/v1alpha1, we have to skip it too
+-kube::util::read-array applyconfigurationgen_external_apis < <(
+-  cd "${KUBE_ROOT}/staging/src"
+-  find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort | grep -v pkg.apis.policy.v1alpha1
+-)
+-applyconfigurationgen_external_apis+=("k8s.io/apimachinery/pkg/apis/meta/v1")
+-applyconfigurationgen_external_apis_csv=$(IFS=,; echo "${applyconfigurationgen_external_apis[*]}")
+-applyconfigurations_package="k8s.io/client-go/applyconfigurations"
+-${applyconfigurationgen} \
+-  --openapi-schema <(${modelsschema}) \
+-  --output-base "${KUBE_ROOT}/vendor" \
+-  --output-package "${applyconfigurations_package}" \
+-  --input-dirs "${applyconfigurationgen_external_apis_csv}" \
+-  --go-header-file "${KUBE_ROOT}/hack/boilerplate/boilerplate.generatego.txt" \
+-  "$@"
+-
+-# This can be called with one flag, --verify-only, so it works for both the
+-# update- and verify- scripts.
+-${clientgen} --output-base "${KUBE_ROOT}/vendor" --output-package="k8s.io/client-go" --clientset-name="kubernetes" --input-base="k8s.io/api" --input="${GV_DIRS_CSV}" --apply-configuration-package "${applyconfigurations_package}" --go-header-file "${KUBE_ROOT}/hack/boilerplate/boilerplate.generatego.txt" "$@"
+-
+-listergen_external_apis=()
+-kube::util::read-array listergen_external_apis < <(
+-  cd "${KUBE_ROOT}/staging/src"
+-  find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort
+-)
+-listergen_external_apis_csv=$(IFS=,; echo "${listergen_external_apis[*]}")
+-${listergen} --output-base "${KUBE_ROOT}/vendor" --output-package "k8s.io/client-go/listers" --input-dirs "${listergen_external_apis_csv}" --go-header-file "${KUBE_ROOT}/hack/boilerplate/boilerplate.generatego.txt" "$@"
+-
+-informergen_external_apis=()
+-# because client-gen doesn't do policy/v1alpha1, we have to skip it too
+-kube::util::read-array informergen_external_apis < <(
+-  cd "${KUBE_ROOT}/staging/src"
+-  find k8s.io/api -name types.go -print0 | xargs -0 -n1 dirname | sort | grep -v pkg.apis.policy.v1alpha1
+-)
+-informergen_external_apis_csv=$(IFS=,; echo "${informergen_external_apis[*]}")
+-
+-${informergen} \
+-  --output-base "${KUBE_ROOT}/vendor" \
+-  --output-package "k8s.io/client-go/informers" \
+-  --single-directory \
+-  --input-dirs "${informergen_external_apis_csv}" \
+-  --versioned-clientset-package k8s.io/client-go/kubernetes \
+-  --listers-package k8s.io/client-go/listers \
+-  --go-header-file "${KUBE_ROOT}/hack/boilerplate/boilerplate.generatego.txt" \
+-  "$@"
+-
+-# You may add additional calls of code generators like set-gen above.
+-
+-# call generation on sub-project for now
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/code-generator/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/kube-aggregator/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/sample-apiserver/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/sample-controller/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/apiextensions-apiserver/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/metrics/hack/update-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh
+diff --git a/hack/verify-codegen.sh b/hack/verify-codegen.sh
+index cf4efdb10ad..7fd0a19a7ad 100755
+--- a/hack/verify-codegen.sh
++++ b/hack/verify-codegen.sh
+@@ -32,11 +32,15 @@ kube::golang::setup_env
+ #
+ # Note: these must be before the main script call because the later calls the sub-project's
+ #       update-codegen.sh scripts. We wouldn't see any error on changes then.
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/code-generator/hack/verify-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/kube-aggregator/hack/verify-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/sample-apiserver/hack/verify-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/sample-controller/hack/verify-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/apiextensions-apiserver/hack/verify-codegen.sh
+-CODEGEN_PKG=./vendor/k8s.io/code-generator vendor/k8s.io/metrics/hack/verify-codegen.sh
++export CODEGEN_PKG=./vendor/k8s.io/code-generator
++vendor/k8s.io/code-generator/hack/verify-codegen.sh
++vendor/k8s.io/kube-aggregator/hack/verify-codegen.sh
++vendor/k8s.io/sample-apiserver/hack/verify-codegen.sh
++vendor/k8s.io/sample-controller/hack/verify-codegen.sh
++vendor/k8s.io/apiextensions-apiserver/hack/verify-codegen.sh
++vendor/k8s.io/metrics/hack/verify-codegen.sh
+ 
+-"${KUBE_ROOT}/hack/update-codegen.sh" --verify-only
++# This won't actually update anything because of --verify-only, but it tells
++# the openapi tool to verify against the real filenames.
++export UPDATE_API_KNOWN_VIOLATIONS=true
++"${KUBE_ROOT}/hack/update-codegen.sh" --verify-only "$@"
+diff --git a/hack/verify-flags-underscore.py b/hack/verify-flags-underscore.py
+index e6de9483ae2..fbf16b70984 100755
+--- a/hack/verify-flags-underscore.py
++++ b/hack/verify-flags-underscore.py
+@@ -62,8 +62,6 @@ def get_all_files(rootdir):
+             dirs.remove('third_party')
+         if '.git' in dirs:
+             dirs.remove('.git')
+-        if '.make' in dirs:
+-            dirs.remove('.make')
+         if 'BUILD' in files:
+            files.remove('BUILD')
+ 
+diff --git a/hack/verify-generated-files-remake.sh b/hack/verify-generated-files-remake.sh
+index 35074f16aa6..6c06b86eb16 100755
+--- a/hack/verify-generated-files-remake.sh
++++ b/hack/verify-generated-files-remake.sh
+@@ -14,406 +14,5 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# This script verifies that the expected results are obtained when creating each
+-# type of file(e.g. codegen tool itself, a file in a package that needs codegen,
+-# and etc.) for verification and then generating the code(executes
+-# `make generated_files`).
+-# Usage: `hack/verify-generated-files-remake.sh`.
+-
+-set -o errexit
+-set -o nounset
+-set -o pipefail
+-
+-KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+-source "${KUBE_ROOT}/hack/lib/init.sh"
+-
+-kube::util::ensure_clean_working_dir
+-
+-_tmpdir="$(kube::realpath "$(mktemp -d -t verify-generated-files.XXXXXX)")"
+-_tmp_gopath="${_tmpdir}/go"
+-_tmp_kuberoot="${_tmp_gopath}/src/k8s.io/kubernetes"
+-mkdir -p "${_tmp_kuberoot}/.."
+-git worktree add "${_tmp_kuberoot}" HEAD
+-kube::util::trap_add "git worktree remove -f ${_tmp_kuberoot} && rm -rf ${_tmpdir}" EXIT
+-cd "${_tmp_kuberoot}"
+-
+-# clean out anything from the temp dir that's not checked in
+-git clean -ffxd
+-
+-# $1 = filename pattern as in "zz_generated.$1.go"
+-function find_genfiles() {
+-    find .                         \
+-        \(                         \
+-          -not \(                  \
+-            \(                     \
+-                -path ./_\* -o     \
+-                -path ./.\*        \
+-            \) -prune              \
+-          \)                       \
+-        \) -name "zz_generated.$1.go"
+-}
+-
+-# $1 = filename pattern as in "zz_generated.$1.go"
+-# $2 timestamp file
+-function newer() {
+-    find_genfiles "$1" | while read -r F; do
+-        if [[ "${F}" -nt "$2" ]]; then
+-            echo "${F}"
+-        fi
+-    done | LC_ALL=C sort
+-}
+-
+-# $1 = filename pattern as in "zz_generated.$1.go"
+-# $2 timestamp file
+-function older() {
+-    find_genfiles "$1" | while read -r F; do
+-        if [[ "$2" -nt "${F}" ]]; then
+-            echo "${F}"
+-        fi
+-    done | LC_ALL=C sort
+-}
+-
+-function assert_clean() {
+-    make generated_files >/dev/null
+-    touch "${STAMP}"
+-    make generated_files >/dev/null
+-    X="$(newer deepcopy "${STAMP}")"
+-    if [[ -n "${X}" ]]; then
+-        echo "Generated files changed on back-to-back 'make' runs:"
+-        echo "  ${X}" | tr '\n' ' '
+-        echo ""
+-        return 1
+-    fi
+-    true
+-}
+-
+-STAMP=/tmp/stamp.$RANDOM
+-
+-#
+-# Test when we touch a file in a package that needs codegen.
+-#
+-
+-assert_clean
+-
+-DIR=staging/src/k8s.io/sample-apiserver/pkg/apis/wardle/v1alpha1
+-touch "${DIR}/types.go"
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(newer deepcopy "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./${DIR}/zz_generated.deepcopy.go" ]]; then
+-    echo "Wrong generated deepcopy files changed after touching src file:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-X="$(newer defaults "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./${DIR}/zz_generated.defaults.go" ]]; then
+-    echo "Wrong generated defaults files changed after touching src file:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-X="$(newer conversion "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./${DIR}/zz_generated.conversion.go" ]]; then
+-    echo "Wrong generated conversion files changed after touching src file:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when the codegen tool itself changes: deepcopy
+-#
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/deepcopy-gen/main.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older deepcopy "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated deepcopy files did not change after touching code-generator file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/deepcopy-gen/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older deepcopy "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated deepcopy files did not change after touching code-generator dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/gengo/examples/deepcopy-gen/generators/deepcopy.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older deepcopy "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated deepcopy files did not change after touching code-generator dep file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/gengo/examples/deepcopy-gen/generators/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older deepcopy "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated deepcopy files did not change after touching code-generator dep dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when the codegen tool itself changes: defaults
+-#
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/defaulter-gen/main.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older defaults "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated defaults files did not change after touching code-generator file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/defaulter-gen/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older defaults "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated defaults files did not change after touching code-generator dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/gengo/examples/defaulter-gen/generators/defaulter.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older defaults "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated defaults files did not change after touching code-generator dep file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/gengo/examples/defaulter-gen/generators/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older defaults "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated defaults files did not change after touching code-generator dep dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when the codegen tool itself changes: conversion
+-#
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/conversion-gen/main.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older conversion "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated conversion files did not change after touching code-generator file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch staging/src/k8s.io/code-generator/cmd/conversion-gen/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older conversion "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated conversion files did not change after touching code-generator dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/code-generator/cmd/conversion-gen/generators/conversion.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older conversion "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated conversion files did not change after touching code-generator dep file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/code-generator/cmd/conversion-gen/generators/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older conversion "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated conversion files did not change after touching code-generator dep dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when we touch a file in a package that needs codegen for all openapi specs.
+-#
+-
+-assert_clean
+-
+-touch "staging/src/k8s.io/apimachinery/pkg/apis/meta/v1/types.go"
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(newer openapi "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/apiextensions-apiserver/pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/code-generator/examples/apiserver/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/kube-aggregator/pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/sample-apiserver/pkg/generated/openapi/zz_generated.openapi.go" ]]; then
+-    echo "Wrong generated openapi files changed after touching src file:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when we touch a file in a package that needs codegen for only the main openapi spec.
+-#
+-
+-assert_clean
+-
+-touch "staging/src/k8s.io/api/apps/v1/types.go"
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(newer openapi "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./pkg/generated/openapi/zz_generated.openapi.go" ]]; then
+-    echo "Wrong generated openapi files changed after touching src file:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-#
+-# Test when we touch a file, modify the violation file it should fail, and UPDATE_API_KNOWN_VIOLATIONS=true updates it.
+-#
+-
+-assert_clean
+-
+-touch "staging/src/k8s.io/apimachinery/pkg/apis/meta/v1/types.go"
+-echo > api/api-rules/violation_exceptions.list
+-echo > api/api-rules/codegen_violation_exceptions.list
+-if make generated_files >/dev/null 2>&1; then
+-    echo "Expected make generated_files to fail with API violations."
+-    echo ""
+-    exit 1
+-fi
+-touch "${STAMP}"
+-make generated_files UPDATE_API_KNOWN_VIOLATIONS=true >/dev/null
+-X="$(newer openapi "${STAMP}")"
+-if [[ -z "${X}" || ${X} != "./pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/apiextensions-apiserver/pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/code-generator/examples/apiserver/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/kube-aggregator/pkg/generated/openapi/zz_generated.openapi.go
+-./staging/src/k8s.io/sample-apiserver/pkg/generated/openapi/zz_generated.openapi.go" ]]; then
+-    echo "Wrong generated openapi files changed after updating violation files:"
+-    echo "  ${X:-(none)}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-for f in api/api-rules/violation_exceptions.list api/api-rules/codegen_violation_exceptions.list; do
+-    if ! git diff --quiet "$f"; then
+-        echo "Violation file \"$f\" was not updated with UPDATE_API_KNOWN_VIOLATIONS=true."
+-        echo ""
+-        exit 1
+-    fi
+-done
+-
+-#
+-# Test when the codegen tool itself changes: openapi
+-#
+-
+-assert_clean
+-
+-touch vendor/k8s.io/kube-openapi/cmd/openapi-gen/openapi-gen.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older openapi "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated openapi files did not change after touching code-generator file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/kube-openapi/cmd/openapi-gen/
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older openapi "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated openapi files did not change after touching code-generator dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/kube-openapi/pkg/generators/openapi.go
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older openapi "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated openapi files did not change after touching code-generator dep file:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
+-
+-assert_clean
+-
+-touch vendor/k8s.io/kube-openapi/pkg/generators
+-touch "${STAMP}"
+-make generated_files >/dev/null
+-X="$(older openapi "${STAMP}")"
+-if [[ -n "${X}" ]]; then
+-    echo "Generated openapi files did not change after touching code-generator dep dir:"
+-    echo "  ${X}" | tr '\n' ' '
+-    echo ""
+-    exit 1
+-fi
++# TODO(thockin): remove this file once all tests pass
++echo "this script is deprecated"
+diff --git a/hack/verify-generated-files.sh b/hack/verify-generated-files.sh
+index 3ae824f7516..6b22ee43f17 100755
+--- a/hack/verify-generated-files.sh
++++ b/hack/verify-generated-files.sh
+@@ -14,41 +14,5 @@
+ # See the License for the specific language governing permissions and
+ # limitations under the License.
+ 
+-# This script checks whether updating of generated code is needed or not. We
+-# should run `make generated_files` if generated code is out of date.
+-# Usage: `hack/verify-generated-files.sh`.
+-
+-set -o errexit
+-set -o nounset
+-set -o pipefail
+-
+-KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
+-export KUBE_ROOT
+-source "${KUBE_ROOT}/hack/lib/init.sh"
+-
+-kube::util::ensure_clean_working_dir
+-
+-_tmpdir="$(kube::realpath "$(mktemp -d -t verify-generated-files.XXXXXX)")"
+-kube::util::trap_add "rm -rf ${_tmpdir}" EXIT
+-
+-_tmp_gopath="${_tmpdir}/go"
+-_tmp_kuberoot="${_tmp_gopath}/src/k8s.io/kubernetes"
+-mkdir -p "${_tmp_kuberoot}/.."
+-cp -a "${KUBE_ROOT}" "${_tmp_kuberoot}/.."
+-
+-cd "${_tmp_kuberoot}"
+-
+-# clean out anything from the temp dir that's not checked in
+-git clean -ffxd
+-# regenerate any generated code
+-make generated_files
+-
+-changed_files=$(git status --porcelain)
+-
+-if [[ -n "${changed_files}" ]]; then
+-  echo "!!! Generated code is out of date:" >&2
+-  echo "${changed_files}" >&2
+-  echo >&2
+-  echo "Please run make generated_files." >&2
+-  exit 1
+-fi
++# TODO(thockin): remove this file once all tests pass
++echo "this script is deprecated"
+diff --git a/hack/verify-typecheck.sh b/hack/verify-typecheck.sh
+index bd75e3e7b28..590a9e75ebd 100755
+--- a/hack/verify-typecheck.sh
++++ b/hack/verify-typecheck.sh
+@@ -28,8 +28,6 @@ kube::golang::verify_go_version
+ 
+ cd "${KUBE_ROOT}"
+ 
+-make --no-print-directory -C "${KUBE_ROOT}" generated_files
+-
+ # As of June, 2020 the typecheck tool is written in terms of go/packages, but
+ # that library doesn't work well with multiple modules.  Until that is done,
+ # force this tooling to run in a fake GOPATH.
+diff --git a/hack/verify-yamlfmt.sh b/hack/verify-yamlfmt.sh
+index e9986ac5ff8..453ce812888 100755
+--- a/hack/verify-yamlfmt.sh
++++ b/hack/verify-yamlfmt.sh
+@@ -30,7 +30,7 @@ source "${KUBE_ROOT}/hack/lib/init.sh"
+ 
+ kube::util::ensure_clean_working_dir
+ 
+-_tmpdir="$(kube::realpath "$(mktemp -d -t verify-generated-files.XXXXXX)")"
++_tmpdir="$(kube::realpath "$(mktemp -d -t verify-yamlfmt.XXXXXX)")"
+ 
+ _tmp_gopath="${_tmpdir}/go"
+ _tmp_kuberoot="${_tmp_gopath}/src/k8s.io/kubernetes"
+diff --git a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/bar.go b/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/boilerplate.go.txt
+similarity index 88%
+rename from hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/bar.go
+rename to staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/boilerplate.go.txt
+index 7e52fa5039d..b7c650da470 100644
+--- a/hack/make-rules/helpers/go2make/testdata/dir-with-gofiles/bar.go
++++ b/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/boilerplate.go.txt
+@@ -1,5 +1,5 @@
+ /*
+-Copyright 2017 The Kubernetes Authors.
++Copyright The Kubernetes Authors.
+ 
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+@@ -14,7 +14,3 @@ See the License for the specific language governing permissions and
+ limitations under the License.
+ */
+ 
+-package gofiles
+-
+-func Bar() {
+-}
+diff --git a/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh b/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh
+index 0f7bfa52ad6..b122f64087f 100755
+--- a/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh
++++ b/staging/src/k8s.io/apiextensions-apiserver/examples/client-go/hack/update-codegen.sh
+@@ -28,7 +28,9 @@ CODEGEN_PKG=${CODEGEN_PKG:-$(cd "${SCRIPT_ROOT}"; ls -d -1 ./vendor/k8s.io/code-
+ bash "${CODEGEN_PKG}/generate-groups.sh" all \
+   k8s.io/apiextensions-apiserver/examples/client-go/pkg/client k8s.io/apiextensions-apiserver/examples/client-go/pkg/apis \
+   cr:v1 \
+-  --output-base "$(dirname "${BASH_SOURCE[0]}")/../../../../.."
++  --output-base "$(dirname "${BASH_SOURCE[0]}")/../../../../.." \
++  --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
++
+ 
+ # To use your own boilerplate text append:
+ #   --go-header-file ${SCRIPT_ROOT}/hack/custom-boilerplate.go.txt
+diff --git a/staging/src/k8s.io/code-generator/cmd/applyconfiguration-gen/main.go b/staging/src/k8s.io/code-generator/cmd/applyconfiguration-gen/main.go
+index b5d1207b6bc..b4e264042aa 100644
+--- a/staging/src/k8s.io/code-generator/cmd/applyconfiguration-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/applyconfiguration-gen/main.go
+@@ -25,13 +25,11 @@ import (
+ 
+ 	generatorargs "k8s.io/code-generator/cmd/applyconfiguration-gen/args"
+ 	"k8s.io/code-generator/cmd/applyconfiguration-gen/generators"
+-	"k8s.io/code-generator/pkg/util"
+ )
+ 
+ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs, customArgs := generatorargs.NewDefaults()
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	customArgs.AddFlags(pflag.CommandLine, "k8s.io/kubernetes/pkg/apis") // TODO: move this input path out of applyconfiguration-gen
+ 	if err := flag.Set("logtostderr", "true"); err != nil {
+diff --git a/staging/src/k8s.io/code-generator/cmd/client-gen/main.go b/staging/src/k8s.io/code-generator/cmd/client-gen/main.go
+index bdb55461385..64a1274dfc0 100644
+--- a/staging/src/k8s.io/code-generator/cmd/client-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/client-gen/main.go
+@@ -34,7 +34,6 @@ func main() {
+ 
+ 	// Override defaults.
+ 	// TODO: move this out of client-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+ 	genericArgs.OutputPackagePath = "k8s.io/kubernetes/pkg/client/clientset_generated/"
+ 
+ 	genericArgs.AddFlags(pflag.CommandLine)
+diff --git a/staging/src/k8s.io/code-generator/cmd/conversion-gen/main.go b/staging/src/k8s.io/code-generator/cmd/conversion-gen/main.go
+index a4687e199e8..5a461d27090 100644
+--- a/staging/src/k8s.io/code-generator/cmd/conversion-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/conversion-gen/main.go
+@@ -102,17 +102,12 @@ import (
+ 
+ 	generatorargs "k8s.io/code-generator/cmd/conversion-gen/args"
+ 	"k8s.io/code-generator/cmd/conversion-gen/generators"
+-	"k8s.io/code-generator/pkg/util"
+ )
+ 
+ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs, customArgs := generatorargs.NewDefaults()
+ 
+-	// Override defaults.
+-	// TODO: move this out of conversion-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+-
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	customArgs.AddFlags(pflag.CommandLine)
+ 	flag.Set("logtostderr", "true")
+diff --git a/staging/src/k8s.io/code-generator/cmd/deepcopy-gen/main.go b/staging/src/k8s.io/code-generator/cmd/deepcopy-gen/main.go
+index 16df95fd144..5622c1a1beb 100644
+--- a/staging/src/k8s.io/code-generator/cmd/deepcopy-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/deepcopy-gen/main.go
+@@ -53,17 +53,12 @@ import (
+ 	"k8s.io/klog/v2"
+ 
+ 	generatorargs "k8s.io/code-generator/cmd/deepcopy-gen/args"
+-	"k8s.io/code-generator/pkg/util"
+ )
+ 
+ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs, customArgs := generatorargs.NewDefaults()
+ 
+-	// Override defaults.
+-	// TODO: move this out of deepcopy-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+-
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	customArgs.AddFlags(pflag.CommandLine)
+ 	flag.Set("logtostderr", "true")
+diff --git a/staging/src/k8s.io/code-generator/cmd/defaulter-gen/main.go b/staging/src/k8s.io/code-generator/cmd/defaulter-gen/main.go
+index 47967520aee..23d5d3271bb 100644
+--- a/staging/src/k8s.io/code-generator/cmd/defaulter-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/defaulter-gen/main.go
+@@ -49,17 +49,12 @@ import (
+ 	"k8s.io/klog/v2"
+ 
+ 	generatorargs "k8s.io/code-generator/cmd/defaulter-gen/args"
+-	"k8s.io/code-generator/pkg/util"
+ )
+ 
+ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs, customArgs := generatorargs.NewDefaults()
+ 
+-	// Override defaults.
+-	// TODO: move this out of defaulter-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+-
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	customArgs.AddFlags(pflag.CommandLine)
+ 	flag.Set("logtostderr", "true")
+diff --git a/staging/src/k8s.io/code-generator/cmd/go-to-protobuf/protobuf/cmd.go b/staging/src/k8s.io/code-generator/cmd/go-to-protobuf/protobuf/cmd.go
+index 8a92082bef1..c472b15dad7 100644
+--- a/staging/src/k8s.io/code-generator/cmd/go-to-protobuf/protobuf/cmd.go
++++ b/staging/src/k8s.io/code-generator/cmd/go-to-protobuf/protobuf/cmd.go
+@@ -30,7 +30,6 @@ import (
+ 
+ 	flag "github.com/spf13/pflag"
+ 
+-	"k8s.io/code-generator/pkg/util"
+ 	"k8s.io/gengo/args"
+ 	"k8s.io/gengo/generator"
+ 	"k8s.io/gengo/namer"
+@@ -56,8 +55,7 @@ type Generator struct {
+ func New() *Generator {
+ 	sourceTree := args.DefaultSourceTree()
+ 	common := args.GeneratorArgs{
+-		OutputBase:       sourceTree,
+-		GoHeaderFilePath: util.BoilerplatePath(),
++		OutputBase: sourceTree,
+ 	}
+ 	defaultProtoImport := filepath.Join(sourceTree, "k8s.io", "kubernetes", "vendor", "github.com", "gogo", "protobuf", "protobuf")
+ 	cwd, err := os.Getwd()
+diff --git a/staging/src/k8s.io/code-generator/cmd/import-boss/main.go b/staging/src/k8s.io/code-generator/cmd/import-boss/main.go
+index 0fc56445e8c..34373c54117 100644
+--- a/staging/src/k8s.io/code-generator/cmd/import-boss/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/import-boss/main.go
+@@ -21,7 +21,6 @@ import (
+ 	"os"
+ 
+ 	"github.com/spf13/pflag"
+-	"k8s.io/code-generator/pkg/util"
+ 	"k8s.io/gengo/args"
+ 	"k8s.io/gengo/examples/import-boss/generators"
+ 
+@@ -32,8 +31,6 @@ func main() {
+ 	klog.InitFlags(nil)
+ 	arguments := args.Default()
+ 
+-	// Override defaults.
+-	arguments.GoHeaderFilePath = util.BoilerplatePath()
+ 	pflag.CommandLine.BoolVar(&arguments.IncludeTestFiles, "include-test-files", false, "If true, include *_test.go files.")
+ 
+ 	if err := arguments.Execute(
+diff --git a/staging/src/k8s.io/code-generator/cmd/informer-gen/main.go b/staging/src/k8s.io/code-generator/cmd/informer-gen/main.go
+index 650a3d78bd2..1247c35b37a 100644
+--- a/staging/src/k8s.io/code-generator/cmd/informer-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/informer-gen/main.go
+@@ -33,7 +33,6 @@ func main() {
+ 
+ 	// Override defaults.
+ 	// TODO: move out of informer-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+ 	genericArgs.OutputPackagePath = "k8s.io/kubernetes/pkg/client/informers/informers_generated"
+ 	customArgs.VersionedClientSetPackage = "k8s.io/kubernetes/pkg/client/clientset_generated/clientset"
+ 	customArgs.InternalClientSetPackage = "k8s.io/kubernetes/pkg/client/clientset_generated/internalclientset"
+diff --git a/staging/src/k8s.io/code-generator/cmd/lister-gen/main.go b/staging/src/k8s.io/code-generator/cmd/lister-gen/main.go
+index 3418005c623..a7d7b610878 100644
+--- a/staging/src/k8s.io/code-generator/cmd/lister-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/lister-gen/main.go
+@@ -33,7 +33,6 @@ func main() {
+ 
+ 	// Override defaults.
+ 	// TODO: move this out of lister-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+ 	genericArgs.OutputPackagePath = "k8s.io/kubernetes/pkg/client/listers"
+ 
+ 	genericArgs.AddFlags(pflag.CommandLine)
+diff --git a/staging/src/k8s.io/code-generator/cmd/prerelease-lifecycle-gen/main.go b/staging/src/k8s.io/code-generator/cmd/prerelease-lifecycle-gen/main.go
+index f722a9d113e..376788e4667 100644
+--- a/staging/src/k8s.io/code-generator/cmd/prerelease-lifecycle-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/prerelease-lifecycle-gen/main.go
+@@ -40,7 +40,6 @@ import (
+ 	"github.com/spf13/pflag"
+ 	generatorargs "k8s.io/code-generator/cmd/prerelease-lifecycle-gen/args"
+ 	statusgenerators "k8s.io/code-generator/cmd/prerelease-lifecycle-gen/prerelease-lifecycle-generators"
+-	"k8s.io/code-generator/pkg/util"
+ 	"k8s.io/klog/v2"
+ )
+ 
+@@ -48,10 +47,6 @@ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs, customArgs := generatorargs.NewDefaults()
+ 
+-	// Override defaults.
+-	// TODO: move this out of prerelease-lifecycle-gen
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+-
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	customArgs.AddFlags(pflag.CommandLine)
+ 	flag.Set("logtostderr", "true")
+diff --git a/staging/src/k8s.io/code-generator/cmd/register-gen/main.go b/staging/src/k8s.io/code-generator/cmd/register-gen/main.go
+index b8ba66f0da0..dc29144481b 100644
+--- a/staging/src/k8s.io/code-generator/cmd/register-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/register-gen/main.go
+@@ -24,13 +24,11 @@ import (
+ 
+ 	generatorargs "k8s.io/code-generator/cmd/register-gen/args"
+ 	"k8s.io/code-generator/cmd/register-gen/generators"
+-	"k8s.io/code-generator/pkg/util"
+ )
+ 
+ func main() {
+ 	klog.InitFlags(nil)
+ 	genericArgs := generatorargs.NewDefaults()
+-	genericArgs.GoHeaderFilePath = util.BoilerplatePath()
+ 	genericArgs.AddFlags(pflag.CommandLine)
+ 	flag.Set("logtostderr", "true")
+ 	pflag.CommandLine.AddGoFlagSet(flag.CommandLine)
+diff --git a/staging/src/k8s.io/code-generator/cmd/set-gen/main.go b/staging/src/k8s.io/code-generator/cmd/set-gen/main.go
+index f40c5e4a44e..0968ce762b9 100644
+--- a/staging/src/k8s.io/code-generator/cmd/set-gen/main.go
++++ b/staging/src/k8s.io/code-generator/cmd/set-gen/main.go
+@@ -27,7 +27,6 @@ package main
+ import (
+ 	"os"
+ 
+-	"k8s.io/code-generator/pkg/util"
+ 	"k8s.io/gengo/args"
+ 	"k8s.io/gengo/examples/set-gen/generators"
+ 
+@@ -39,7 +38,6 @@ func main() {
+ 	arguments := args.Default()
+ 
+ 	// Override defaults.
+-	arguments.GoHeaderFilePath = util.BoilerplatePath()
+ 	arguments.InputDirs = []string{"k8s.io/kubernetes/pkg/util/sets/types"}
+ 	arguments.OutputPackagePath = "k8s.io/apimachinery/pkg/util/sets"
+ 
+diff --git a/staging/src/k8s.io/code-generator/generate-groups.sh b/staging/src/k8s.io/code-generator/generate-groups.sh
+index cfc2576a856..223423b6646 100755
+--- a/staging/src/k8s.io/code-generator/generate-groups.sh
++++ b/staging/src/k8s.io/code-generator/generate-groups.sh
+@@ -71,25 +71,36 @@ done
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "deepcopy" <<<"${GENS}"; then
+   echo "Generating deepcopy funcs"
+-  "${gobin}/deepcopy-gen" --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" -O zz_generated.deepcopy "$@"
++  "${gobin}/deepcopy-gen" \
++      --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
++      -O zz_generated.deepcopy \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "client" <<<"${GENS}"; then
+   echo "Generating clientset for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}"
+-  "${gobin}/client-gen" --clientset-name "${CLIENTSET_NAME_VERSIONED:-versioned}" --input-base "" --input "$(codegen::join , "${FQ_APIS[@]}")" --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" "$@"
++  "${gobin}/client-gen" \
++      --clientset-name "${CLIENTSET_NAME_VERSIONED:-versioned}" \
++      --input-base "" \
++      --input "$(codegen::join , "${FQ_APIS[@]}")" \
++      --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "lister" <<<"${GENS}"; then
+   echo "Generating listers for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/listers"
+-  "${gobin}/lister-gen" --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" --output-package "${OUTPUT_PKG}/listers" "$@"
++  "${gobin}/lister-gen" \
++      --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
++      --output-package "${OUTPUT_PKG}/listers" \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "informer" <<<"${GENS}"; then
+   echo "Generating informers for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/informers"
+   "${gobin}/informer-gen" \
+-           --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
+-           --versioned-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_VERSIONED:-versioned}" \
+-           --listers-package "${OUTPUT_PKG}/listers" \
+-           --output-package "${OUTPUT_PKG}/informers" \
+-           "$@"
++      --input-dirs "$(codegen::join , "${FQ_APIS[@]}")" \
++      --versioned-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_VERSIONED:-versioned}" \
++      --listers-package "${OUTPUT_PKG}/listers" \
++      --output-package "${OUTPUT_PKG}/informers" \
++      "$@"
+ fi
+diff --git a/staging/src/k8s.io/code-generator/generate-internal-groups.sh b/staging/src/k8s.io/code-generator/generate-internal-groups.sh
+index 2c114a37039..5dfda87923f 100755
+--- a/staging/src/k8s.io/code-generator/generate-internal-groups.sh
++++ b/staging/src/k8s.io/code-generator/generate-internal-groups.sh
+@@ -77,51 +77,70 @@ done
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "deepcopy" <<<"${GENS}"; then
+   echo "Generating deepcopy funcs"
+-  "${GOPATH}/bin/deepcopy-gen" --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" -O zz_generated.deepcopy "$@"
++  "${GOPATH}/bin/deepcopy-gen" \
++      --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" -O zz_generated.deepcopy \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "defaulter" <<<"${GENS}"; then
+   echo "Generating defaulters"
+-  "${GOPATH}/bin/defaulter-gen"  --input-dirs "$(codegen::join , "${EXT_FQ_APIS[@]}")" -O zz_generated.defaults "$@"
++  "${GOPATH}/bin/defaulter-gen"  \
++      --input-dirs "$(codegen::join , "${EXT_FQ_APIS[@]}")" -O zz_generated.defaults \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "conversion" <<<"${GENS}"; then
+   echo "Generating conversions"
+-  "${GOPATH}/bin/conversion-gen" --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" -O zz_generated.conversion "$@"
++  "${GOPATH}/bin/conversion-gen" \
++      --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" -O zz_generated.conversion \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "client" <<<"${GENS}"; then
+   echo "Generating clientset for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}"
+   if [ -n "${INT_APIS_PKG}" ]; then
+     IFS=" " read -r -a APIS <<< "$(printf '%s/ ' "${INT_FQ_APIS[@]}")"
+-    "${GOPATH}/bin/client-gen" --clientset-name "${CLIENTSET_NAME_INTERNAL:-internalversion}" --input-base "" --input "$(codegen::join , "${APIS[@]}")" --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" "$@"
++    "${GOPATH}/bin/client-gen" \
++        --clientset-name "${CLIENTSET_NAME_INTERNAL:-internalversion}" \
++        --input-base "" \
++        --input "$(codegen::join , "${APIS[@]}")" \
++        --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" \
++        "$@"
+   fi
+-  "${GOPATH}/bin/client-gen" --clientset-name "${CLIENTSET_NAME_VERSIONED:-versioned}" --input-base "" --input "$(codegen::join , "${EXT_FQ_APIS[@]}")" --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" "$@"
++  "${GOPATH}/bin/client-gen" \
++      --clientset-name "${CLIENTSET_NAME_VERSIONED:-versioned}" \
++      --input-base "" \
++      --input "$(codegen::join , "${EXT_FQ_APIS[@]}")" \
++      --output-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}" \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "lister" <<<"${GENS}"; then
+   echo "Generating listers for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/listers"
+-  "${GOPATH}/bin/lister-gen" --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" --output-package "${OUTPUT_PKG}/listers" "$@"
++  "${GOPATH}/bin/lister-gen" \
++      --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" \
++      --output-package "${OUTPUT_PKG}/listers" \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "informer" <<<"${GENS}"; then
+   echo "Generating informers for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/informers"
+   "${GOPATH}/bin/informer-gen" \
+-           --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" \
+-           --versioned-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_VERSIONED:-versioned}" \
+-           --internal-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_INTERNAL:-internalversion}" \
+-           --listers-package "${OUTPUT_PKG}/listers" \
+-           --output-package "${OUTPUT_PKG}/informers" \
+-           "$@"
++      --input-dirs "$(codegen::join , "${ALL_FQ_APIS[@]}")" \
++      --versioned-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_VERSIONED:-versioned}" \
++      --internal-clientset-package "${OUTPUT_PKG}/${CLIENTSET_PKG_NAME:-clientset}/${CLIENTSET_NAME_INTERNAL:-internalversion}" \
++      --listers-package "${OUTPUT_PKG}/listers" \
++      --output-package "${OUTPUT_PKG}/informers" \
++      "$@"
+ fi
+ 
+ if [ "${GENS}" = "all" ] || grep -qw "openapi" <<<"${GENS}"; then
+   echo "Generating OpenAPI definitions for ${GROUPS_WITH_VERSIONS} at ${OUTPUT_PKG}/openapi"
+   declare -a OPENAPI_EXTRA_PACKAGES
+   "${GOPATH}/bin/openapi-gen" \
+-           --input-dirs "$(codegen::join , "${EXT_FQ_APIS[@]}" "${OPENAPI_EXTRA_PACKAGES[@]+"${OPENAPI_EXTRA_PACKAGES[@]}"}")" \
+-           --input-dirs "k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/runtime,k8s.io/apimachinery/pkg/version" \
+-           --output-package "${OUTPUT_PKG}/openapi" \
+-           -O zz_generated.openapi \
+-           "$@"
++      --input-dirs "$(codegen::join , "${EXT_FQ_APIS[@]}" "${OPENAPI_EXTRA_PACKAGES[@]+"${OPENAPI_EXTRA_PACKAGES[@]}"}")" \
++      --input-dirs "k8s.io/apimachinery/pkg/apis/meta/v1,k8s.io/apimachinery/pkg/runtime,k8s.io/apimachinery/pkg/version" \
++      --output-package "${OUTPUT_PKG}/openapi" \
++      -O zz_generated.openapi \
++      "$@"
+ fi
+diff --git a/staging/src/k8s.io/code-generator/pkg/util/build.go b/staging/src/k8s.io/code-generator/pkg/util/build.go
+index 72ae683d8d8..53f93afe349 100644
+--- a/staging/src/k8s.io/code-generator/pkg/util/build.go
++++ b/staging/src/k8s.io/code-generator/pkg/util/build.go
+@@ -18,16 +18,10 @@ package util
+ 
+ import (
+ 	gobuild "go/build"
+-	"os"
+ 	"path/filepath"
+-	"reflect"
+ 	"strings"
+-
+-	"golang.org/x/tools/go/packages"
+ )
+ 
+-type empty struct{}
+-
+ // CurrentPackage returns the go package of the current directory, or "" if it cannot
+ // be derived from the GOPATH.
+ func CurrentPackage() string {
+@@ -57,39 +51,6 @@ func hasSubdir(root, dir string) (rel string, ok bool) {
+ 	return filepath.ToSlash(dir[len(root):]), true
+ }
+ 
+-// BoilerplatePath returns the path to the boilerplate file in code-generator,
+-// or "" if the default boilerplate.go.txt file cannot be located.
+-func BoilerplatePath() string {
+-	// set up paths to check
+-	paths := []string{
+-		// works when run from root of $GOPATH containing k8s.io/code-generator
+-		filepath.Join(reflect.TypeOf(empty{}).PkgPath(), "/../../hack/boilerplate.go.txt"),
+-		// works when run from root of module vendoring k8s.io/code-generator
+-		"vendor/k8s.io/code-generator/hack/boilerplate.go.txt",
+-		// works when run from root of $GOPATH containing k8s.io/kubernetes
+-		"k8s.io/kubernetes/vendor/k8s.io/code-generator/hack/boilerplate.go.txt",
+-	}
+-
+-	// see if we can locate the module directory and add that to the list
+-	config := packages.Config{Mode: packages.NeedModule}
+-	if loadedPackages, err := packages.Load(&config, "k8s.io/code-generator/pkg/util"); err == nil {
+-		for _, loadedPackage := range loadedPackages {
+-			if loadedPackage.Module != nil && loadedPackage.Module.Dir != "" {
+-				paths = append(paths, filepath.Join(loadedPackage.Module.Dir, "hack/boilerplate.go.txt"))
+-			}
+-		}
+-	}
+-
+-	// try all paths and return the first that exists
+-	for _, path := range paths {
+-		if _, err := os.Stat(path); err == nil {
+-			return path
+-		}
+-	}
+-	// cannot be located, invoker will have to explicitly specify boilerplate file
+-	return ""
+-}
+-
+ // Vendorless trims vendor prefix from a package path to make it canonical
+ func Vendorless(p string) string {
+ 	if pos := strings.LastIndex(p, "/vendor/"); pos != -1 {
+diff --git a/staging/src/k8s.io/metrics/hack/update-codegen.sh b/staging/src/k8s.io/metrics/hack/update-codegen.sh
+index 4ac2ef726bc..d5063fdad45 100755
+--- a/staging/src/k8s.io/metrics/hack/update-codegen.sh
++++ b/staging/src/k8s.io/metrics/hack/update-codegen.sh
+@@ -37,4 +37,4 @@ bash "${CODEGEN_PKG}/generate-groups.sh" client \
+   k8s.io/metrics/pkg/client k8s.io/metrics/pkg/apis \
+   "metrics:v1alpha1,v1beta1" \
+   --output-base "$(dirname "${BASH_SOURCE[0]}")/../../.." \
+-  --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
+\ No newline at end of file
++  --go-header-file "${SCRIPT_ROOT}/hack/boilerplate.go.txt"
+diff --git a/test/conformance/gen-specsummaries.sh b/test/conformance/gen-specsummaries.sh
+index 61d0de4ec68..f2598cfe7c5 100755
+--- a/test/conformance/gen-specsummaries.sh
++++ b/test/conformance/gen-specsummaries.sh
+@@ -23,9 +23,6 @@ KUBE_ROOT=$(cd "$(dirname "${BASH_SOURCE[0]}")"/../.. && pwd -P)
+ cd "${KUBE_ROOT}"
+ 
+ # build ginkgo and e2e.test
+-# NOTE: we do *not* use `make WHAT=...` because we do *not* want to be running
+-# make generated_files when diffing things (see: hack/verify-conformance-yaml.sh)
+-# other update/verify already handle the generated files
+ hack/make-rules/build.sh github.com/onsi/ginkgo/v2/ginkgo test/e2e/e2e.test
+ 
+ # dump spec
+diff --git a/test/e2e_node/jenkins/conformance/conformance-jenkins.sh b/test/e2e_node/jenkins/conformance/conformance-jenkins.sh
+index 2d922d2286b..f3f438f0395 100755
+--- a/test/e2e_node/jenkins/conformance/conformance-jenkins.sh
++++ b/test/e2e_node/jenkins/conformance/conformance-jenkins.sh
+@@ -24,8 +24,6 @@ set -x
+ 
+ . "${1}"
+ 
+-make generated_files
+-
+ WORKSPACE=${WORKSPACE:-"/tmp/"}
+ ARTIFACTS=${WORKSPACE}/_artifacts
+ TIMEOUT=${TIMEOUT:-"45m"}
+diff --git a/test/integration/ipamperf/README.md b/test/integration/ipamperf/README.md
+index e51fb34c55d..14c2398bc7f 100644
+--- a/test/integration/ipamperf/README.md
++++ b/test/integration/ipamperf/README.md
+@@ -18,8 +18,6 @@ How to run
+ 
+ ```shell
+ # In kubernetes root path
+-make generated_files
+-
+ cd test/integration/ipamperf
+ ./test-performance.sh
+ ```
+diff --git a/vendor/modules.txt b/vendor/modules.txt
+index c9c17ae486c..792e5e200ff 100644
+--- a/vendor/modules.txt
++++ b/vendor/modules.txt
+@@ -2055,7 +2055,6 @@ k8s.io/cluster-bootstrap/util/tokens
+ k8s.io/code-generator/cmd/go-to-protobuf
+ k8s.io/code-generator/cmd/go-to-protobuf/protobuf
+ k8s.io/code-generator/cmd/go-to-protobuf/protoc-gen-gogo
+-k8s.io/code-generator/pkg/util
+ k8s.io/code-generator/third_party/forked/golang/reflect
+ # k8s.io/component-base v0.0.0 => ./staging/src/k8s.io/component-base
+ ## explicit; go 1.19
