@@ -225,7 +225,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
-
+      - codegens-to-scripts.1.25
 
   - name: v1.24.17-ci
     base_release: v1.24.17
@@ -233,6 +233,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - codegens-to-scripts.1.24
 
   - name: v1.23.17-ci
     base_release: v1.23.17
@@ -712,3 +713,11 @@ patches:
   - name: update-kube-proxy-iptables.1.18
     patch:
       - patches/update-kube-proxy-iptables.1.18.patch
+
+  - name: codegens-to-scripts.1.25
+    patch:
+      - patches/codegens-to-scripts.1.25.patch
+
+  - name: codegens-to-scripts.1.24
+    patch:
+      - patches/codegens-to-scripts.1.24.patch

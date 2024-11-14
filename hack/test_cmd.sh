@@ -5,7 +5,7 @@ set -o nounset
 set -o pipefail
 
 source "kit/helper.sh"
-export KUBE_ROOT=$(dirname "$(readlink -f "$0")")/../src/github.com/kubernetes/kubernetes/
+export KUBE_ROOT=$(dirname "$(readlink -f "$0")")/..
 export TERM=linux
 echo "KUBE_ROOT directory: $KUBE_ROOT"
 cd "${WORKDIR}"
@@ -21,7 +21,6 @@ make generated_files kubeadm
 ./build/run.sh make all WHAT=cmd/kubeadm
 
 mkdir -p _output/local/go/bin/ && cp _output/dockerized/bin/linux/amd64/kubeadm _output/local/go/bin/
-./hack/install-etcd.sh
 TERM=linux PATH=$(pwd)/third_party/etcd:${PATH} make test-cmd
 ' 2>&1 | grep -v -E '^I\w+ ' && exit 0
 done
