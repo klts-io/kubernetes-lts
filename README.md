@@ -45,7 +45,7 @@ Below lists the status of each release image and package and you can click any t
 
 - [Portal and Docs](https://klts.io/docs/)
 - [Install Guide](https://klts.io/docs/install/)
-
+- [endoflife.date](https://endoflife.date/kubernetes)
 
 -----------------------
 
