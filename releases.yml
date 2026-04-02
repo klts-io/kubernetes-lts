@@ -706,6 +706,10 @@ patches:
     patch:
       - patches/fix-etcd-put-key.1.11.patch
 
+  - name: fix-scheduler-volumebinding.1.28
+    patch:
+      - patches/fix-scheduler-volumebinding.1.28.patch
+
   # Pick commit from https://github.com/kubernetes/kubernetes/pull/91500.patch
   - name: fix-missing-env-91500.1.18
     patch:
