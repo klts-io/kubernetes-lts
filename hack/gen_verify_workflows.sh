@@ -22,6 +22,8 @@ on:
 jobs:
   Patch:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Cache
@@ -54,6 +56,8 @@ for release in ${RELEASES}; do
   Test-${name}:
     needs: Patch
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Cache
@@ -86,6 +90,8 @@ for release in ${RELEASES}; do
   Test-Cmd-${name}:
     needs: Patch
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Cache
@@ -118,6 +124,8 @@ for release in ${RELEASES}; do
   Test-Integration-${name}:
     needs: Patch
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - name: Cache
