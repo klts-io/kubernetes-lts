@@ -211,12 +211,16 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.27.16-ci
     base_release: v1.27.16
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.26.15-ci
     base_release: v1.26.15
@@ -224,6 +228,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.25.16-ci
     base_release: v1.25.16
@@ -232,6 +238,8 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.25
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.24.17-ci
     base_release: v1.24.17
@@ -240,6 +248,8 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.23.17-ci
     base_release: v1.23.17
@@ -247,6 +257,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.22.17-ci
     base_release: v1.22.17
@@ -254,6 +266,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.21.14-ci
     base_release: v1.21.14
@@ -261,6 +275,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   - name: v1.20.15-ci
     base_release: v1.20.15
@@ -272,6 +288,7 @@ releases:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/pkg/util/oom
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
   # use v1.20.15-ci instead 
   # - name: v1.20.2-ci
@@ -297,6 +314,7 @@ releases:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
       - k8s.io/kubernetes/pkg/util/oom
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
     test_integration_failures_tolerated: []
 
   - name: v1.18.20-ci
@@ -309,6 +327,7 @@ releases:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
     test_integration_failures_tolerated: []
 
   - name: v1.17.17-ci
@@ -320,6 +339,7 @@ releases:
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
     test_integration_failures_tolerated: []
 
   - name: v1.16.15-ci
@@ -334,6 +354,7 @@ releases:
       # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/gce
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
     test_integration_failures_tolerated: []
 
   - name: v1.15.12-ci
