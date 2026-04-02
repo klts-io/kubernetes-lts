@@ -23,9 +23,9 @@ jobs:
   Patch:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: src
         with:
@@ -55,9 +55,9 @@ for release in ${RELEASES}; do
     needs: Patch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: src
         with:
@@ -87,9 +87,9 @@ for release in ${RELEASES}; do
     needs: Patch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: src
         with:
@@ -119,9 +119,9 @@ for release in ${RELEASES}; do
     needs: Patch
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Cache
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         env:
           cache-name: src
         with:
