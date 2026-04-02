@@ -2,6 +2,12 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
+  - name: v1.28.15-lts.1
+    base_release: v1.28.15-ci
+    must: true
+    patches:
+      - fix-scheduler-volumebinding.1.28
+
   - name: v1.28.15-lts.0
     base_release: v1.28.15-ci
     must: true
