@@ -2,6 +2,26 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
+  - name: v1.32.13-lts.0
+    base_release: v1.32.13-ci
+    must: true
+    patches: []
+
+  - name: v1.31.14-lts.0
+    base_release: v1.31.14-ci
+    must: true
+    patches: []
+
+  - name: v1.30.14-lts.0
+    base_release: v1.30.14-ci
+    must: true
+    patches: []
+
+  - name: v1.29.15-lts.0
+    base_release: v1.29.15-ci
+    must: true
+    patches: []
+
   - name: v1.28.15-lts.1
     base_release: v1.28.15-ci
     must: true
