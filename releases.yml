@@ -234,6 +234,38 @@ releases:
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
+  - name: v1.32.13-ci
+    base_release: v1.32.13
+    patches:
+      - no-delete-images.1.24
+      - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
+
+  - name: v1.31.14-ci
+    base_release: v1.31.14
+    patches:
+      - no-delete-images.1.24
+      - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
+
+  - name: v1.30.14-ci
+    base_release: v1.30.14
+    patches:
+      - no-delete-images.1.24
+      - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
+
+  - name: v1.29.15-ci
+    base_release: v1.29.15
+    patches:
+      - no-delete-images.1.24
+      - fix-etcd-put-key.1.24
+    test_failures_tolerated:
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
+
   - name: v1.27.16-ci
     base_release: v1.27.16
     patches:
