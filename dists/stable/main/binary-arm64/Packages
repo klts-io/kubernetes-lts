@@ -1,0 +1,53 @@
+Package: kubeadm
+Priority: optional
+Section: misc
+Installed-Size: 55565
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: arm64
+Version: 1.31.14-lts.0
+Depends: kubelet (>= 1.10.0), kubectl (>= 1.10.0), kubernetes-cni (>= 0.8.6), cri-tools (>= 1.13.0)
+Filename: pool/main/k/kubeadm/kubeadm_1.31.14-lts.0_arm64.deb
+Size: 9956964
+MD5sum: a2899543b466c970e91d76aefffd7f9f
+SHA1: 481d920d5e90835878cc61177380e2dc9a720740
+SHA256: 0c462a4c72c66f29b1ac1a3dbc4b34393e4133f67137663078d14df857a15260
+SHA512: 9acc28aa5ccdf60991b2503152fbcb68ecfa74e8cae088fbc8c22bf09ee1b088f7286ee2dab78754cf8d218877fc0a629afe7044c66b2e1a592baae1037ad471
+Description: Kubernetes Cluster Bootstrapping Tool
+ The Kubernetes command line tool for bootstrapping a Kubernetes cluster.
+Homepage: https://kubernetes.io
+
+Package: kubectl
+Priority: optional
+Section: misc
+Installed-Size: 53894
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: arm64
+Version: 1.31.14-lts.0
+Filename: pool/main/k/kubectl/kubectl_1.31.14-lts.0_arm64.deb
+Size: 9830316
+MD5sum: 78ba3539bdd957878dd5a2c9f3a85916
+SHA1: b4e16d4f892907af3fb86ee9c97f1c4b8b353164
+SHA256: 4866150afe52b29e484a2a5a18271b2070a480fa87bb25bddb68cf41cc24612d
+SHA512: 563a717437b44f0c8ea79a518e44dc6011667ff458e6ca81dbcef12702690199d2af06f086f49901dcf43fd2c4254577a7f1b3d4220067e06922a8be16214e18
+Description: Kubernetes Command Line Tool
+ The Kubernetes command line tool for interacting with the Kubernetes API.
+Homepage: https://kubernetes.io
+
+Package: kubelet
+Priority: optional
+Section: misc
+Installed-Size: 72908
+Maintainer: Kubernetes Authors <kubernetes-dev+release@googlegroups.com>
+Architecture: arm64
+Version: 1.31.14-lts.0
+Depends: iptables (>= 1.4.21), kubernetes-cni (>= 0.8.6), iproute2, socat, util-linux, mount, ebtables, ethtool, conntrack
+Filename: pool/main/k/kubelet/kubelet_1.31.14-lts.0_arm64.deb
+Size: 13153756
+MD5sum: 21dcb8c8460037096c9870adf37d9414
+SHA1: f26299d6203ab7c044a12afd4d08b7a1a18fc242
+SHA256: d3e1b30da0c9cdf54a27e645ee17b3c5970a8a39033847ab89f2f6134c642c04
+SHA512: 2b2232f3522c0572582d136bb5c043231a39593529926d3dd9858963166ebf70f3ee5c5023e6a25acfa220e5f1d9fcc26a6f5ba225a6195f23a22ca007e9e8ad
+Description: Kubernetes Node Agent
+ The node agent of Kubernetes, the container cluster manager
+Homepage: https://kubernetes.io
+
