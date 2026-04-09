@@ -379,6 +379,7 @@ releases:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
+      - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
     test_integration_failures_tolerated: []
 
