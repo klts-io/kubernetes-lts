@@ -66,12 +66,14 @@ releases:
   - name: v1.21.14-lts.1
     base_release: v1.21.14-ci
     must: true
-    patches: []
+    patches:
+      - CVE-2021-25740.1.21
 
   - name: v1.20.15-lts.2
     base_release: v1.20.15-ci
     must: true
     patches:
+      - CVE-2021-25740.1.21
       - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
@@ -87,6 +89,7 @@ releases:
     base_release: v1.19.16-ci
     must: true
     patches:
+      - CVE-2021-25740.1.21
       - CVE-2020-8554.1.19
       - nokmem.1.20
 
@@ -94,6 +97,7 @@ releases:
     base_release: v1.18.20-ci
     must: true
     patches:
+      - CVE-2021-25740.1.21
       - CVE-2020-8554.1.18
       - fix-missing-env-91500.1.18
       - CVE-2021-25741.1.18
@@ -657,6 +661,14 @@ patches:
       - https://github.com/kubernetes/kubernetes/pull/75771.patch
 
   # CVSS Score >= 3.0
+
+  # CVSS Score 3.1, <= k8s1.21, https://www.cvedetails.com/cve/CVE-2021-25740/
+  - name: CVE-2021-25740
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/103704.patch
+  - name: CVE-2021-25740.1.21
+    patch:
+      - patches/CVE-2021-25740.1.21.patch # Conflict resolution for <=1.21
 
   # CVSS Score 3.3, < k8s1.15, https://www.cvedetails.com/cve/CVE-2020-8551/
   # TODO
