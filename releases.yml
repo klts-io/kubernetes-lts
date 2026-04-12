@@ -271,6 +271,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -280,6 +281,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -291,6 +293,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.25
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -302,6 +305,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.24
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -312,6 +316,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -322,6 +327,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -332,6 +338,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -342,6 +349,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -355,6 +363,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -370,6 +379,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -384,6 +394,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -399,6 +410,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - CVE-2024-10220
     test_failures_tolerated:
       # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -490,6 +502,11 @@ releases:
 
 patches:
   # CVSS Score >= 8.0
+
+  # CVSS Score 8.1, <= k8s1.28.11, https://www.cvedetails.com/cve/CVE-2024-10220/
+  - name: CVE-2024-10220
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/124531.patch
 
   # CVSS Score 8.8, < k8s1.19, https://www.cvedetails.com/cve/CVE-2021-25741/
   - name: CVE-2021-25741
