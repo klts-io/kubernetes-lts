@@ -231,6 +231,11 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2024-9042
+      - CVE-2025-0426
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -239,6 +244,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2025-1767
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -247,6 +253,8 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2025-13281
+      - CVE-2025-1767
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -255,6 +263,9 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -263,6 +274,9 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -272,6 +286,11 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - CVE-2024-10220
+      - CVE-2024-9042
+      - CVE-2025-0426
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
 
@@ -282,6 +301,10 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - CVE-2024-10220
+      - CVE-2025-0426
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -294,6 +317,10 @@ releases:
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.25
       - CVE-2024-10220
+      - CVE-2025-0426
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -306,6 +333,9 @@ releases:
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.24
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -317,6 +347,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -328,6 +361,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -339,6 +375,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
@@ -350,6 +389,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -364,6 +406,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -380,6 +425,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220.1.18
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler
       - k8s.io/kubernetes/pkg/volume/csi
@@ -395,6 +443,9 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - CVE-2024-10220.1.18
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/volume/csi
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -411,6 +462,9 @@ releases:
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
       - CVE-2024-10220.1.18
+      - CVE-2025-13281
+      - CVE-2025-1767
+      - CVE-2025-5187
     test_failures_tolerated:
       # - k8s.io/kubernetes/vendor/k8s.io/apiextensions-apiserver/pkg/apis/apiextensions # Fix by fix-test.1.16
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -567,7 +621,32 @@ patches:
     patch:
       - patches/CVE-2019-11247.1.11.patch # Remove BUILD file
 
+  # CVSS Score 6.7, <= k8s1.31.11 on supported lines, https://github.com/kubernetes/kubernetes/issues/133471
+  - name: CVE-2025-5187
+    patch:
+      - patches/CVE-2025-5187.patch # Backport without test changes for <=1.30 lines
+
+  # CVSS Score 6.5, all k8s versions, https://github.com/kubernetes/kubernetes/issues/130786
+  - name: CVE-2025-1767
+    patch:
+      - patches/CVE-2025-1767.patch # Mitigate local repository path access in gitRepo volume
+
+  # CVSS Score 6.2, <= k8s1.29.13 on supported lines, https://github.com/kubernetes/kubernetes/issues/130016
+  - name: CVE-2025-0426
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/130014.patch
+
   # CVSS Score >= 5.0
+
+  # CVSS Score 5.9, <= k8s1.29.12 on supported lines, https://github.com/kubernetes/kubernetes/issues/129654
+  - name: CVE-2024-9042
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/129603.patch
+
+  # CVSS Score 5.8, <= k8s1.31.14 on supported lines, https://github.com/kubernetes/kubernetes/issues/135525
+  - name: CVE-2025-13281
+    patch:
+      - patches/CVE-2025-13281.patch # Reduced-context backport for <=1.31 lines
 
   # CVSS Score 5.8, < k8s1.16, https://www.cvedetails.com/cve/CVE-2020-8558/
   - name: CVE-2020-8558
