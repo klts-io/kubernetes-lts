@@ -2,27 +2,27 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
-  - name: v1.32.13-lts.0
+  - name: v1.32.13-lts.1
     base_release: v1.32.13-ci
     must: true
     patches: []
 
-  - name: v1.31.14-lts.0
+  - name: v1.31.14-lts.1
     base_release: v1.31.14-ci
     must: true
     patches: []
 
-  - name: v1.30.14-lts.0
+  - name: v1.30.14-lts.1
     base_release: v1.30.14-ci
     must: true
     patches: []
 
-  - name: v1.29.15-lts.0
+  - name: v1.29.15-lts.1
     base_release: v1.29.15-ci
     must: true
     patches: []
 
-  - name: v1.28.15-lts.1
+  - name: v1.28.15-lts.2
     base_release: v1.28.15-ci
     must: true
     patches:
@@ -33,49 +33,49 @@ releases:
     must: true
     patches: []
 
-  - name: v1.27.16-lts.0
+  - name: v1.27.16-lts.1
     base_release: v1.27.16-ci
     must: true
     patches: []
 
-  - name: v1.26.15-lts.0
+  - name: v1.26.15-lts.1
     base_release: v1.26.15-ci
     must: true
     patches: []
 
-  - name: v1.25.16-lts.0
+  - name: v1.25.16-lts.1
     base_release: v1.25.16-ci
     must: true
     patches: []
 
-  - name: v1.24.17-lts.0
+  - name: v1.24.17-lts.1
     base_release: v1.24.17-ci
     must: true
     patches: []
 
-  - name: v1.23.17-lts.0
+  - name: v1.23.17-lts.1
     base_release: v1.23.17-ci
     must: true
     patches: []
 
-  - name: v1.22.17-lts.0
+  - name: v1.22.17-lts.1
     base_release: v1.22.17-ci
     must: true
     patches: []
 
-  - name: v1.21.14-lts.1
+  - name: v1.21.14-lts.2
     base_release: v1.21.14-ci
     must: true
     patches: []
 
-  - name: v1.20.15-lts.2
+  - name: v1.20.15-lts.3
     base_release: v1.20.15-ci
     must: true
     patches:
       - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
-  # use v1.20.15-lts.2 instead
+  # use v1.20.15-lts.3 instead
   # - name: v1.20.2-lts.2
   #   base_release: v1.20.2-ci
   #   must: true
@@ -83,14 +83,14 @@ releases:
   #     - fix-kubectl-convert-97644.1.20 
   #     - nokmem.1.20
 
-  - name: v1.19.16-lts.3
+  - name: v1.19.16-lts.4
     base_release: v1.19.16-ci
     must: true
     patches:
       - CVE-2020-8554.1.19
       - nokmem.1.20
 
-  - name: v1.18.20-lts.2
+  - name: v1.18.20-lts.3
     base_release: v1.18.20-ci
     must: true
     patches:
@@ -109,7 +109,7 @@ releases:
   #     - CVE-2021-25741.1.18
   #     - nokmem.1.20
 
-  - name: v1.17.17-lts.2
+  - name: v1.17.17-lts.3
     base_release: v1.17.17-ci
     must: true
     patches:
@@ -118,7 +118,7 @@ releases:
       # - CVE-2021-25741.1.18
       - nokmem.1.20
 
-  - name: v1.16.15-lts.2
+  - name: v1.16.15-lts.3
     base_release: v1.16.15-ci
     must: true
     patches:
