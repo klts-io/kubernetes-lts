@@ -1,0 +1,95 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: codex <codex@local>
+Date: Wed, 15 Apr 2026 12:45:45 +0800
+Subject: [PATCH] build: bump Go to 1.25.0 for release-1.32
+
+---
+ .go-version                     | 2 +-
+ build/build-image/cross/VERSION | 2 +-
+ build/common.sh                 | 2 +-
+ build/dependencies.yaml         | 6 +++---
+ staging/publishing/rules.yaml   | 2 +-
+ test/images/Makefile            | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/.go-version b/.go-version
+index 59b05446606..ad2191947f7 100644
+--- a/.go-version
++++ b/.go-version
+@@ -1 +1 @@
+-1.24.13
++1.25.0
+diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
+index a5d914de931..f0a1fc99bfe 100644
+--- a/build/build-image/cross/VERSION
++++ b/build/build-image/cross/VERSION
+@@ -1 +1 @@
+-v1.32.0-go1.24.13-bullseye.0
++v1.32.0-go1.25.0-bullseye.0
+diff --git a/build/common.sh b/build/common.sh
+index ef10abc3a27..34f86c88ec2 100644
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -98,7 +98,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
+ 
+ # These are the default versions (image tags) for their respective base images.
+ readonly __default_distroless_iptables_version=v0.7.15
+-readonly __default_go_runner_version=v2.4.0-go1.24.13-bookworm.0
++readonly __default_go_runner_version=v2.4.0-go1.25.0-bookworm.0
+ readonly __default_setcap_version=bookworm-v1.0.6
+ 
+ # These are the base images for the Docker-wrapped binaries.
+diff --git a/build/dependencies.yaml b/build/dependencies.yaml
+index f1d46541ca4..a3643f321f3 100644
+--- a/build/dependencies.yaml
++++ b/build/dependencies.yaml
+@@ -112,7 +112,7 @@ dependencies:
+ 
+   # Golang
+   - name: "golang: upstream version"
+-    version: 1.24.13
++    version: 1.25.0
+     refPaths:
+     - path: .go-version
+     - path: build/build-image/cross/VERSION
+@@ -137,7 +137,7 @@ dependencies:
+       match: golang:([0-9]+\.[0-9]+).0-bullseye
+ 
+   - name: "registry.k8s.io/kube-cross: dependents"
+-    version: v1.32.0-go1.24.13-bullseye.0
++    version: v1.32.0-go1.25.0-bullseye.0
+     refPaths:
+     - path: build/build-image/cross/VERSION
+ 
+@@ -183,7 +183,7 @@ dependencies:
+       match: configs\[DistrolessIptables\] = Config{list\.BuildImageRegistry, "distroless-iptables", "v([0-9]+)\.([0-9]+)\.([0-9]+)"}
+ 
+   - name: "registry.k8s.io/go-runner: dependents"
+-    version: v2.4.0-go1.24.13-bookworm.0
++    version: v2.4.0-go1.25.0-bookworm.0
+     refPaths:
+     - path: build/common.sh
+       match: __default_go_runner_version=
+diff --git a/staging/publishing/rules.yaml b/staging/publishing/rules.yaml
+index 2158e7d7a4d..97dbad47bf9 100644
+--- a/staging/publishing/rules.yaml
++++ b/staging/publishing/rules.yaml
+@@ -2900,4 +2900,4 @@ rules:
+       - staging/src/k8s.io/externaljwt
+ recursive-delete-patterns:
+ - '*/.gitattributes'
+-default-go-version: 1.24.13
++default-go-version: 1.25.0
+diff --git a/test/images/Makefile b/test/images/Makefile
+index af46d3ad6cc..fcfd864f9b2 100644
+--- a/test/images/Makefile
++++ b/test/images/Makefile
+@@ -16,7 +16,7 @@ REGISTRY ?= registry.k8s.io/e2e-test-images
+ GOARM ?= 7
+ DOCKER_CERT_BASE_PATH ?=
+ QEMUVERSION=v5.1.0-2
+-GOLANG_VERSION=1.24.13
++GOLANG_VERSION=1.25.0
+ export
+ 
+ ifndef WHAT
