@@ -21,16 +21,122 @@ on:
     branches: [main]
   pull_request:
     branches: [main]
+  issue_comment:
+    types: [created]
 
   workflow_dispatch:
 
 jobs:
+  Select-Releases:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    outputs:
+      run_requested: \${{ steps.select.outputs.run_requested }}
+      run_all: \${{ steps.select.outputs.run_all }}
+      selected_releases: \${{ steps.select.outputs.selected_releases }}
+      checkout_ref: \${{ steps.select.outputs.checkout_ref }}
+    steps:
+      - id: select
+        uses: actions/github-script@v7
+        env:
+          RELEASES: '${ALL_RELEASES}'
+        with:
+          script: |
+            const releases = process.env.RELEASES.split(",").filter(Boolean)
+            const eventName = context.eventName
+            const payload = context.payload
+
+            let runRequested = true
+            let runAll = false
+            let selector = ""
+            let checkoutRef = context.sha
+
+            const selectReleases = (value) => {
+              const selected = []
+              const lower = (value || "").toLowerCase()
+              for (const release of releases) {
+                const relLower = release.toLowerCase()
+                const match = release.match(/^v(\d+)\.(\d+)\./)
+                const minorDot = match ? (match[1] + "." + match[2]) : ""
+                const minorDash = minorDot.replace(".", "-")
+                if (
+                  lower.includes(relLower) ||
+                  (minorDot && lower.includes(minorDot)) ||
+                  (minorDash && lower.includes(minorDash))
+                ) {
+                  selected.push(release)
+                }
+              }
+              return selected
+            }
+
+            if (eventName === "pull_request") {
+              const pr = payload.pull_request
+              selector = (pr.head.ref || "") + " " + (pr.title || "")
+              checkoutRef = pr.head.sha || context.sha
+            } else if (eventName === "issue_comment") {
+              const issue = payload.issue
+              const body = (payload.comment?.body || "").trim()
+
+              if (!issue?.pull_request) {
+                runRequested = false
+              } else if (!/^\/test(\s|$)/.test(body)) {
+                runRequested = false
+              } else {
+                const { owner, repo } = context.repo
+                const pullNumber = issue.number
+                const { data: pr } = await github.rest.pulls.get({
+                  owner,
+                  repo,
+                  pull_number: pullNumber,
+                })
+                checkoutRef = pr.head.sha
+                // comment selector can include one or multiple versions, e.g. "/test 1.28 1.29".
+                selector = body.replace(/^\/test(\s+)?/, "")
+              }
+            } else {
+              runAll = true
+            }
+
+            let selected = []
+            if (runRequested) {
+              if (runAll) {
+                selected = releases
+              } else {
+                selected = selectReleases(selector)
+                if (selected.length === 0) {
+                  runAll = true
+                  selected = releases
+                }
+              }
+            }
+
+            const selectedReleases = selected.length ? ("," + selected.join(",") + ",") : ""
+
+            core.setOutput("run_requested", runRequested ? "true" : "false")
+            core.setOutput("run_all", runAll ? "true" : "false")
+            core.setOutput("selected_releases", selectedReleases)
+            core.setOutput("checkout_ref", checkoutRef)
+            core.info(
+              "run_requested=" + runRequested +
+              " run_all=" + runAll +
+              " selected_releases=" + selectedReleases +
+              " checkout_ref=" + checkoutRef
+            )
+
   Patch:
+    needs:
+      - Select-Releases
+    if: \${{ needs.Select-Releases.outputs.run_requested == 'true' }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: \${{ needs.Select-Releases.outputs.checkout_ref }}
       - name: Cache
         uses: actions/cache@v4
         env:
@@ -53,62 +159,6 @@ jobs:
         run: |
           make verify-patch-format
 
-  Select-Releases:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-    outputs:
-      run_all: \${{ steps.select.outputs.run_all }}
-      selected_releases: \${{ steps.select.outputs.selected_releases }}
-    steps:
-      - id: select
-        shell: bash
-        env:
-          EVENT_NAME: \${{ github.event_name }}
-          HEAD_REF: \${{ github.head_ref }}
-          PR_TITLE: \${{ github.event.pull_request.title }}
-          RELEASES: '${ALL_RELEASES}'
-        run: |
-          set -o errexit
-          set -o nounset
-          set -o pipefail
-
-          selected_releases=""
-          run_all="false"
-
-          if [[ "\${EVENT_NAME}" != "pull_request" ]]; then
-            run_all="true"
-            selected_releases="\${RELEASES}"
-          else
-            selector="\$(echo "\${HEAD_REF} \${PR_TITLE}" | tr '[:upper:]' '[:lower:]')"
-            IFS=',' read -r -a release_list <<< "\${RELEASES}"
-            for release in "\${release_list[@]}"; do
-              if [[ -z "\${release}" ]]; then
-                continue
-              fi
-              release_lower="\$(echo "\${release}" | tr '[:upper:]' '[:lower:]')"
-              minor_dot="\$(echo "\${release}" | sed -E 's/^v([0-9]+)\.([0-9]+)\..*/\1.\2/')"
-              minor_dash="\${minor_dot/./-}"
-
-              if [[ "\${selector}" == *"\${release_lower}"* ]] || [[ "\${selector}" == *"\${minor_dot}"* ]] || [[ "\${selector}" == *"\${minor_dash}"* ]]; then
-                if [[ -z "\${selected_releases}" ]]; then
-                  selected_releases=",\${release},"
-                else
-                  selected_releases="\${selected_releases}\${release},"
-                fi
-              fi
-            done
-
-            if [[ -z "\${selected_releases}" ]]; then
-              run_all="true"
-              selected_releases="\${RELEASES}"
-            fi
-          fi
-
-          echo "run_all=\${run_all}" >> "\${GITHUB_OUTPUT}"
-          echo "selected_releases=\${selected_releases}" >> "\${GITHUB_OUTPUT}"
-          echo "Selected releases: \${selected_releases}"
-
 EOF
 
 for release in ${RELEASES}; do
@@ -118,12 +168,14 @@ for release in ${RELEASES}; do
     needs:
       - Patch
       - Select-Releases
-    if: \${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},') }}
+    if: \${{ needs.Select-Releases.outputs.run_requested == 'true' && (needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: \${{ needs.Select-Releases.outputs.checkout_ref }}
       - name: Cache
         uses: actions/cache@v4
         env:
@@ -155,12 +207,14 @@ for release in ${RELEASES}; do
     needs:
       - Patch
       - Select-Releases
-    if: \${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},') }}
+    if: \${{ needs.Select-Releases.outputs.run_requested == 'true' && (needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: \${{ needs.Select-Releases.outputs.checkout_ref }}
       - name: Cache
         uses: actions/cache@v4
         env:
@@ -192,12 +246,14 @@ for release in ${RELEASES}; do
     needs:
       - Patch
       - Select-Releases
-    if: \${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},') }}
+    if: \${{ needs.Select-Releases.outputs.run_requested == 'true' && (needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',${release},')) }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: \${{ needs.Select-Releases.outputs.checkout_ref }}
       - name: Cache
         uses: actions/cache@v4
         env:
