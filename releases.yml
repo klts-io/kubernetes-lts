@@ -906,7 +906,7 @@ patches:
 
   - name: fix-kubeadm-preflight-host-url-construction
     patch:
-      - https://github.com/kubernetes/kubernetes/commit/ced2a40b9e98889ecaf657573f4f0ab32772f95d.patch
+      - https://github.com/kubernetes/kubernetes/commit/ced2a40b9e9acfad3934e30ce684f5d191277dc3.patch
 
   - name: fix-scheduler-volumebinding.1.28
     patch:
