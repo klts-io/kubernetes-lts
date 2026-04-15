@@ -27,7 +27,7 @@ index ac7840e9012..cf344839b72 100644
 -v1.31.0-go1.24.9-bullseye.0
 +v1.31.0-go1.25.0-bullseye.0
 diff --git a/build/common.sh b/build/common.sh
-index e2850cdc5f4..ecab15d2de9 100644
+index e2850cdc5f4..ecab15d2de9 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -98,7 +98,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
