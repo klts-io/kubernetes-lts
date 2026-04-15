@@ -231,6 +231,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-9.1.28
       - CVE-2024-9042
       - CVE-2025-0426
       - CVE-2025-13281
@@ -298,6 +299,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-9.1.27
       - CVE-2024-10220
       - CVE-2024-9042
       - CVE-2025-0426
@@ -313,6 +315,7 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-9.1.26
       - CVE-2024-10220
       - CVE-2025-0426
       - CVE-2025-13281
@@ -329,6 +332,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.25
+      - bump-go-1-25-9.1.25
       - CVE-2024-10220
       - CVE-2025-0426
       - CVE-2025-13281
