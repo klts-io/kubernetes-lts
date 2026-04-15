@@ -244,6 +244,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-0.1.32
       - CVE-2025-1767
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
@@ -253,6 +254,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-0.1.31
       - CVE-2025-13281
       - CVE-2025-1767
     test_failures_tolerated:
@@ -263,6 +265,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-0.1.30
       - CVE-2025-13281
       - CVE-2025-1767
       - CVE-2025-5187
@@ -274,6 +277,7 @@ releases:
     patches:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
+      - bump-go-1-25-0.1.29
       - CVE-2025-13281
       - CVE-2025-1767
       - CVE-2025-5187
@@ -876,6 +880,19 @@ patches:
   - name: fix-etcd-put-key.1.11
     patch:
       - patches/fix-etcd-put-key.1.11.patch
+
+  - name: bump-go-1-25-0.1.32
+    patch:
+      - patches/bump-go-1-25-0.1.32.patch
+  - name: bump-go-1-25-0.1.31
+    patch:
+      - patches/bump-go-1-25-0.1.31.patch
+  - name: bump-go-1-25-0.1.30
+    patch:
+      - patches/bump-go-1-25-0.1.30.patch
+  - name: bump-go-1-25-0.1.29
+    patch:
+      - patches/bump-go-1-25-0.1.29.patch
 
   - name: fix-scheduler-volumebinding.1.28
     patch:
