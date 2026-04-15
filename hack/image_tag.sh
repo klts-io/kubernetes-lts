@@ -13,6 +13,11 @@ if [[ -z "${REGISTRY}" ]]; then
     exit 1
 fi
 
+if [[ "${REGISTRY}" != ghcr.io/* ]]; then
+    echo "REGISTRY must target ghcr.io, got: ${REGISTRY}"
+    exit 1
+fi
+
 declare -a CANDIDATE_OLD_REGISTRIES=()
 add_candidate_registry() {
     local candidate="${1}"
