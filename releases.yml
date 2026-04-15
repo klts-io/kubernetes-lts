@@ -245,6 +245,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - bump-go-1-25-9.1.32
+      - fix-allocsperrun-parallel
       - CVE-2025-1767
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
@@ -255,6 +256,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - bump-go-1-25-9.1.31
+      - fix-allocsperrun-parallel
       - CVE-2025-13281
       - CVE-2025-1767
     test_failures_tolerated:
@@ -266,6 +268,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - bump-go-1-25-9.1.30
+      - fix-allocsperrun-parallel
       - CVE-2025-13281
       - CVE-2025-1767
       - CVE-2025-5187
@@ -278,6 +281,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.24
       - bump-go-1-25-9.1.29
+      - fix-allocsperrun-parallel
       - CVE-2025-13281
       - CVE-2025-1767
       - CVE-2025-5187
@@ -893,6 +897,10 @@ patches:
   - name: bump-go-1-25-9.1.29
     patch:
       - patches/bump-go-1-25-9.1.29.patch
+
+  - name: fix-allocsperrun-parallel
+    patch:
+      - https://github.com/kubernetes/kubernetes/pull/130437.patch
 
   - name: fix-scheduler-volumebinding.1.28
     patch:
