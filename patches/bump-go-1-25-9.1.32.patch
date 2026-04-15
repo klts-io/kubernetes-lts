@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: codex <codex@local>
 Date: Wed, 15 Apr 2026 12:45:45 +0800
-Subject: [PATCH] build: bump Go to 1.25.0 for release-1.32
+Subject: [PATCH] build: bump Go to 1.25.9 for release-1.32
 
 ---
  .go-version                     | 2 +-
@@ -18,14 +18,14 @@ index 59b05446606..ad2191947f7 100644
 +++ b/.go-version
 @@ -1 +1 @@
 -1.24.13
-+1.25.0
++1.25.9
 diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
 index a5d914de931..f0a1fc99bfe 100644
 --- a/build/build-image/cross/VERSION
 +++ b/build/build-image/cross/VERSION
 @@ -1 +1 @@
 -v1.32.0-go1.24.13-bullseye.0
-+v1.32.0-go1.25.0-bullseye.0
++v1.33.0-go1.25.9-bullseye.0
 diff --git a/build/common.sh b/build/common.sh
 index ef10abc3a27..34f86c88ec2 100755
 --- a/build/common.sh
@@ -35,7 +35,7 @@ index ef10abc3a27..34f86c88ec2 100755
  # These are the default versions (image tags) for their respective base images.
  readonly __default_distroless_iptables_version=v0.7.15
 -readonly __default_go_runner_version=v2.4.0-go1.24.13-bookworm.0
-+readonly __default_go_runner_version=v2.4.0-go1.25.0-bookworm.0
++readonly __default_go_runner_version=v2.4.0-go1.25.9-bookworm.0
  readonly __default_setcap_version=bookworm-v1.0.6
  
  # These are the base images for the Docker-wrapped binaries.
@@ -48,7 +48,7 @@ index f1d46541ca4..a3643f321f3 100644
    # Golang
    - name: "golang: upstream version"
 -    version: 1.24.13
-+    version: 1.25.0
++    version: 1.25.9
      refPaths:
      - path: .go-version
      - path: build/build-image/cross/VERSION
@@ -57,7 +57,7 @@ index f1d46541ca4..a3643f321f3 100644
  
    - name: "registry.k8s.io/kube-cross: dependents"
 -    version: v1.32.0-go1.24.13-bullseye.0
-+    version: v1.32.0-go1.25.0-bullseye.0
++    version: v1.33.0-go1.25.9-bullseye.0
      refPaths:
      - path: build/build-image/cross/VERSION
  
@@ -66,7 +66,7 @@ index f1d46541ca4..a3643f321f3 100644
  
    - name: "registry.k8s.io/go-runner: dependents"
 -    version: v2.4.0-go1.24.13-bookworm.0
-+    version: v2.4.0-go1.25.0-bookworm.0
++    version: v2.4.0-go1.25.9-bookworm.0
      refPaths:
      - path: build/common.sh
        match: __default_go_runner_version=
@@ -79,7 +79,7 @@ index 2158e7d7a4d..97dbad47bf9 100644
  recursive-delete-patterns:
  - '*/.gitattributes'
 -default-go-version: 1.24.13
-+default-go-version: 1.25.0
++default-go-version: 1.25.9
 diff --git a/test/images/Makefile b/test/images/Makefile
 index af46d3ad6cc..fcfd864f9b2 100644
 --- a/test/images/Makefile
@@ -89,7 +89,7 @@ index af46d3ad6cc..fcfd864f9b2 100644
  DOCKER_CERT_BASE_PATH ?=
  QEMUVERSION=v5.1.0-2
 -GOLANG_VERSION=1.24.13
-+GOLANG_VERSION=1.25.0
++GOLANG_VERSION=1.25.9
  export
  
  ifndef WHAT

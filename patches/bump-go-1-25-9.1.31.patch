@@ -1,7 +1,7 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: codex <codex@local>
-Date: Wed, 15 Apr 2026 12:45:56 +0800
-Subject: [PATCH] build: bump Go to 1.25.0 for release-1.29
+Date: Wed, 15 Apr 2026 12:45:49 +0800
+Subject: [PATCH] build: bump Go to 1.25.9 for release-1.31
 
 ---
  .go-version                     | 2 +-
@@ -13,85 +13,83 @@ Subject: [PATCH] build: bump Go to 1.25.0 for release-1.29
  6 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/.go-version b/.go-version
-index fa994bd7197..f2538f8b59f 100644
+index eb716f77a7b..ad2191947f7 100644
 --- a/.go-version
 +++ b/.go-version
 @@ -1 +1 @@
--1.23.6
-\ No newline at end of file
-+1.25.0
-\ No newline at end of file
+-1.24.9
++1.25.9
 diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
-index 55f1fb049ab..3dca34411d1 100644
+index ac7840e9012..cf344839b72 100644
 --- a/build/build-image/cross/VERSION
 +++ b/build/build-image/cross/VERSION
 @@ -1 +1 @@
--v1.29.0-go1.23.6-bullseye.0
-+v1.29.0-go1.25.0-bullseye.0
+-v1.31.0-go1.24.9-bullseye.0
++v1.33.0-go1.25.9-bullseye.0
 diff --git a/build/common.sh b/build/common.sh
-index 06292442695..e0144e75870 100755
+index e2850cdc5f4..ecab15d2de9 100755
 --- a/build/common.sh
 +++ b/build/common.sh
-@@ -97,7 +97,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
+@@ -98,7 +98,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
  
  # These are the default versions (image tags) for their respective base images.
- readonly __default_distroless_iptables_version=v0.5.13
--readonly __default_go_runner_version=v2.4.0-go1.23.6-bookworm.0
-+readonly __default_go_runner_version=v2.4.0-go1.25.0-bookworm.0
- readonly __default_setcap_version=bookworm-v1.0.3
+ readonly __default_distroless_iptables_version=v0.7.11
+-readonly __default_go_runner_version=v2.4.0-go1.24.9-bookworm.0
++readonly __default_go_runner_version=v2.4.0-go1.25.9-bookworm.0
+ readonly __default_setcap_version=bookworm-v1.0.6
  
  # These are the base images for the Docker-wrapped binaries.
 diff --git a/build/dependencies.yaml b/build/dependencies.yaml
-index 876fa1484b4..7fc7843e5f3 100644
+index 70fc9a6290c..332701d7317 100644
 --- a/build/dependencies.yaml
 +++ b/build/dependencies.yaml
-@@ -118,7 +118,7 @@ dependencies:
+@@ -112,7 +112,7 @@ dependencies:
  
    # Golang
    - name: "golang: upstream version"
--    version: 1.23.6
-+    version: 1.25.0
+-    version: 1.24.9
++    version: 1.25.9
      refPaths:
      - path: .go-version
      - path: build/build-image/cross/VERSION
-@@ -141,7 +141,7 @@ dependencies:
+@@ -135,7 +135,7 @@ dependencies:
      #   match: minimum_go_version=go([0-9]+\.[0-9]+)
  
    - name: "registry.k8s.io/kube-cross: dependents"
--    version: v1.29.0-go1.23.6-bullseye.0
-+    version: v1.29.0-go1.25.0-bullseye.0
+-    version: v1.31.0-go1.24.9-bullseye.0
++    version: v1.33.0-go1.25.9-bullseye.0
      refPaths:
      - path: build/build-image/cross/VERSION
  
-@@ -187,7 +187,7 @@ dependencies:
+@@ -181,7 +181,7 @@ dependencies:
        match: configs\[DistrolessIptables\] = Config{list\.BuildImageRegistry, "distroless-iptables", "v([0-9]+)\.([0-9]+)\.([0-9]+)"}
  
    - name: "registry.k8s.io/go-runner: dependents"
--    version: v2.4.0-go1.23.6-bookworm.0
-+    version: v2.4.0-go1.25.0-bookworm.0
+-    version: v2.4.0-go1.24.9-bookworm.0
++    version: v2.4.0-go1.25.9-bookworm.0
      refPaths:
      - path: build/common.sh
        match: __default_go_runner_version=
 diff --git a/staging/publishing/rules.yaml b/staging/publishing/rules.yaml
-index 5cb6a90509a..ec237845ff5 100644
+index 10da656ada6..c473e997f99 100644
 --- a/staging/publishing/rules.yaml
 +++ b/staging/publishing/rules.yaml
-@@ -2803,4 +2803,4 @@ rules:
+@@ -2898,4 +2898,4 @@ rules:
        - staging/src/k8s.io/endpointslice
  recursive-delete-patterns:
  - '*/.gitattributes'
--default-go-version: 1.23.6
-+default-go-version: 1.25.0
+-default-go-version: 1.24.9
++default-go-version: 1.25.9
 diff --git a/test/images/Makefile b/test/images/Makefile
-index a2bd6fb83a3..fcfd864f9b2 100644
+index 4cda4a67fcd..fcfd864f9b2 100644
 --- a/test/images/Makefile
 +++ b/test/images/Makefile
 @@ -16,7 +16,7 @@ REGISTRY ?= registry.k8s.io/e2e-test-images
  GOARM ?= 7
  DOCKER_CERT_BASE_PATH ?=
  QEMUVERSION=v5.1.0-2
--GOLANG_VERSION=1.23.6
-+GOLANG_VERSION=1.25.0
+-GOLANG_VERSION=1.24.9
++GOLANG_VERSION=1.25.9
  export
  
  ifndef WHAT
