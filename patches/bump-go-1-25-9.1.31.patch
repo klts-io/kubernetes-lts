@@ -13,21 +13,21 @@ Subject: [PATCH] build: bump Go to 1.25.9 for release-1.31
  6 files changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/.go-version b/.go-version
-index eb716f77a7b..ad2191947f7 100644
+index eb716f77a7b..0e0c284d88a 100644
 --- a/.go-version
 +++ b/.go-version
 @@ -1 +1 @@
 -1.24.9
 +1.25.9
 diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
-index ac7840e9012..cf344839b72 100644
+index ac7840e9012..306a07c99c8 100644
 --- a/build/build-image/cross/VERSION
 +++ b/build/build-image/cross/VERSION
 @@ -1 +1 @@
 -v1.31.0-go1.24.9-bullseye.0
 +v1.33.0-go1.25.9-bullseye.0
 diff --git a/build/common.sh b/build/common.sh
-index e2850cdc5f4..ecab15d2de9 100755
+index e2850cdc5f4..8d1875b946c 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -98,7 +98,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
@@ -40,7 +40,7 @@ index e2850cdc5f4..ecab15d2de9 100755
  
  # These are the base images for the Docker-wrapped binaries.
 diff --git a/build/dependencies.yaml b/build/dependencies.yaml
-index 70fc9a6290c..332701d7317 100644
+index 70fc9a6290c..b9ffdd29354 100644
 --- a/build/dependencies.yaml
 +++ b/build/dependencies.yaml
 @@ -112,7 +112,7 @@ dependencies:
@@ -71,7 +71,7 @@ index 70fc9a6290c..332701d7317 100644
      - path: build/common.sh
        match: __default_go_runner_version=
 diff --git a/staging/publishing/rules.yaml b/staging/publishing/rules.yaml
-index 10da656ada6..c473e997f99 100644
+index 10da656ada6..68f23674b4b 100644
 --- a/staging/publishing/rules.yaml
 +++ b/staging/publishing/rules.yaml
 @@ -2898,4 +2898,4 @@ rules:
@@ -81,7 +81,7 @@ index 10da656ada6..c473e997f99 100644
 -default-go-version: 1.24.9
 +default-go-version: 1.25.9
 diff --git a/test/images/Makefile b/test/images/Makefile
-index 4cda4a67fcd..fcfd864f9b2 100644
+index 4cda4a67fcd..26d4d3546b1 100644
 --- a/test/images/Makefile
 +++ b/test/images/Makefile
 @@ -16,7 +16,7 @@ REGISTRY ?= registry.k8s.io/e2e-test-images
