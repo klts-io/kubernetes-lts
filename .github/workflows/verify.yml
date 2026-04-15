@@ -38,22 +38,33 @@ jobs:
             let checkoutRef = context.sha
 
             const selectReleases = (value) => {
-              const selected = []
+              const exact = []
+              const byMinor = new Map()
               const lower = (value || "").toLowerCase()
               for (const release of releases) {
                 const relLower = release.toLowerCase()
                 const match = release.match(/^v(\d+)\.(\d+)\./)
                 const minorDot = match ? (match[1] + "." + match[2]) : ""
                 const minorDash = minorDot.replace(".", "-")
+
+                if (lower.includes(relLower)) {
+                  exact.push(release)
+                  continue
+                }
+
                 if (
-                  lower.includes(relLower) ||
-                  (minorDot && lower.includes(minorDot)) ||
-                  (minorDash && lower.includes(minorDash))
+                  minorDot &&
+                  (lower.includes(minorDot) || lower.includes(minorDash)) &&
+                  !byMinor.has(minorDot)
                 ) {
-                  selected.push(release)
+                  // keep first release per minor as "latest" (releases are listed newest first)
+                  byMinor.set(minorDot, release)
                 }
               }
-              return selected
+              if (exact.length > 0) {
+                return exact
+              }
+              return Array.from(byMinor.values())
             }
 
             if (eventName === "pull_request") {
