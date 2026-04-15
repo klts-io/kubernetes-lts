@@ -1,0 +1,66 @@
+From 9aeb0c8ca2f81c588cedb9503d51a34b806cde83 Mon Sep 17 00:00:00 2001
+From: Paco Xu <paco.xu@daocloud.io>
+Date: Wed, 15 Apr 2026 18:06:10 +0800
+Subject: [PATCH] go1.25: fix tokeninternal and printf-style vet failures
+
+---
+ .../endpoints/handlers/responsewriters/errors.go  |  2 +-
+ .../gce/gce_loadbalancer_utils_test.go            |  2 +-
+ .../tools/internal/tokeninternal/tokeninternal.go | 15 ++++++++++++---
+ 3 files changed, 14 insertions(+), 5 deletions(-)
+
+diff --git a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/responsewriters/errors.go b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/responsewriters/errors.go
+index d13bee4d223..3440f1d825f 100644
+--- a/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/responsewriters/errors.go
++++ b/staging/src/k8s.io/apiserver/pkg/endpoints/handlers/responsewriters/errors.go
+@@ -45,7 +45,7 @@ func Forbidden(ctx context.Context, attributes authorizer.Attributes, w http.Res
+ 	}
+ 	gv := schema.GroupVersion{Group: attributes.GetAPIGroup(), Version: attributes.GetAPIVersion()}
+ 	gr := schema.GroupResource{Group: attributes.GetAPIGroup(), Resource: attributes.GetResource()}
+-	ErrorNegotiated(apierrors.NewForbidden(gr, attributes.GetName(), fmt.Errorf(errMsg)), s, gv, w, req)
++	ErrorNegotiated(apierrors.NewForbidden(gr, attributes.GetName(), fmt.Errorf("%s", errMsg)), s, gv, w, req)
+ }
+ 
+ func forbiddenMessage(attributes authorizer.Attributes) string {
+diff --git a/staging/src/k8s.io/legacy-cloud-providers/gce/gce_loadbalancer_utils_test.go b/staging/src/k8s.io/legacy-cloud-providers/gce/gce_loadbalancer_utils_test.go
+index 35f9eae8de8..7f42da2b6ec 100644
+--- a/staging/src/k8s.io/legacy-cloud-providers/gce/gce_loadbalancer_utils_test.go
++++ b/staging/src/k8s.io/legacy-cloud-providers/gce/gce_loadbalancer_utils_test.go
+@@ -299,7 +299,7 @@ func checkEvent(t *testing.T, recorder *record.FakeRecorder, expected string, sh
+ 	select {
+ 	case received := <-recorder.Events:
+ 		if strings.HasPrefix(received, expected) != shouldMatch {
+-			t.Errorf(received)
++			t.Errorf("%s", received)
+ 			if shouldMatch {
+ 				t.Errorf("Should receive message \"%v\" but got \"%v\".", expected, received)
+ 			} else {
+diff --git a/vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go b/vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go
+index 7e638ec24fc..2144280efad 100644
+--- a/vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go
++++ b/vendor/golang.org/x/tools/internal/tokeninternal/tokeninternal.go
+@@ -73,9 +73,18 @@ func AddExistingFiles(fset *token.FileSet, files []*token.File) {
+ 		_     *token.File // changed to atomic.Pointer[token.File] in go1.19
+ 	}
+ 
+-	// If the size of token.FileSet changes, this will fail to compile.
+-	const delta = int64(unsafe.Sizeof(tokenFileSet{})) - int64(unsafe.Sizeof(token.FileSet{}))
+-	var _ [-delta * delta]int
++	// If token.FileSet layout changed (for example in go1.25), prefer using
++	// the standard-library API when available.
++	if unsafe.Sizeof(tokenFileSet{}) != unsafe.Sizeof(token.FileSet{}) {
++		type addExistingFiles interface {
++			AddExistingFiles(...*token.File)
++		}
++		if fs, ok := interface{}(fset).(addExistingFiles); ok {
++			fs.AddExistingFiles(files...)
++			return
++		}
++		panic("unexpected token.FileSet size")
++	}
+ 
+ 	type uP = unsafe.Pointer
+ 	var ptr *tokenFileSet
+-- 
+2.50.1 (Apple Git-155)
+
