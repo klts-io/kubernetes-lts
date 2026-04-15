@@ -37,8 +37,67 @@ jobs:
         run: |
           make verify-patch-format
 
+  Select-Releases:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      run_all: ${{ steps.select.outputs.run_all }}
+      selected_releases: ${{ steps.select.outputs.selected_releases }}
+    steps:
+      - id: select
+        shell: bash
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          HEAD_REF: ${{ github.head_ref }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+          RELEASES: ',v1.32.13-lts.1,v1.31.14-lts.1,v1.30.14-lts.1,v1.29.15-lts.1,v1.28.15-lts.2,v1.28.15-lts.0,v1.27.16-lts.1,v1.26.15-lts.1,v1.25.16-lts.1,v1.24.17-lts.1,v1.23.17-lts.1,v1.22.17-lts.1,v1.21.14-lts.2,v1.20.15-lts.3,v1.19.16-lts.4,v1.18.20-lts.3,v1.17.17-lts.3,v1.16.15-lts.3,'
+        run: |
+          set -o errexit
+          set -o nounset
+          set -o pipefail
+
+          selected_releases=""
+          run_all="false"
+
+          if [[ "${EVENT_NAME}" != "pull_request" ]]; then
+            run_all="true"
+            selected_releases="${RELEASES}"
+          else
+            selector="$(echo "${HEAD_REF} ${PR_TITLE}" | tr '[:upper:]' '[:lower:]')"
+            IFS=',' read -r -a release_list <<< "${RELEASES}"
+            for release in "${release_list[@]}"; do
+              if [[ -z "${release}" ]]; then
+                continue
+              fi
+              release_lower="$(echo "${release}" | tr '[:upper:]' '[:lower:]')"
+              minor_dot="$(echo "${release}" | sed -E 's/^v([0-9]+)\.([0-9]+)\..*/\1.\2/')"
+              minor_dash="${minor_dot/./-}"
+
+              if [[ "${selector}" == *"${release_lower}"* ]] || [[ "${selector}" == *"${minor_dot}"* ]] || [[ "${selector}" == *"${minor_dash}"* ]]; then
+                if [[ -z "${selected_releases}" ]]; then
+                  selected_releases=",${release},"
+                else
+                  selected_releases="${selected_releases}${release},"
+                fi
+              fi
+            done
+
+            if [[ -z "${selected_releases}" ]]; then
+              run_all="true"
+              selected_releases="${RELEASES}"
+            fi
+          fi
+
+          echo "run_all=${run_all}" >> "${GITHUB_OUTPUT}"
+          echo "selected_releases=${selected_releases}" >> "${GITHUB_OUTPUT}"
+          echo "Selected releases: ${selected_releases}"
+
   Test-v1-32-13-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.32.13-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -72,7 +131,10 @@ jobs:
           make test
 
   Test-Cmd-v1-32-13-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.32.13-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -106,7 +168,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-32-13-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.32.13-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -141,7 +206,10 @@ jobs:
           make test-integration
 
   Test-v1-31-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.31.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -175,7 +243,10 @@ jobs:
           make test
 
   Test-Cmd-v1-31-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.31.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -209,7 +280,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-31-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.31.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -244,7 +318,10 @@ jobs:
           make test-integration
 
   Test-v1-30-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.30.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -278,7 +355,10 @@ jobs:
           make test
 
   Test-Cmd-v1-30-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.30.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -312,7 +392,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-30-14-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.30.14-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -347,7 +430,10 @@ jobs:
           make test-integration
 
   Test-v1-29-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.29.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -381,7 +467,10 @@ jobs:
           make test
 
   Test-Cmd-v1-29-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.29.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -415,7 +504,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-29-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.29.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -450,7 +542,10 @@ jobs:
           make test-integration
 
   Test-v1-28-15-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -484,7 +579,10 @@ jobs:
           make test
 
   Test-Cmd-v1-28-15-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -518,7 +616,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-28-15-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -553,7 +654,10 @@ jobs:
           make test-integration
 
   Test-v1-28-15-lts-0:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.0,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -587,7 +691,10 @@ jobs:
           make test
 
   Test-Cmd-v1-28-15-lts-0:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.0,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -621,7 +728,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-28-15-lts-0:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.28.15-lts.0,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -656,7 +766,10 @@ jobs:
           make test-integration
 
   Test-v1-27-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.27.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -690,7 +803,10 @@ jobs:
           make test
 
   Test-Cmd-v1-27-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.27.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -724,7 +840,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-27-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.27.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -759,7 +878,10 @@ jobs:
           make test-integration
 
   Test-v1-26-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.26.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -793,7 +915,10 @@ jobs:
           make test
 
   Test-Cmd-v1-26-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.26.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -827,7 +952,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-26-15-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.26.15-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -862,7 +990,10 @@ jobs:
           make test-integration
 
   Test-v1-25-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.25.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -896,7 +1027,10 @@ jobs:
           make test
 
   Test-Cmd-v1-25-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.25.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -930,7 +1064,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-25-16-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.25.16-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -965,7 +1102,10 @@ jobs:
           make test-integration
 
   Test-v1-24-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.24.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -999,7 +1139,10 @@ jobs:
           make test
 
   Test-Cmd-v1-24-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.24.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1033,7 +1176,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-24-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.24.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1068,7 +1214,10 @@ jobs:
           make test-integration
 
   Test-v1-23-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.23.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1102,7 +1251,10 @@ jobs:
           make test
 
   Test-Cmd-v1-23-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.23.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1136,7 +1288,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-23-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.23.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1171,7 +1326,10 @@ jobs:
           make test-integration
 
   Test-v1-22-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.22.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1205,7 +1363,10 @@ jobs:
           make test
 
   Test-Cmd-v1-22-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.22.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1239,7 +1400,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-22-17-lts-1:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.22.17-lts.1,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1274,7 +1438,10 @@ jobs:
           make test-integration
 
   Test-v1-21-14-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.21.14-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1308,7 +1475,10 @@ jobs:
           make test
 
   Test-Cmd-v1-21-14-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.21.14-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1342,7 +1512,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-21-14-lts-2:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.21.14-lts.2,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1377,7 +1550,10 @@ jobs:
           make test-integration
 
   Test-v1-20-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.20.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1411,7 +1587,10 @@ jobs:
           make test
 
   Test-Cmd-v1-20-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.20.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1445,7 +1624,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-20-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.20.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1480,7 +1662,10 @@ jobs:
           make test-integration
 
   Test-v1-19-16-lts-4:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.19.16-lts.4,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1514,7 +1699,10 @@ jobs:
           make test
 
   Test-Cmd-v1-19-16-lts-4:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.19.16-lts.4,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1548,7 +1736,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-19-16-lts-4:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.19.16-lts.4,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1583,7 +1774,10 @@ jobs:
           make test-integration
 
   Test-v1-18-20-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.18.20-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1617,7 +1811,10 @@ jobs:
           make test
 
   Test-Cmd-v1-18-20-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.18.20-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1651,7 +1848,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-18-20-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.18.20-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1686,7 +1886,10 @@ jobs:
           make test-integration
 
   Test-v1-17-17-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.17.17-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1720,7 +1923,10 @@ jobs:
           make test
 
   Test-Cmd-v1-17-17-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.17.17-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1754,7 +1960,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-17-17-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.17.17-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1789,7 +1998,10 @@ jobs:
           make test-integration
 
   Test-v1-16-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.16.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1823,7 +2035,10 @@ jobs:
           make test
 
   Test-Cmd-v1-16-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.16.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -1857,7 +2072,10 @@ jobs:
           make test-cmd
 
   Test-Integration-v1-16-15-lts-3:
-    needs: Patch
+    needs:
+      - Patch
+      - Select-Releases
+    if: ${{ needs.Select-Releases.outputs.run_all == 'true' || contains(needs.Select-Releases.outputs.selected_releases, ',v1.16.15-lts.3,') }}
     runs-on: ubuntu-latest
     permissions:
       contents: read
