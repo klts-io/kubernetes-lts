@@ -1,0 +1,30 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: codex <codex@local>
+Date: Thu, 16 Apr 2026 17:17:00 +0800
+Subject: [PATCH] build: bump Go to 1.25.9 for release-1.14
+
+---
+ build/build-image/cross/VERSION | 2 +-
+ test/images/Makefile            | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
+index 1a8543adf20..306a07c99c8 100644
+--- a/build/build-image/cross/VERSION
++++ b/build/build-image/cross/VERSION
+@@ -1 +1 @@
+-v1.12.12-1
++v1.33.0-go1.25.9-bullseye.0
+diff --git a/test/images/Makefile b/test/images/Makefile
+index daee66c2b3f..23a301279a6 100644
+--- a/test/images/Makefile
++++ b/test/images/Makefile
+@@ -17,7 +17,7 @@ include  ../../hack/make-rules/Makefile.manifest
+ REGISTRY ?= gcr.io/kubernetes-e2e-test-images
+ GOARM=7
+ QEMUVERSION=v2.9.1
+-GOLANG_VERSION=1.12.12
++GOLANG_VERSION=1.25.9
+ export
+ 
+ ifndef WHAT
