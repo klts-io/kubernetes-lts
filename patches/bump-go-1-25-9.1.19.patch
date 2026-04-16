@@ -1,6 +1,6 @@
 From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: codex <codex@local>
-Date: Thu, 16 Apr 2026 17:12:57 +0800
+Date: Thu, 16 Apr 2026 17:45:34 +0800
 Subject: [PATCH] build: bump Go to 1.25.9 for release-1.19
 
 ---
@@ -19,7 +19,7 @@ index 57063568252..306a07c99c8 100644
 -v1.15.15-legacy-1
 +v1.33.0-go1.25.9-bullseye.0
 diff --git a/build/common.sh b/build/common.sh
-index 52437217321..12505b5bf6b 100755
+index 257c7a51f1d..e0c30744291 100755
 --- a/build/common.sh
 +++ b/build/common.sh
 @@ -94,7 +94,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
@@ -32,7 +32,7 @@ index 52437217321..12505b5bf6b 100755
    ### in build/BUILD. And kube::golang::server_image_targets
    local targets=(
 diff --git a/build/dependencies.yaml b/build/dependencies.yaml
-index 10953619c94..d60d0f48d46 100644
+index 10953619c94..f8f0c733c19 100644
 --- a/build/dependencies.yaml
 +++ b/build/dependencies.yaml
 @@ -99,7 +99,7 @@ dependencies:
@@ -40,7 +40,7 @@ index 10953619c94..d60d0f48d46 100644
    # Golang
    - name: "golang: upstream version"
 -    version: 1.15.15
-+    version: .25.9
++    version: 1.25.9
      refPaths:
      - path: build/build-image/cross/VERSION
      - path: build/root/WORKSPACE
