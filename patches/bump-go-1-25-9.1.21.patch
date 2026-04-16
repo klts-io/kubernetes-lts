@@ -1,0 +1,90 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: codex <codex@local>
+Date: Thu, 16 Apr 2026 14:45:50 +0800
+Subject: [PATCH] build: bump Go to 1.25.9 for release-1.21
+
+---
+ build/build-image/cross/VERSION | 2 +-
+ build/common.sh                 | 2 +-
+ build/dependencies.yaml         | 6 +++---
+ staging/publishing/rules.yaml   | 2 +-
+ test/images/Makefile            | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/build/build-image/cross/VERSION b/build/build-image/cross/VERSION
+index c46549394a9..306a07c99c8 100644
+--- a/build/build-image/cross/VERSION
++++ b/build/build-image/cross/VERSION
+@@ -1 +1 @@
+-v1.21.0-go1.16.15-buster.0
++v1.33.0-go1.25.9-bullseye.0
+diff --git a/build/common.sh b/build/common.sh
+index 65737e9b22e..04eca13bb68 100755
+--- a/build/common.sh
++++ b/build/common.sh
+@@ -87,7 +87,7 @@ readonly KUBE_CONTAINER_RSYNC_PORT=8730
+ 
+ # These are the default versions (image tags) for their respective base images.
+ readonly __default_debian_iptables_version=buster-v1.6.7
+-readonly __default_go_runner_version=v2.3.1-go1.16.15-buster.0
++readonly __default_go_runner_version=v2.4.0-go1.25.9-bookworm.0
+ readonly __default_setcap_version=buster-v2.0.4
+ 
+ # These are the base images for the Docker-wrapped binaries.
+diff --git a/build/dependencies.yaml b/build/dependencies.yaml
+index c724110c919..076bcff6f71 100644
+--- a/build/dependencies.yaml
++++ b/build/dependencies.yaml
+@@ -101,7 +101,7 @@ dependencies:
+ 
+   # Golang
+   - name: "golang: upstream version"
+-    version: 1.16.15
++    version: 1.25.9
+     refPaths:
+     - path: build/build-image/cross/VERSION
+     - path: cluster/addons/fluentd-elasticsearch/es-image/Dockerfile
+@@ -124,7 +124,7 @@ dependencies:
+       match: minimum_go_version=go([0-9]+\.[0-9]+)
+ 
+   - name: "k8s.gcr.io/kube-cross: dependents"
+-    version: v1.21.0-go1.16.15-buster.0
++    version: v1.33.0-go1.25.9-bullseye.0
+     refPaths:
+     - path: build/build-image/cross/VERSION
+     - path: test/images/sample-apiserver/Makefile
+@@ -154,7 +154,7 @@ dependencies:
+       match: configs\[DebianIptables\] = Config{buildImageRegistry, "debian-iptables", "[a-zA-Z]+\-v((([0-9]+)\.([0-9]+)\.([0-9]+)(?:-([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?)"}
+ 
+   - name: "k8s.gcr.io/go-runner: dependents"
+-    version: v2.3.1-go1.16.15-buster.0
++    version: v2.4.0-go1.25.9-bookworm.0
+     refPaths:
+     - path: build/common.sh
+       match: __default_go_runner_version=
+diff --git a/staging/publishing/rules.yaml b/staging/publishing/rules.yaml
+index 58b0faa1c88..183d3c9468e 100644
+--- a/staging/publishing/rules.yaml
++++ b/staging/publishing/rules.yaml
+@@ -7,7 +7,7 @@ recursive-delete-patterns:
+ - BUILD.bazel
+ - "*/BUILD.bazel"
+ - Gopkg.toml
+-default-go-version: 1.16.15
++default-go-version: 1.25.9
+ rules:
+ - destination: code-generator
+   branches:
+diff --git a/test/images/Makefile b/test/images/Makefile
+index b2a82160b36..e1ab5749b1d 100644
+--- a/test/images/Makefile
++++ b/test/images/Makefile
+@@ -16,7 +16,7 @@ REGISTRY ?= gcr.io/kubernetes-e2e-test-images
+ GOARM ?= 7
+ DOCKER_CERT_BASE_PATH ?=
+ QEMUVERSION=v5.1.0-2
+-GOLANG_VERSION=1.16.15
++GOLANG_VERSION=1.25.9
+ export
+ 
+ ifndef WHAT
