@@ -409,6 +409,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.20
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220
       - CVE-2025-13281
       - CVE-2025-1767
@@ -426,6 +428,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.19
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220
       - CVE-2025-13281
       - CVE-2025-1767
@@ -445,6 +449,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.18
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -463,6 +469,8 @@ releases:
       - fix-run-docker.1.24
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.17
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -482,6 +490,8 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.16
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -502,6 +512,7 @@ releases:
       - fix-image-name
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.15
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/master
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
@@ -516,6 +527,7 @@ releases:
       - fix-image-name
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.14
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/controller/podautoscaler
       - k8s.io/kubernetes/pkg/controller/volume/persistentvolume
@@ -531,6 +543,7 @@ releases:
       - fix-image-name
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.13
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/api/testing
       - k8s.io/kubernetes/pkg/controller/podautoscaler
@@ -546,6 +559,7 @@ releases:
       - fix-image-name.1.12
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
+      - bump-go-1-25-9.1.12
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/server
     test_integration_failures_tolerated: []
@@ -559,6 +573,7 @@ releases:
       - fix-image-name.1.12
       - fix-etcd-health.1.11
       - fix-etcd-put-key.1.11
+      - bump-go-1-25-9.1.11
     test_failures_tolerated:
       - k8s.io/kubernetes/pkg/util/mount
     test_integration_failures_tolerated: []
@@ -572,6 +587,7 @@ releases:
       - fix-image-name.1.12
       - fix-etcd-health.1.11
       - fix-etcd-put-key.1.11
+      - bump-go-1-25-9.1.10
     test_failures_tolerated: []
     test_integration_failures_tolerated: []
 
@@ -910,6 +926,63 @@ patches:
   - name: bump-go-1-25-9.1.29
     patch:
       - patches/bump-go-1-25-9.1.29.patch
+  - name: bump-go-1-25-9.1.28
+    patch:
+      - patches/bump-go-1-25-9.1.28.patch
+  - name: bump-go-1-25-9.1.27
+    patch:
+      - patches/bump-go-1-25-9.1.27.patch
+  - name: bump-go-1-25-9.1.26
+    patch:
+      - patches/bump-go-1-25-9.1.26.patch
+  - name: bump-go-1-25-9.1.25
+    patch:
+      - patches/bump-go-1-25-9.1.25.patch
+  - name: bump-go-1-25-9.1.24
+    patch:
+      - patches/bump-go-1-25-9.1.24.patch
+  - name: bump-go-1-25-9.1.23
+    patch:
+      - patches/bump-go-1-25-9.1.23.patch
+  - name: bump-go-1-25-9.1.22
+    patch:
+      - patches/bump-go-1-25-9.1.22.patch
+  - name: bump-go-1-25-9.1.21
+    patch:
+      - patches/bump-go-1-25-9.1.21.patch
+  - name: bump-go-1-25-9.1.20
+    patch:
+      - patches/bump-go-1-25-9.1.20.patch
+  - name: bump-go-1-25-9.1.19
+    patch:
+      - patches/bump-go-1-25-9.1.19.patch
+  - name: bump-go-1-25-9.1.18
+    patch:
+      - patches/bump-go-1-25-9.1.18.patch
+  - name: bump-go-1-25-9.1.17
+    patch:
+      - patches/bump-go-1-25-9.1.17.patch
+  - name: bump-go-1-25-9.1.16
+    patch:
+      - patches/bump-go-1-25-9.1.16.patch
+  - name: bump-go-1-25-9.1.15
+    patch:
+      - patches/bump-go-1-25-9.1.15.patch
+  - name: bump-go-1-25-9.1.14
+    patch:
+      - patches/bump-go-1-25-9.1.14.patch
+  - name: bump-go-1-25-9.1.13
+    patch:
+      - patches/bump-go-1-25-9.1.13.patch
+  - name: bump-go-1-25-9.1.12
+    patch:
+      - patches/bump-go-1-25-9.1.12.patch
+  - name: bump-go-1-25-9.1.11
+    patch:
+      - patches/bump-go-1-25-9.1.11.patch
+  - name: bump-go-1-25-9.1.10
+    patch:
+      - patches/bump-go-1-25-9.1.10.patch
 
   - name: fix-allocsperrun-parallel
     patch:
@@ -928,6 +1001,9 @@ patches:
   - name: fix-go1.25-compat.1.29
     patch:
       - patches/fix-go1.25-compat.1.29.patch
+  - name: fix-go1.25-compat.1.20
+    patch:
+      - patches/fix-go1.25-compat.1.20.patch
 
   - name: fix-scheduler-volumebinding.1.28
     patch:
