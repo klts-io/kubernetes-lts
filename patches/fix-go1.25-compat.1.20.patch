@@ -4,14 +4,14 @@ Date: Sun, 19 Apr 2026 22:58:00 +0800
 Subject: [PATCH] go1.25: guard reflect2 nil map type and iterator
 
 ---
- vendor/github.com/modern-go/reflect2/unsafe_map.go | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
+ vendor/github.com/modern-go/reflect2/unsafe_map.go | 16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/vendor/github.com/modern-go/reflect2/unsafe_map.go b/vendor/github.com/modern-go/reflect2/unsafe_map.go
 index f2e76e6bb14..7de5e619e98 100644
 --- a/vendor/github.com/modern-go/reflect2/unsafe_map.go
 +++ b/vendor/github.com/modern-go/reflect2/unsafe_map.go
-@@ -37,6 +37,13 @@ func (type2 *UnsafeMapType) LikePtr() bool {
+@@ -37,6 +37,20 @@ func (type2 *UnsafeMapType) LikePtr() bool {
  	return true
  }
  
