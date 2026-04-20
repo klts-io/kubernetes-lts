@@ -410,6 +410,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.20
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220
       - CVE-2025-13281
       - CVE-2025-1767
@@ -428,6 +429,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.19
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220
       - CVE-2025-13281
       - CVE-2025-1767
@@ -448,6 +450,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.18
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -467,6 +470,7 @@ releases:
       - no-delete-images.1.24
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.17
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -487,6 +491,7 @@ releases:
       - fix-etcd-health.1.16
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.16
+      - fix-go1.25-compat.1.20
       - CVE-2024-10220.1.18
       - CVE-2025-13281
       - CVE-2025-1767
@@ -996,6 +1001,9 @@ patches:
   - name: fix-go1.25-compat.1.29
     patch:
       - patches/fix-go1.25-compat.1.29.patch
+  - name: fix-go1.25-compat.1.20
+    patch:
+      - patches/fix-go1.25-compat.1.20.patch
 
   - name: fix-scheduler-volumebinding.1.28
     patch:
