@@ -72,6 +72,7 @@ releases:
     base_release: v1.20.15-ci
     must: true
     patches:
+      - bump-go-1-25-9.1.20
       - fix-kubectl-convert-97644.1.20 
       - nokmem.1.20
 
@@ -87,6 +88,7 @@ releases:
     base_release: v1.19.16-ci
     must: true
     patches:
+      - bump-go-1-25-9.1.19
       - CVE-2020-8554.1.19
       - nokmem.1.20
 
@@ -910,6 +912,12 @@ patches:
   - name: bump-go-1-25-9.1.29
     patch:
       - patches/bump-go-1-25-9.1.29.patch
+  - name: bump-go-1-25-9.1.20
+    patch:
+      - patches/bump-go-1-25-9.1.20.patch
+  - name: bump-go-1-25-9.1.19
+    patch:
+      - patches/bump-go-1-25-9.1.19.patch
 
   - name: fix-allocsperrun-parallel
     patch:
