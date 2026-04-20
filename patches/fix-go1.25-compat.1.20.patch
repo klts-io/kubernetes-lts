@@ -4,8 +4,44 @@ Date: Sun, 19 Apr 2026 22:58:00 +0800
 Subject: [PATCH] go1.25: guard reflect2 nil map type and iterator
 
 ---
+ vendor/github.com/modern-go/reflect2/safe_type.go  | 18 ++++++++++++++++--
  vendor/github.com/modern-go/reflect2/unsafe_map.go | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+ 2 files changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/vendor/github.com/modern-go/reflect2/safe_type.go b/vendor/github.com/modern-go/reflect2/safe_type.go
+index ee4e7bb6edf..da492780249 100644
+--- a/vendor/github.com/modern-go/reflect2/safe_type.go
++++ b/vendor/github.com/modern-go/reflect2/safe_type.go
+@@ -31,7 +31,14 @@
+ }
+ 
+ func (type2 *safeType) Implements(thatType Type) bool {
+-	return type2.Type.Implements(thatType.Type1())
++	if type2 == nil || type2.Type == nil || thatType == nil {
++		return false
++	}
++	thatReflectType := thatType.Type1()
++	if thatReflectType == nil {
++		return false
++	}
++	return type2.Type.Implements(thatReflectType)
+ }
+ 
+ func (type2 *safeType) RType() uintptr {
+@@ -74,5 +81,12 @@
+ }
+ 
+ func (type2 *safeType) AssignableTo(anotherType Type) bool {
+-	return type2.Type1().AssignableTo(anotherType.Type1())
++	if type2 == nil || type2.Type == nil || anotherType == nil {
++		return false
++	}
++	anotherReflectType := anotherType.Type1()
++	if anotherReflectType == nil {
++		return false
++	}
++	return type2.Type.AssignableTo(anotherReflectType)
+ }
 
 diff --git a/vendor/github.com/modern-go/reflect2/unsafe_map.go b/vendor/github.com/modern-go/reflect2/unsafe_map.go
 index f2e76e6bb14..7de5e619e98 100644
