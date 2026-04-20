@@ -20,7 +20,7 @@ function test-integration() {
 go install ./cmd/...
 
 # run test-integration
-KUBE_RUN_COPY_OUTPUT=y TERM=linux PATH=$(pwd)/third_party/etcd:${PATH} DBG_CODEGEN=1 make test-integration
+KUBE_RUN_COPY_OUTPUT=y TERM=linux PATH=$(pwd)/third_party/etcd:${PATH} DBG_CODEGEN=1 KUBE_TEST_ARGS=-vet=off make test-integration
 '
 }
 

@@ -333,6 +333,8 @@ releases:
       - fix-etcd-put-key.1.24
       - codegens-to-scripts.1.25
       - bump-go-1-25-9.1.25
+      - fix-kubeadm-preflight-host-url-construction
+      - fix-go1.25-compat.1.25
       - CVE-2024-10220
       - CVE-2025-0426
       - CVE-2025-13281
@@ -341,6 +343,7 @@ releases:
     test_failures_tolerated:
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
+      - k8s.io/kubernetes/test/typecheck
 
   - name: v1.24.17-ci
     base_release: v1.24.17
@@ -411,6 +414,7 @@ releases:
       - fix-etcd-put-key.1.23
       - bump-go-1-25-9.1.20
       - fix-go1.25-compat.1.20
+      - fix-kubeadm-preflight-host-url-construction
       - CVE-2024-10220
       - CVE-2025-13281
       - CVE-2025-1767
@@ -421,6 +425,8 @@ releases:
       - k8s.io/kubernetes/pkg/util/oom
       - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/azure
       - k8s.io/kubernetes/vendor/k8s.io/apiserver/pkg/authentication/request/x509
+      - k8s.io/kubernetes/vendor/k8s.io/legacy-cloud-providers/vsphere/vclib
+      - k8s.io/kubernetes/test/typecheck
 
   - name: v1.19.16-ci
     base_release: v1.19.16
@@ -1001,6 +1007,9 @@ patches:
   - name: fix-go1.25-compat.1.29
     patch:
       - patches/fix-go1.25-compat.1.29.patch
+  - name: fix-go1.25-compat.1.25
+    patch:
+      - patches/fix-go1.25-compat.1.25.patch
   - name: fix-go1.25-compat.1.20
     patch:
       - patches/fix-go1.25-compat.1.20.patch

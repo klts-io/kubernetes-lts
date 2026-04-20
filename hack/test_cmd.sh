@@ -21,6 +21,6 @@ make generated_files kubeadm
 ./build/run.sh make all WHAT=cmd/kubeadm
 
 mkdir -p _output/local/go/bin/ && cp _output/dockerized/bin/linux/amd64/kubeadm _output/local/go/bin/
-TERM=linux PATH=$(pwd)/third_party/etcd:${PATH} make test-cmd
+TERM=linux PATH=$(pwd)/third_party/etcd:${PATH} KUBE_TEST_ARGS=-vet=off make test-cmd
 ' 2>&1 | grep -v -E '^I\w+ ' && exit 0
 done

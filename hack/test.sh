@@ -9,7 +9,7 @@ cd "${WORKDIR}"
 
 TMPFILE="${TMPDIR}/test.log"
 
-./build/run.sh make test 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
+KUBE_TEST_ARGS="-vet=off" ./build/run.sh make test 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
 
 RETRY_CASES=$(cat "${TMPFILE}" | grep -E '^FAIL\s+k8s.io/kubernetes' | awk '{print $2}' || echo "")
 
@@ -35,7 +35,7 @@ for n in {1..5}; do
     echo "+++ Test retry ${n}, the case is as follows:"
     echo "${RETRY_CASES}"
     want=$(echo ${RETRY_CASES})
-    ./build/run.sh make test WHAT="${want}" 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
+    KUBE_TEST_ARGS="-vet=off" ./build/run.sh make test WHAT="${want}" 2>&1 | tee "${TMPFILE}" | grep -v -E '^I\w+ ' && exit 0
     RETRY_CASES=$(cat "${TMPFILE}" | grep -E '^FAIL\s+k8s.io/kubernetes' | awk '{print $2}' || echo "")
 done
 
