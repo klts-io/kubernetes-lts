@@ -4,9 +4,24 @@ Date: Sun, 19 Apr 2026 22:58:00 +0800
 Subject: [PATCH] go1.25: guard reflect2 nil map type and iterator
 
 ---
- vendor/github.com/modern-go/reflect2/safe_type.go  | 18 ++++++++++++++++--
- vendor/github.com/modern-go/reflect2/unsafe_map.go | 16 +++++++++++++++-
- 2 files changed, 31 insertions(+), 3 deletions(-)
+ staging/src/k8s.io/apimachinery/pkg/runtime/serializer/json/json.go | 2 +-
+ vendor/github.com/modern-go/reflect2/safe_type.go                    | 18 ++++++++++++++++--
+ vendor/github.com/modern-go/reflect2/unsafe_map.go                   | 16 +++++++++++++++-
+ 3 files changed, 32 insertions(+), 4 deletions(-)
+
+diff --git a/staging/src/k8s.io/apimachinery/pkg/runtime/serializer/json/json.go b/staging/src/k8s.io/apimachinery/pkg/runtime/serializer/json/json.go
+index 83b2e139311..f1e5b27c540 100644
+--- a/staging/src/k8s.io/apimachinery/pkg/runtime/serializer/json/json.go
++++ b/staging/src/k8s.io/apimachinery/pkg/runtime/serializer/json/json.go
+@@ -303,7 +303,7 @@ func (s *Serializer) Encode(obj runtime.Object, w io.Writer) error {
+ 
+ func (s *Serializer) doEncode(obj runtime.Object, w io.Writer) error {
+ 	if s.options.Yaml {
+-		json, err := caseSensitiveJSONIterator.Marshal(obj)
++		json, err := json.Marshal(obj)
+ 		if err != nil {
+ 			return err
+ 		}
 
 diff --git a/vendor/github.com/modern-go/reflect2/safe_type.go b/vendor/github.com/modern-go/reflect2/safe_type.go
 index ee4e7bb6edf..da492780249 100644
