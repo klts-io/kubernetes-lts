@@ -2,27 +2,27 @@ base: https://github.com/kubernetes/kubernetes
 
 releases:
 
-  - name: v1.32.13-lts.1
+  - name: v1.32.13-lts.2
     base_release: v1.32.13-ci
     must: true
     patches: []
 
-  - name: v1.31.14-lts.1
+  - name: v1.31.14-lts.2
     base_release: v1.31.14-ci
     must: true
     patches: []
 
-  - name: v1.30.14-lts.1
+  - name: v1.30.14-lts.2
     base_release: v1.30.14-ci
     must: true
     patches: []
 
-  - name: v1.29.15-lts.1
+  - name: v1.29.15-lts.2
     base_release: v1.29.15-ci
     must: true
     patches: []
 
-  - name: v1.28.15-lts.2
+  - name: v1.28.15-lts.3
     base_release: v1.28.15-ci
     must: true
     patches:
@@ -33,37 +33,37 @@ releases:
     must: true
     patches: []
 
-  - name: v1.27.16-lts.1
+  - name: v1.27.16-lts.2
     base_release: v1.27.16-ci
     must: true
     patches: []
 
-  - name: v1.26.15-lts.1
+  - name: v1.26.15-lts.2
     base_release: v1.26.15-ci
     must: true
     patches: []
 
-  - name: v1.25.16-lts.1
+  - name: v1.25.16-lts.2
     base_release: v1.25.16-ci
     must: true
     patches: []
 
-  - name: v1.24.17-lts.1
+  - name: v1.24.17-lts.2
     base_release: v1.24.17-ci
     must: true
     patches: []
 
-  - name: v1.23.17-lts.1
+  - name: v1.23.17-lts.2
     base_release: v1.23.17-ci
     must: true
     patches: []
 
-  - name: v1.22.17-lts.1
+  - name: v1.22.17-lts.2
     base_release: v1.22.17-ci
     must: true
     patches: []
 
-  - name: v1.21.14-lts.2
+  - name: v1.21.14-lts.3
     base_release: v1.21.14-ci
     must: true
     patches: []
