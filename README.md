@@ -102,4 +102,8 @@ Made with [contrib.rocks](https://contrib.rocks).
 Originally created by DaoCloud on Jul 18, 2021,
 and open-sourced under the Apache License 2.0.
 
+## License
+
+Licensed under the Apache License, Version 2.0.
+
 Copyright 2026 the KLTS.io Authors. All rights reserved.
