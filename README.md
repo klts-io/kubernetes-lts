@@ -107,4 +107,4 @@ The project is open-sourced under the Apache License 2.0.
 
 Licensed under the Apache License, Version 2.0.
 
-Copyright 2026 the KLTS.io Authors. All rights reserved.
+Copyright 2021-2026 the KLTS.io Authors. All rights reserved.
