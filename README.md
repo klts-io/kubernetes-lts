@@ -99,7 +99,7 @@ Made with [contrib.rocks](https://contrib.rocks).
 
 ## Origin
 
-Originally created by DaoCloud on Jul 18, 2021; see the public repository history at
+Originally created by DaoCloud on 2021-07-18; see the public repository history at
 [klts-io/kubernetes-lts](https://github.com/klts-io/kubernetes-lts) for provenance.
 The project is open-sourced under the Apache License 2.0.
 
